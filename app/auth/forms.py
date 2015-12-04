@@ -35,3 +35,9 @@ class SignUpForm(Form):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=5)])
     password2 = PasswordField('Password Again', validators=[DataRequired(), EqualTo(password)])
     submit = SubmitField('Sign Up')
+
+
+class LoginForm(Form):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    login = SubmitField('Login')
