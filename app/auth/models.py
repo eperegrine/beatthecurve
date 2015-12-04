@@ -18,7 +18,7 @@ class User(UserMixin, Model):
     email = CharField(db_column='EMAIL', unique=True)
     password = CharField(db_column='PASSWORD')
     school_id = ForeignKeyField(School, db_column='SCHOOL_ID')
-    karma_points = IntegerField(db_column='KARMA_POINTS')
+    karma_points = IntegerField(db_column='KARMA_POINTS', default=0)
 
     class Meta:
         database = DATABASE
