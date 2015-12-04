@@ -5,6 +5,7 @@ from .models import DATABASE
 from .auth.models import User
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'hufenaifneianfioawnfiohaewifs'
 
 # Set up login manager
 login_manager = LoginManager()
