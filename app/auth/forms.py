@@ -30,7 +30,7 @@ class SignUpForm(Form):
                         validators=[DataRequired(),
                                     Email(),
                                     edu_email_validator,
-                                    email_in_use_validator()])
+                                    email_in_use_validator])
     school = SelectField('School', validators=[DataRequired()], choices=[school.name for school in School.select()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=5)])
     password2 = PasswordField('Password Again', validators=[DataRequired(), EqualTo(password)])
