@@ -36,3 +36,6 @@ def after_request(response):
     """Close the database connection after each response"""
     g.db.close()
     return response
+
+from app.auth.views import auth_bp
+app.register_blueprint(auth_bp)
