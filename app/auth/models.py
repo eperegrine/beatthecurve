@@ -56,3 +56,5 @@ class User(UserMixin, Model):
         except Exception as e:
             raise e
 
+    def get_id(self):
+        return str(self.user_id)

@@ -5,7 +5,7 @@ from .models import DATABASE
 from .auth.models import User
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'hufenaifneianfioawnfiohaewifs'
+app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
 
 # Set up login manager
 login_manager = LoginManager()
@@ -18,7 +18,7 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 def load_user(user_id):
     try:
-        return User.get(User.id == user_id)
+        return User.get(User.user_id == user_id)
     except DoesNotExist:
         return None
 
