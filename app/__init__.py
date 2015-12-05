@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask, g, render_template
 from flask.ext.login import LoginManager, current_user
 from peewee import DoesNotExist
 from .models import DATABASE
@@ -37,6 +37,11 @@ def after_request(response):
     """Close the database connection after each response"""
     g.db.close()
     return response
+
+
+@app.route('/')
+def index():
+    return render_template('layout.html')
 
 from app.auth.views import auth_bp
 app.register_blueprint(auth_bp)
