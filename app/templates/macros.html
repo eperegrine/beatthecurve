@@ -5,9 +5,9 @@
                 <div class="field-error">{{ error }}</div>
             {% endfor %}
         {% endif %}
-        {% if field.type != "CSRFTokenField" %}
+        {% if field.type != "CSRFTokenField" and field.type != "SubmitField" %}
             <label for="{{ field.id }}">{{ field.label.text }}</label>
-            {{ field(placeholder=field.label.text, class="form-control") }}
         {% endif %}
+        {{ field(placeholder=field.label.text, class="form-control") }}
     </div>
 {%  endmacro %}
