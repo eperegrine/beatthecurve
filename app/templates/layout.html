@@ -13,24 +13,29 @@
     <nav>
       <a href="#" class="brand-logo center">{% block title %}{% endblock %}</a>
       <ul id="slide-out" class="side-nav">
-        <li><a href="#">Profile</a></li>
-        <li class="no-padding">
-          <ul class="collapsible collapsible-accordion">
-            <li>
-              <a class="collapsible-header">Classes<i class="mdi-navigation-arrow-drop-down"></i></a>
-              <div class="collapsible-body">
-                <ul>
-                  <li><a href="#">Chemistry 101</a></li>
-                  <li><a href="#">Biology 106</a></li>
-                  <li><a href="#">English 101</a></li>
-                  <li><a href="#">Engineering 101</a></li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </li>
-        <li><a href="#">Search</a></li>
-        <li><a href="#">Logout</a></li>
+        {% if current_user.is_authenticated %}
+          <li><a href="#">Profile</a></li>
+          <li class="no-padding">
+            <ul class="collapsible collapsible-accordion">
+              <li>
+                <a class="collapsible-header">Classes<i class="mdi-navigation-arrow-drop-down"></i></a>
+                <div class="collapsible-body">
+                  <ul>
+                    <li><a href="#">Chemistry 101</a></li>
+                    <li><a href="#">Biology 106</a></li>
+                    <li><a href="#">English 101</a></li>
+                    <li><a href="#">Engineering 101</a></li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <li><a href="#">Search</a></li>
+          <li><a href="#">Logout</a></li>
+        {% else %}
+          <li><a href="#">Login</a></li>
+          <li><a href="#">Sign Up</a></li>
+        {% endif %}
       </ul>
       <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
     </nav>
