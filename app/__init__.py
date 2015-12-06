@@ -43,9 +43,16 @@ def after_request(response):
 def index():
     return render_template('layout.html')
 
+
 @app.route('/notes')
 def notes():
     return render_template('notes/notes_listing.html')
+
+
+@app.route('/qa')
+def qa():
+    return render_template('qa/qa_listing.html')
+
 
 from app.auth.views import auth_bp
 app.register_blueprint(auth_bp)
