@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_lesson_tabs %}
+{% block title %}Chemistry 101{% endblock %}
+{% block main %}
+  {{ render_lesson_tabs('notes') }}
+  <table class="striped">
+    <thead>
+      <tr>
+        <td>Lecture</td>
+        <td>Number Of Files</td>
+        <td>Files</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Lecture 1</td>
+        <td>4</td>
+        <td><a href="#">main.docx, main.docx, main.docx, main.docx</a></td>
+      </tr>
+      <tr>
+        <td>Lecture 2</td>
+        <td>1</td>
+        <td><a href="#">main.docx</a></td>
+      </tr>
+      <tr>
+        <td>Lecture 3</td>
+        <td>2</td>
+        <td><a href="#">main.docx, main.docx</a></td>
+      </tr>
+      <tr>
+        <td>Lecture 4</td>
+        <td>5</td>
+        <td><a href="#">main.docx, main.docx, main.docx, main.docx, main.docx</a></td>
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}

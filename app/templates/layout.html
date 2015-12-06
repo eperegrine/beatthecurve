@@ -11,7 +11,7 @@
     </head>
 
     <nav>
-      <a href="#" class="brand-logo center">Chemistry 101</a>
+      <a href="#" class="brand-logo center">{% block title %}{% endblock %}</a>
       <ul id="slide-out" class="side-nav">
         <li><a href="#">Profile</a></li>
         <li class="no-padding">
@@ -36,8 +36,8 @@
     </nav>
 
     <main class="">
-      {% from 'macros.html' import render_lesson_tabs %}
-      {{ render_lesson_tabs('exams') }}
+      {% block main %}
+      {% endblock %}
     </main>
 
     <body>
