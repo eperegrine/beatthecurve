@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask.ext.bcrypt import check_password_hash
-from flask.ext.login import login_user
+from flask.ext.login import login_user, login_required, logout_user
 from peewee import DoesNotExist
 from .forms import SignUpForm, LoginForm
 from .models import User
@@ -44,3 +44,10 @@ def login():
             else:
                 flash('Your email or password does not exist.')
     return render_template('auth/login.html', form=form)
+
+
+@auth_bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for(".login"))

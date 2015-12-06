@@ -36,10 +36,8 @@ class SignUpForm(Form):
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password',
                                                                                       message='Passwords must match')])
-    submit = SubmitField('Sign Up')
 
 
 class LoginForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    login = SubmitField('Login')
