@@ -11,7 +11,8 @@
     </head>
 
     <nav>
-      <ul id="slide-out" class="side-nav fixed">
+      <a href="#" class="brand-logo center">Chemistry 101</a>
+      <ul id="slide-out" class="side-nav">
         <li><a href="#">Profile</a></li>
         <li class="no-padding">
           <ul class="collapsible collapsible-accordion">
@@ -28,20 +29,15 @@
             </li>
           </ul>
         </li>
+        <li><a href="#">Search</a></li>
+        <li><a href="#">Logout</a></li>
       </ul>
-      <ul class="right">
-          <li><a href="#">Notes</a></li>
-          <li><a href="#">Q&A</a></li>
-          <li><a href="#">Exams</a></li>
-          <li><a href="#">Study Groups</a></li>
-          <li class="active"><a href="#">Search</a></li>
-          <li><a href="#">Logout</a></li>
-        </ul>
-      <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+      <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
     </nav>
 
     <main class="">
-      <p>Hello World</p>
+      {% from 'macros.html' import render_lesson_tabs %}
+      {{ render_lesson_tabs('exams') }}
     </main>
 
     <body>

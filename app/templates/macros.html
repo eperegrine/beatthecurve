@@ -11,3 +11,20 @@
         {{ field(placeholder=field.label.text, class="form-control") }}
     </div>
 {%  endmacro %}
+
+{% macro render_lesson_tabs(active) %}
+  <div id="lesson-tabs">
+    <div>
+      <ul class="tabs">
+        <li class="tab"><a class="{% if active == "notes" %}active{% endif %}" href="#test1">Notes</a></li>
+        <li class="tab"><a class="{% if active == "qa" %}active{% endif %}" href="#test2">Q&A</a></li>
+        <li class="tab"><a class="{% if active == "exams" %}active{% endif %}" href="#test3">Exams</a></li>
+        <li class="tab"><a class="{% if active == "studygroups" %}active{% endif %}" href="#test4">Study Groups</a></li>
+      </ul>
+    </div>
+    <div id="test1" class="col s12">Test 1</div>
+    <div id="test2" class="col s12">Test 2</div>
+    <div id="test3" class="col s12">Test 3</div>
+    <div id="test4" class="col s12">Test 4</div>
+  </div>
+{% endmacro %}
