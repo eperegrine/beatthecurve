@@ -77,5 +77,8 @@ app.register_blueprint(notes_bp)
 from app.qa.views import qa_bp
 app.register_blueprint(qa_bp)
 
+from app.exams.views import exams_bp
+app.register_blueprint(exams_bp)
+
 from app.lesson.models import LessonStudent
 app.jinja_env.globals.update(get_lessons=LessonStudent.get_attended_lessons)
