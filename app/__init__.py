@@ -59,5 +59,10 @@ def exams():
     return render_template('exams/exam_listing.html')
 
 
+@app.route('/studygroups')
+def study_groups():
+    return render_template('studygroups/study_groups_listing.html')
+
+
 from app.auth.views import auth_bp
 app.register_blueprint(auth_bp)

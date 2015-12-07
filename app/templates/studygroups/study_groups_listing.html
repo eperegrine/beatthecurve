@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_lesson_tabs %}
+{% block title %}Chemistry 101{% endblock %}
+{% block main %}
+  {{ render_lesson_tabs('studygroups') }}
+  <table>
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Days</th>
+          <th>Time</th>
+          <th>Members</th>
+          <th>Productivity Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <a href="#">Mckeldin</a>
+          </td>
+          <td>M/W/F</td>
+          <td>12:00pm - 12:50pm</td>
+          <td>35</td>
+          <td>8/10</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">CCC</a>
+          </td>
+          <td>T/TH</td>
+          <td>7:00pm - 8:00pm</td>
+          <td>25</td>
+          <td>4/10</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">Hornbake</a>
+          </td>
+          <td>SU</td>
+          <td>3:00pm - 4:00pm</td>
+          <td>41</td>
+          <td>6/10</td>
+        </tr>
+      </tbody>
+    </table>
+{% endblock %}
