@@ -1,10 +1,10 @@
 {% macro render_field(field) %}
-    <div class="input-field">
         {% if field.errors %}
             {%  for error in field.errors %}
                 <div class="">{{ error }}</div>
             {% endfor %}
         {% endif %}
+    <div class="input-field">
         {{ field() }}
         {% if field.type != "CSRFTokenField" and field.type != "SubmitField" %}
             <label for="{{ field.id }}">{{ field.label.text }}</label>
