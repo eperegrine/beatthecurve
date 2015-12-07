@@ -34,6 +34,12 @@ class LessonStudent(Model):
         primary_key = CompositeKey('student_id', 'lesson_id')
 
     @classmethod
+    def get_attended_lessons(cls, user_id):
+        users_lessons = cls.select().where(LessonStudent.student_id == user_id)
+        lessons = [Lesson.get(Lesson.id == lesson.lesson_id) for lesson in users_lessons]
+        return lessons
+
+    @classmethod
     def attend(cls, user_id, lesson_ids):
         # TODO: Validate user_id and lesson_ids so they are in the same school
         for lesson_id in lesson_ids:

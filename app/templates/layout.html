@@ -21,10 +21,9 @@
                 <a class="collapsible-header">Classes<i class="mdi-navigation-arrow-drop-down"></i></a>
                 <div class="collapsible-body">
                   <ul>
-                    <li><a href="#">Chemistry 101</a></li>
-                    <li><a href="#">Biology 106</a></li>
-                    <li><a href="#">English 101</a></li>
-                    <li><a href="#">Engineering 101</a></li>
+                    {% for lesson in get_lessons(current_user) %}
+                      <li><a href="#">{{ lesson.lesson_name }}</a></li>
+                    {% endfor %}
                   </ul>
                 </div>
               </li>
