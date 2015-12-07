@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block title %}Profile{% endblock %}
+{% block main %}
+  <div class="container">
+    <h1>Hello, Charles Thomas</h1>
+    <h5>Karma Points: 168</h5>
+    <div class="divider"></div>
+    <h5>Change Email</h5>
+    <form action="">
+      <div class="input-field">
+        <input type="text" id="email" name="email">
+        <label for="email">New Email</label>
+        <button type="submit" class="btn waves-effect waves-light">Change Email</button>
+      </div>
+    </form>
+
+    <h5>Change Password</h5>
+    <form action="">
+      <div class="input-field">
+        <input type="text" id="password" name="password">
+        <label for="password">Old Password</label>
+      </div>
+      <div class="input-field">
+        <input type="text" id="new-password" name="new-password">
+        <label for="new-password">New Password</label>
+      </div>
+      <button type="submit" class="btn waves-effect waves-light">Change Email</button>
+    </form>
+  </div>
+{% endblock %}
