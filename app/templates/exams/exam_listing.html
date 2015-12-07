@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% from 'macros.html' import render_lesson_tabs %}
-{% block title %}lesson.lesson_name{% endblock %}
+{% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block main %}
   {{ render_lesson_tabs('exams', lesson.id) }}
   <div class="section">
