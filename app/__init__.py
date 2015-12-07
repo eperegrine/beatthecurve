@@ -7,10 +7,16 @@ from .auth.models import User
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
 
+from app.models import DATABASE
+from app.auth.models import School, User
+from app.lesson.models import Lesson, LessonStudent
+
+DATABASE.create_tables([School, User, Lesson, LessonStudent], safe=True)
+
 # Set up login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'auth_bp.login'
 
 
 # Login Manager Functions

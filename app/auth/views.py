@@ -17,7 +17,9 @@ def signup():
             User.create_user(
                 email=form.email.data,
                 password=form.password.data,
-                school_id=int(form.school.data)
+                school_id=int(form.school.data),
+                first_name=form.first_name.data,
+                last_name=form.last_name.data
             )
             flash('Successfully created an account!')
             return redirect(url_for('.signup'))

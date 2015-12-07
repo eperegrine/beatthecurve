@@ -16,6 +16,8 @@ class School(Model):
 class User(UserMixin, Model):
     user_id = PrimaryKeyField(db_column='ID')
     email = CharField(db_column='EMAIL', unique=True)
+    first_name = CharField(db_column='FIRST_NAME')
+    last_name = CharField(db_column='LAST_NAME')
     password = CharField(db_column='PASSWORD')
     school_id = ForeignKeyField(School, db_column='SCHOOL_ID')
     karma_points = IntegerField(db_column='KARMA_POINTS', default=0)
@@ -25,7 +27,7 @@ class User(UserMixin, Model):
         db_table = 'TBL_USER'
 
     @classmethod
-    def create_user(cls, email, password, school_id):
+    def create_user(cls, email, password, school_id, first_name, last_name):
 
         # Validate email
         if '@' not in email and email[-4:] is not '.edu':
@@ -50,7 +52,9 @@ class User(UserMixin, Model):
             user = cls.create(
                 email=email,
                 password=generate_password_hash(password),
-                school_id=school
+                school_id=school,
+                first_name=first_name,
+                last_name=last_name
             )
             return user
         except Exception as e:

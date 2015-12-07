@@ -2,7 +2,7 @@
 {% block title %}Profile{% endblock %}
 {% block main %}
   <div class="container">
-    <h1>Hello, Charles Thomas</h1>
+    <h1>Hello, {{ current_user.first_name }}</h1>
     <h5>Karma Points: 168</h5>
     <div class="divider"></div>
     <h5>Change Email</h5>
