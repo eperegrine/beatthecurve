@@ -66,3 +66,6 @@ def study_groups():
 
 from app.auth.views import auth_bp
 app.register_blueprint(auth_bp)
+
+from app.lesson.views import lesson_bp
+app.register_blueprint(lesson_bp)

@@ -13,6 +13,16 @@ class Lesson(Model):
         database = DATABASE
         db_table = 'TBL_LESSON'
 
+    @classmethod
+    def get_unattended_lessons(cls, user_id, school_id):
+        schools_lessons = cls.select().where(cls.school_id == school_id)
+        users_lessons = LessonStudent.select().where(LessonStudent.student_id == user_id)
+        lessons = []
+        for lesson in schools_lessons:
+            if lesson not in users_lessons:
+                lessons.append(lesson)
+        return lessons
+
 
 class LessonStudent(Model):
     student_id = ForeignKeyField(User, db_column='STUDENT_ID')
@@ -22,3 +32,9 @@ class LessonStudent(Model):
         database = DATABASE
         db_table = 'TBL_LESSON_STUDENT'
         primary_key = CompositeKey('student_id', 'lesson_id')
+
+    @classmethod
+    def attend(cls, user_id, lesson_ids):
+        # TODO: Validate user_id and lesson_ids so they are in the same school
+        for lesson_id in lesson_ids:
+            LessonStudent.create(student_id=user_id, lesson_id=lesson_id)
