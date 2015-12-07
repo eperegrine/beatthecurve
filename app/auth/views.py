@@ -22,7 +22,7 @@ def signup():
                 last_name=form.last_name.data
             )
             flash('Successfully created an account!')
-            return redirect(url_for('.signup'))
+            return redirect(url_for('lesson_bp.add'))
         except Exception as e:
             flash(e)
 
