@@ -49,22 +49,6 @@ def after_request(response):
 def index():
     return render_template('layout.html')
 
-
-@app.route('/qa')
-def qa():
-    return render_template('qa/qa_listing.html')
-
-
-@app.route('/exams')
-def exams():
-    return render_template('exams/exam_listing.html')
-
-
-@app.route('/studygroups')
-def study_groups():
-    return render_template('studygroups/study_groups_listing.html')
-
-
 from app.auth.views import auth_bp
 app.register_blueprint(auth_bp)
 
