@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 {% from 'macros.html' import render_lesson_tabs %}
-{% block title %}Chemistry 101{% endblock %}
+{% block title %}{{ lesson.lesson_name}}{% endblock %}
 {% block main %}
-  {{ render_lesson_tabs('studygroups') }}
+  {{ render_lesson_tabs('studygroups', lesson.id) }}
   <table>
       <thead>
         <tr>
