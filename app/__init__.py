@@ -54,5 +54,10 @@ def qa():
     return render_template('qa/qa_listing.html')
 
 
+@app.route('/exams')
+def exams():
+    return render_template('exams/exam_listing.html')
+
+
 from app.auth.views import auth_bp
 app.register_blueprint(auth_bp)

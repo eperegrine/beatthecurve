@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_lesson_tabs %}
+{% block title %}Chemistry 101{% endblock %}
+{% block main %}
+  {{ render_lesson_tabs('exams') }}
+  <div class="section">
+    <h5>Exam 1</h5>
+    <table>
+      <thead>
+        <tr>
+          <th>Exam</th>
+          <th>Number Of Takers</th>
+          <th>Average Grade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <a href="#">Exam 1 2011 Fall Semester</a>
+          </td>
+          <td>35</td>
+          <td>65%</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">Exam 1 2011 Spring Semester</a>
+          </td>
+          <td>55</td>
+          <td>63%</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">Exam 1 2012 Fall Semester</a>
+          </td>
+          <td>60</td>
+          <td>52%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="section">
+    <h5>Exam 2</h5>
+    <table>
+      <thead>
+        <tr>
+          <th>Exam</th>
+          <th>Number Of Takers</th>
+          <th>Average Grade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <a href="#">Exam 2 2011 Fall Semester</a>
+          </td>
+          <td>43</td>
+          <td>65%</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">Exam 2 2011 Spring Semester</a>
+          </td>
+          <td>53</td>
+          <td>63%</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#">Exam 2 2012 Fall Semester</a>
+          </td>
+          <td>57</td>
+          <td>52%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
