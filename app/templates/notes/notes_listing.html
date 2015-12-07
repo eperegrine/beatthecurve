@@ -2,7 +2,7 @@
 {% from 'macros.html' import render_lesson_tabs %}
 {% block title %}Chemistry 101{% endblock %}
 {% block main %}
-  {{ render_lesson_tabs('notes') }}
+  {{ render_lesson_tabs('notes', lesson.id) }}
   <table class="striped">
     <thead>
       <tr>

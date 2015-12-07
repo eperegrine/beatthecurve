@@ -50,11 +50,6 @@ def index():
     return render_template('layout.html')
 
 
-@app.route('/notes')
-def notes():
-    return render_template('notes/notes_listing.html')
-
-
 @app.route('/qa')
 def qa():
     return render_template('qa/qa_listing.html')
@@ -75,6 +70,9 @@ app.register_blueprint(auth_bp)
 
 from app.lesson.views import lesson_bp
 app.register_blueprint(lesson_bp)
+
+from app.notes.views import notes_bp
+app.register_blueprint(notes_bp)
 
 from app.lesson.models import LessonStudent
 app.jinja_env.globals.update(get_lessons=LessonStudent.get_attended_lessons)
