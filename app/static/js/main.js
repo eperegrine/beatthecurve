@@ -6,4 +6,6 @@ $(document).ready(function () {
   $("li.tab a").on("click", function (e) {
       window.location = $(this).attr('href');
   });
+  $('select').material_select();
+
 });
