@@ -7,6 +7,7 @@ class Lecture(Model):
     id = PrimaryKeyField(db_column='ID')
     lesson_id = ForeignKeyField(Lesson, db_column='LESSON_ID')
     name = CharField(db_column='NAME', unique=True)
+    number_of_files = IntegerField(db_column='NUMBER_OF_FILES', default=0)
 
     class Meta:
         database = DATABASE
