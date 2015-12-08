@@ -16,7 +16,11 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    return render_template('notes/notes_listing.html', lesson=lesson)
+    lectures = Lecture.select().where(Lecture.lesson_id == lesson.id)
+    notes = {}
+    for lecture in lectures:
+        notes[lecture.id] = [] # TODO: Modify to actually get files
+    return render_template('notes/notes_listing.html', lesson=lesson, lectures=lectures, notes=notes)
 
 
 @notes_bp.route('/add-lecture', methods=('POST', 'GEt'))

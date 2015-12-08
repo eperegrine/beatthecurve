@@ -12,26 +12,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Lecture 1</td>
-        <td>4</td>
-        <td><a href="#">main.docx, main.docx, main.docx, main.docx</a></td>
+      {% for lecture in lectures %}
+        <tr>
+          <td>{{ lecture.name }}</td>
+          <td>{{ lecture.number_of_replies }}</td>
+          <td>{% for note in notes[lecture.id] %}<a href="#">{{ note.filename }}</a>{% endfor %}</td>
       </tr>
-      <tr>
-        <td>Lecture 2</td>
-        <td>1</td>
-        <td><a href="#">main.docx</a></td>
-      </tr>
-      <tr>
-        <td>Lecture 3</td>
-        <td>2</td>
-        <td><a href="#">main.docx, main.docx</a></td>
-      </tr>
-      <tr>
-        <td>Lecture 4</td>
-        <td>5</td>
-        <td><a href="#">main.docx, main.docx, main.docx, main.docx, main.docx</a></td>
-      </tr>
+    {% endfor %}
     </tbody>
   </table>
 {% endblock %}
