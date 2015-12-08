@@ -16,6 +16,8 @@ class Lecture(Model):
 class Discussion(Model):
     id = PrimaryKeyField(db_column='ID')
     lecture_id = ForeignKeyField(Lecture, db_column='LECTURE_ID')
+    # TODO: remove unique key
+    # TODO: Add composite key
     name = CharField(db_column='NAME', unique=True)
 
     class Meta:
