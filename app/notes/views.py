@@ -1,6 +1,8 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, g
 from flask.ext.login import login_required
-from app.lesson.models import Lesson
+from app.lesson.models import Lesson, LessonStudent
+from .forms import AddLectureForm
+from .models import Lecture
 
 notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')
 
@@ -15,3 +17,26 @@ def view(lessonid):
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
     return render_template('notes/notes_listing.html', lesson=lesson)
+
+
+@notes_bp.route('/add-lecture', methods=('POST', 'GEt'))
+@login_required
+def add_lecture():
+    # TODO: Validate user is attending lesson
+    form = AddLectureForm()
+    form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in
+                           LessonStudent.get_attended_lessons(g.user.user_id)]
+
+    if form.validate_on_submit():
+        try:
+            Lecture.create(
+                lesson_id=int(form.lesson.data),
+                name=form.name.data
+            )
+            flash('Success')
+            return redirect(url_for('auth_bp.profile'))
+        except:
+            # TODO: Improve exception handling
+            flash('There was an error')
+
+    return render_template('notes/add_lecture.html', form=form)
