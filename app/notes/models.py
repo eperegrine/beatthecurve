@@ -16,10 +16,12 @@ class Lecture(Model):
 class Discussion(Model):
     id = PrimaryKeyField(db_column='ID')
     lecture_id = ForeignKeyField(Lecture, db_column='LECTURE_ID')
-    # TODO: remove unique key
-    # TODO: Add composite key
-    name = CharField(db_column='NAME', unique=True)
+    name = CharField(db_column='NAME')
 
     class Meta:
         database = DATABASE
         db_table = 'TBL_DISCUSSION'
+        indexes = (
+            # create a unique on from/to/date
+            (('lecture_id', 'name'), True),
+        )
