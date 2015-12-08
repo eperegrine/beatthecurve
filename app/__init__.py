@@ -10,9 +10,9 @@ app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
 from app.models import DATABASE
 from app.auth.models import School, User
 from app.lesson.models import Lesson, LessonStudent
-from app.notes.models import Lecture
+from app.notes.models import Lecture, Discussion
 
-DATABASE.create_tables([School, User, Lesson, LessonStudent, Lecture], safe=True)
+DATABASE.create_tables([School, User, Lesson, LessonStudent, Lecture, Discussion], safe=True)
 
 # Set up login manager
 login_manager = LoginManager()
