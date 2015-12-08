@@ -11,3 +11,13 @@ class Lecture(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_LECTURE'
+
+
+class Discussion(Model):
+    id = PrimaryKeyField(db_column='ID')
+    lecture_id = ForeignKeyField(Lecture, db_column='LECTURE_ID')
+    name = CharField(db_column='NAME', unique=True)
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_DISCUSSION'
