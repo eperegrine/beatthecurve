@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% from 'macros.html' import render_field %}
 {% block title %}Profile{% endblock %}
 {% block main %}
   <div class="container">
@@ -6,25 +7,19 @@
     <h5>Karma Points: {{ current_user.karma_points }}</h5>
     <div class="divider"></div>
     <h5>Change Email</h5>
-    <form action="">
-      <div class="input-field">
-        <input type="text" id="email" name="email">
-        <label for="email">New Email</label>
-        <button type="submit" class="btn waves-effect waves-light">Change Email</button>
-      </div>
+    <form action="" method="post">
+      {% for field in change_email_form %}
+        {{ render_field(field) }}
+      {% endfor %}
+      <button type="submit" class="btn waves-effect waves-light" name="change_email">Change Email</button>
     </form>
 
     <h5>Change Password</h5>
-    <form action="">
-      <div class="input-field">
-        <input type="text" id="password" name="password">
-        <label for="password">Old Password</label>
-      </div>
-      <div class="input-field">
-        <input type="text" id="new-password" name="new-password">
-        <label for="new-password">New Password</label>
-      </div>
-      <button type="submit" class="btn waves-effect waves-light">Change Email</button>
+    <form action="" method="post">
+      {% for field in change_password_form %}
+        {{ render_field(field) }}
+      {% endfor %}
+      <button type="submit" class="btn waves-effect waves-light" name="change_password">Change Password</button>
     </form>
   </div>
 {% endblock %}

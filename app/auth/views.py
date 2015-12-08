@@ -1,12 +1,12 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, request, g
 from flask.ext.bcrypt import check_password_hash
 from flask.ext.login import login_user, login_required, logout_user
 from peewee import DoesNotExist
-from .forms import SignUpForm, LoginForm
+from .forms import SignUpForm, LoginForm, ChangeEmailForm, ChangePasswordForm
 from .models import User
 
 auth_bp = Blueprint('auth_bp', __name__)
-
+# TODO: Add Flash Messages to Layout.html
 
 @auth_bp.route('/signup', methods=('POST', 'GET'))
 def signup():
@@ -55,7 +55,32 @@ def logout():
     return redirect(url_for(".login"))
 
 
-@auth_bp.route('/profile')
+@auth_bp.route('/profile', methods=('POST', 'GET'))
 @login_required
 def profile():
-    return render_template('auth/profile.html')
+    change_email_form = ChangeEmailForm()
+    change_password_form = ChangePasswordForm()
+
+    if 'change_email' in request.form:
+        if change_email_form.validate_on_submit():
+            # TODO: Add Error handling
+            g.user.email = change_email_form.email.data
+            g.user.save()
+            flash('Email Updated!')
+            return redirect(url_for('.profile'))
+
+    elif 'change_password' in request.form:
+        if change_password_form.validate_on_submit():
+            if check_password_hash(g.user.password, change_password_form.current_password.data):
+                try:
+                    g.user.update_password(change_password_form.new_password.data)
+                    flash('Updated Password!')
+                    return redirect(url_for('.profile'))
+                # TODO: improve error handling
+                except:
+                    flash('There was an error!')
+        else:
+            flash('Incorrect Password')
+
+    return render_template('auth/profile.html', change_email_form=change_email_form,
+                           change_password_form=change_password_form)

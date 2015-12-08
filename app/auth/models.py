@@ -62,3 +62,10 @@ class User(UserMixin, Model):
 
     def get_id(self):
         return str(self.user_id)
+
+    def update_password(self, password):
+        try:
+            self.password = generate_password_hash(password)
+            self.save()
+        except Exception as e:
+            raise e

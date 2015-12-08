@@ -43,3 +43,14 @@ class SignUpForm(Form):
 class LoginForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
+
+
+class ChangeEmailForm(Form):
+    email = StringField('Email', validators=[DataRequired(),Email(), edu_email_validator, email_in_use_validator])
+
+
+class ChangePasswordForm(Form):
+    current_password = PasswordField('Old Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    new_password2 = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password',
+                                                                                      message='Passwords must match')])
