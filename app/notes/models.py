@@ -1,4 +1,5 @@
 from peewee import *
+from app.auth.models import User
 from app.lesson.models import Lesson
 from app.models import DATABASE
 
@@ -26,3 +27,16 @@ class Discussion(Model):
             # create a unique on from/to/date
             (('lecture_id', 'name'), True),
         )
+
+
+class Note(Model):
+    id = PrimaryKeyField(db_column='ID')
+    votes = IntegerField(db_column='VOTES', default=0)
+    filename = CharField(db_column='FILENAME')
+    uploader = ForeignKeyField(User, db_column='UPLOADER')
+    discussion = ForeignKeyField(Discussion, db_column='DISCUSSION', null=True)
+    lecture = ForeignKeyField(Discussion, db_column='LECTURE')
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_NOTE'
