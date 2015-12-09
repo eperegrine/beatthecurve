@@ -16,7 +16,8 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    lectures = Lecture.select().where(Lecture.lesson_id == lesson.id)
+    lectures = [lecture for lecture in Lecture.select().where(Lecture.lesson_id == lesson.id)]
+    print(lectures)
     notes = {}
     for lecture in lectures:
         notes[lecture.id] = [] # TODO: Modify to actually get files
