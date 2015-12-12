@@ -4,12 +4,24 @@
                 <div class="">{{ error }}</div>
             {% endfor %}
         {% endif %}
-    <div class="input-field">
-        {{ field() }}
-        {% if field.type != "CSRFTokenField" and field.type != "SubmitField" %}
-            <label for="{{ field.id }}">{{ field.label.text }}</label>
-        {% endif %}
-    </div>
+    {% if field.type == "FileField" %}
+      <div class="file-field input-field">
+        <div class="btn">
+          <span>File</span>
+          {{ field() }}
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+    {% else %}
+      <div class="input-field">
+          {{ field() }}
+          {% if field.type != "CSRFTokenField" and field.type != "SubmitField" %}
+              <label for="{{ field.id }}">{{ field.label.text }}</label>
+          {% endif %}
+      </div>
+  {% endif %}
 {%  endmacro %}
 
 {% macro render_lesson_tabs(active, lessonid) %}

@@ -6,6 +6,7 @@ from .auth.models import User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
+app.config['UPLOAD_FOLDER'] = 'uploads'
 
 from app.models import DATABASE
 from app.auth.models import School, User

@@ -35,7 +35,7 @@ class Note(Model):
     filename = CharField(db_column='FILENAME')
     uploader = ForeignKeyField(User, db_column='UPLOADER')
     discussion = ForeignKeyField(Discussion, db_column='DISCUSSION', null=True)
-    lecture = ForeignKeyField(Discussion, db_column='LECTURE')
+    lecture = ForeignKeyField(Lecture, db_column='LECTURE')
 
     class Meta:
         database = DATABASE
