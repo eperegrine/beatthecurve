@@ -12,8 +12,9 @@ from app.models import DATABASE
 from app.auth.models import School, User
 from app.lesson.models import Lesson, LessonStudent
 from app.notes.models import Lecture, Discussion, Note
+from app.qa.models import Question, Reply
 
-DATABASE.create_tables([School, User, Lesson, LessonStudent, Lecture, Discussion, Note], safe=True)
+DATABASE.create_tables([School, User, Lesson, LessonStudent, Lecture, Discussion, Note, Question, Reply], safe=True)
 
 # Set up login manager
 login_manager = LoginManager()
