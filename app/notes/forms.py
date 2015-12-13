@@ -6,7 +6,8 @@ from wtforms.fields import (
 )
 from wtforms.validators import (
     ValidationError,
-    DataRequired
+    DataRequired,
+    Optional
 )
 
 from .models import Lecture
@@ -26,5 +27,5 @@ class AddLectureForm(Form):
 
 class AddNoteForm(Form):
     lecture = SelectField('Lecture', validators=[DataRequired()])
-    discussion = SelectField('Discussion')
+    discussion = SelectField('Discussion', validators=[Optional()])
     file = FileField('File', validators=[DataRequired()])

@@ -5,7 +5,7 @@ function getDiscussions(lectureId, selectFieldId) {
         $(selectFieldId).empty();
         if (Object.keys(data).length == 0) {
             $(selectFieldId).prop('disabled', true);
-            var option = "<option value=''>No Discussions</option>";
+            var option = "<option value='-1'>No Discussions</option>";
             $(selectFieldId).append(option)
 
         } else {

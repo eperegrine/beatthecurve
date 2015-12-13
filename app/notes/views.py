@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, g, jsonify, current_app, request
+from flask import Blueprint, render_template, flash, redirect, url_for, g, jsonify, current_app, request, send_from_directory
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
 from .forms import AddLectureForm, AddNoteForm
@@ -26,7 +26,7 @@ def view(lessonid):
     return render_template('notes/notes_listing.html', lesson=lesson, lectures=lectures, notes=notes)
 
 
-@notes_bp.route('/add-lecture', methods=('POST', 'GEt'))
+@notes_bp.route('/add-lecture', methods=('POST', 'GET'))
 @login_required
 def add_lecture():
     # TODO: Validate user is attending lesson
@@ -40,9 +40,8 @@ def add_lecture():
                 lesson_id=int(form.lesson.data),
                 name=form.name.data
             )
+            os.makedirs(os.path.join(current_app.config['UPLOAD_FOLDER'], "notes", form.lesson.data, lecture.id))
             flash('Success')
-            path = os.path.join(current_app.config['UPLOAD_FOLDER'], "notes", lecture.name)
-            os.makedirs(path)
             return redirect(url_for('auth_bp.profile'))
         except:
             # TODO: Improve exception handling
@@ -65,25 +64,32 @@ def get_discussions(lectureid):
 def add_note(lessonid):
     form = AddNoteForm()
     form.lecture.choices = [(str(lecture.id), lecture.name) for lecture in
-                            Lecture.select().where(Lecture.lesson_id == lessonid)]
-    if form.lecture.data == 'None':
-        form.discussion.choices = [(-1, '')]
+                            Lecture.select().where(Lecture.lesson_id == int(lessonid))]
+    print(form.discussion.data)
+    if form.lecture.data == 'None' and request.method == 'GET':
+        form.discussion.choices = [('-1', '')]
     else:
         form.discussion.choices = [(str(discussion.id), discussion.name) for discussion in Discussion.select().where(Discussion.lecture_id == form.lecture.data)]
 
     if form.validate_on_submit():
         # TODO: Add error handling
-        lecture = Lecture.get(Lecture.id == int(form.lecture.data))
         # Upload file
         filename = secure_filename(form.file.data.filename)
-        filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], "notes", lecture.name, filename)
+        filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], "notes", lessonid, form.lecture.data, filename)
         file = request.files[form.file.name]
         file.save(filepath)
         # Create model
-        if form.discussion.choices == 'None':
-            note = Note.create(filename=filename, uploader=g.user.user_id, lecture=lecture)
+        if form.discussion.data == 'None':
+            note = Note.create(filename=filename, uploader=g.user.user_id, lecture=form.lecture.data)
         else:
-            discussion = Discussion.get(Discussion.id == form.discussion.data)
-            note = Note.create(filename=filename, uploader=g.user.user_id, lecture=lecture)
+            note = Note.create(filename=filename, uploader=g.user.user_id, lecture=form.lecture.data, discussion=form.discussion.data)
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('notes/add_note.html', form=form)
+
+
+@notes_bp.route('/uploads/<lessonid>/<lectureid>/<noteid>', methods=['GET', 'POST'])
+def download(lessonid, lectureid, noteid):
+    filename = Note.get(Note.id == noteid).filename
+    uploads = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'], "notes", lessonid, lectureid)
+    print(uploads)
+    return send_from_directory(uploads, filename)
