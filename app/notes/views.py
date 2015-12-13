@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, jsonify, current_app, request, send_from_directory
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
-from .forms import AddLectureForm, AddNoteForm
+from .forms import AddLectureForm, AddNoteForm, AddDiscussionForm
 from .models import Lecture, Discussion, Note
 from werkzeug.utils import secure_filename
 import os
@@ -93,3 +93,21 @@ def download(lessonid, lectureid, noteid):
     uploads = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'], "notes", lessonid, lectureid)
     print(uploads)
     return send_from_directory(uploads, filename)
+
+
+@notes_bp.route('/add-discussion/<lessonid>', methods=('POST', 'GET'))
+@login_required
+def add_discussion(lessonid):
+    form = AddDiscussionForm()
+    form.lecture.choices = [(str(lecture.id), lecture.name) for lecture in
+                            Lecture.select().where(Lecture.lesson_id == int(lessonid))]
+
+    if form.validate_on_submit():
+        Discussion.create(
+            lecture_id=form.lecture.data,
+            name=form.name.data
+        )
+        flash('Success')
+        return redirect(url_for(".view", lessonid=lessonid))
+
+    return render_template('notes/add_discussion.html', form=form)
