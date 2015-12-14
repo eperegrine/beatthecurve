@@ -19,7 +19,7 @@
             <tr>
               <td>
                 <h5><a href="#">{{ data['question'].name }}</a></h5>
-                <p>{{ data['question'].name[:20] }}</p>
+                <p>{{ data['question'].content[:100] }}</p>
               </td>
               <td>{{ data['question'].number_of_posts }}</td>
               <td>{{ data['last_post'].datetime }}</td>
