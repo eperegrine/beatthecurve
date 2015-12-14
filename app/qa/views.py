@@ -1,6 +1,9 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, g, request
 from flask.ext.login import login_required
 from app.lesson.models import Lesson
+from app.notes.models import Lecture, Discussion
+from .forms import AddQuestionForm
+from .models import Question
 
 qa_bp = Blueprint('qa_bp', __name__, url_prefix='/qa')
 
@@ -15,3 +18,31 @@ def view(lessonid):
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
     return render_template('qa/qa_listing.html', lesson=lesson)
+
+
+@qa_bp.route('/add-question/<lessonid>', methods=('POST', 'GET'))
+@login_required
+def add_question(lessonid):
+    form = AddQuestionForm()
+    form.lecture.choices = [(str(lecture.id), lecture.name) for lecture in
+                            Lecture.select().where(Lecture.lesson_id == int(lessonid))]
+    form.lecture.choices.append(('-1', "N/A"))
+    form.discussion.choices = [('-1', "None")]
+
+    if request.method == 'POST':
+        form.discussion.choices += [(str(discussion.id), discussion.name) for discussion in Discussion.select().where(Discussion.lecture_id == form.lecture.data)]
+
+    if form.validate_on_submit():
+        print(form.discussion.data)
+        if form.lecture.data != '-1' and form.lecture.data != 'None':
+            # TODO: Add Error Handling
+            if form.discussion.data != '-1' and form.discussion.data != 'None':
+                Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lecture=form.lecture.data,
+                                discussion=form.discussion.data, lesson=lessonid)
+            else:
+                Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lecture=form.lecture.data,
+                                lesson=lessonid)
+        else:
+            Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lesson=lessonid)
+        return redirect(url_for(".view", lessonid=lessonid))
+    return render_template('qa/add_question.html', form=form)

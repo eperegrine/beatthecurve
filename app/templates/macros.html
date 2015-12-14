@@ -16,7 +16,11 @@
       </div>
     {% else %}
       <div class="input-field">
-          {{ field() }}
+          {% if field.type == "TextAreaField" %}
+            {{ field(class_="materialize-textarea") }}
+          {% else %}
+            {{ field() }}
+          {% endif %}
           {% if field.type != "CSRFTokenField" and field.type != "SubmitField" %}
               <label for="{{ field.id }}">{{ field.label.text }}</label>
           {% endif %}

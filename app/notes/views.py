@@ -40,10 +40,11 @@ def add_lecture():
                 lesson_id=int(form.lesson.data),
                 name=form.name.data
             )
-            os.makedirs(os.path.join(current_app.config['UPLOAD_FOLDER'], "notes", form.lesson.data, lecture.id))
+            os.makedirs(os.path.join(current_app.config['UPLOAD_FOLDER'], "notes", form.lesson.data, str(lecture.id)))
             flash('Success')
             return redirect(url_for('auth_bp.profile'))
-        except:
+        except Exception as e:
+            print(e)
             # TODO: Improve exception handling
             flash('There was an error')
 

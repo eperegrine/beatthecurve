@@ -20,9 +20,9 @@
   <script src="{{ url_for("static", filename="js/get_discussions.js") }}"></script>
   <script>
     $("#discussion").prop('disabled', true);
-    getDiscussions($("#lecture").val(), "discussion")
+    getDiscussions($("#lecture").val(), {'selectFieldId': "discussion"}, addNoteSelectFields)
     $("#lecture").change(function () {
-      getDiscussions($("#lecture").val(), "discussion")
+    getDiscussions($("#lecture").val(), {'selectFieldId': "discussion"}, addNoteSelectFields)
     });
   </script>
 {% endblock %}
