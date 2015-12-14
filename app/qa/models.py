@@ -2,6 +2,7 @@ from peewee import *
 from app.auth.models import User
 from app.notes.models import Lecture, Discussion, Lesson
 from app.models import DATABASE
+from datetime import datetime
 
 
 class Question(Model):
@@ -25,6 +26,7 @@ class Reply(Model):
     question = ForeignKeyField(Question, db_column='QUESTION')
     user = ForeignKeyField(User, db_column='USER')
     content = CharField(db_column='CONTENT')
+    datetime = DateTimeField(db_column='DATETIME', default=datetime.now)
 
     class Meta:
         database = DATABASE
