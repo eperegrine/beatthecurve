@@ -12,6 +12,7 @@ class Question(Model):
     lecture = ForeignKeyField(Lecture, db_column='LECTURE', null=True)
     lesson = ForeignKeyField(Lesson, db_column='LESSON', null=True)
     discussion = ForeignKeyField(Discussion, db_column='DISCUSSION', null=True)
+    name = CharField(db_column='NAME', unique=True)
     content = CharField(db_column='CONTENT')
 
     class Meta:
