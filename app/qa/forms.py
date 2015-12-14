@@ -25,3 +25,7 @@ class AddQuestionForm(Form):
     discussion = SelectField('Discussion', validators=[Optional()])
     name = StringField('Name', validators=[DataRequired(), question_name_in_use])
     content = TextAreaField('Content', validators=[DataRequired()])
+
+
+class AddReplyForm(Form):
+    content = StringField('Content', validators=[DataRequired()])
