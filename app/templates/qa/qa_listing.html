@@ -3,80 +3,30 @@
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block main %}
   {{ render_lesson_tabs('qa', lesson.id) }}
-  <div class="section">
-    <h5>Lecture 1</h5>
-    <table>
-      <thead>
-        <tr>
-          <th>Forums</th>
-          <th>Replies</th>
-          <th>Last Post</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <h5><a href="#">Balancing Equations Help?</a></h5>
-            <p>Does anyone know how to balance the equation on assignment 5? He said a similar question will be on the exam.</p>
-          </td>
-          <td>1</td>
-          <td>16/02/2001</td>
-        </tr>
-        <tr>
-          <td>
-            <h5><a href="#">Balancing Equations Help?</a></h5>
-            <p>Does anyone know how to balance the equation on assignment 5? He said a similar question will be on the exam.</p>
-          </td>
-          <td>1</td>
-          <td>16/02/2001</td>
-        </tr>
-        <tr>
-          <td>
-            <h5><a href="#">Balancing Equations Help?</a></h5>
-            <p>Does anyone know how to balance the equation on assignment 5? He said a similar question will be on the exam.</p>
-          </td>
-          <td>1</td>
-          <td>16/02/2001</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="section">
-    <h5>Lecture 2</h5>
-    <table>
-      <thead>
-        <tr>
-          <th>Forums</th>
-          <th>Replies</th>
-          <th>Last Post</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <h5><a href="#">Balancing Equations Help?</a></h5>
-            <p>Does anyone know how to balance the equation on assignment 5? He said a similar question will be on the exam.</p>
-          </td>
-          <td>1</td>
-          <td>16/02/2001</td>
-        </tr>
-        <tr>
-          <td>
-            <h5><a href="#">Balancing Equations Help?</a></h5>
-            <p>Does anyone know how to balance the equation on assignment 5? He said a similar question will be on the exam.</p>
-          </td>
-          <td>1</td>
-          <td>16/02/2001</td>
-        </tr>
-        <tr>
-          <td>
-            <h5><a href="#">Balancing Equations Help?</a></h5>
-            <p>Does anyone know how to balance the equation on assignment 5? He said a similar question will be on the exam.</p>
-          </td>
-          <td>1</td>
-          <td>16/02/2001</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  {% for key in questions %}
+    <div class="section">
+      <h5>{{ key }}</h5>
+      <table>
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Replies</th>
+            <th>Last Post</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for data in questions[key] %}
+            <tr>
+              <td>
+                <h5><a href="#">{{ data['question'].name }}</a></h5>
+                <p>{{ data['question'].name[:20] }}</p>
+              </td>
+              <td>{{ data['question'].number_of_posts }}</td>
+              <td>{{ data['last_post'].datetime }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endfor %}
 {% endblock %}

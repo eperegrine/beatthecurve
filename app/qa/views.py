@@ -3,7 +3,8 @@ from flask.ext.login import login_required
 from app.lesson.models import Lesson
 from app.notes.models import Lecture, Discussion
 from .forms import AddQuestionForm
-from .models import Question
+from .models import Question, Reply
+from collections import OrderedDict
 
 qa_bp = Blueprint('qa_bp', __name__, url_prefix='/qa')
 
@@ -17,7 +18,20 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    return render_template('qa/qa_listing.html', lesson=lesson)
+    data = OrderedDict()
+    data['Misc'] = []
+    lectures = Lecture.select().where(Lecture.lesson_id == lessonid)
+    for lecture in lectures:
+        data[lecture.name] = []
+    questions = Question.select().where(Question.lesson == lessonid)
+    for question in questions:
+        reply =  Reply.select().where(Reply.question == question.id).order_by(Reply.datetime).limit(1)
+        if question.lecture is None:
+            data['Misc'].append({'question': question, 'last_post': reply})
+        else:
+            data[question.lecture.name].append({'question': question, 'last_post': reply})
+    print(data)
+    return render_template('qa/qa_listing.html', lesson=lesson, questions=data)
 
 
 @qa_bp.route('/add-question/<lessonid>', methods=('POST', 'GET'))
