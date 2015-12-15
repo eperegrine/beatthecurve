@@ -4,8 +4,8 @@
       <!--Import Google Icon Font-->
       <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!--Import materialize.css-->
-      <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"  media="screen,projection"/>
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+      <link type="text/css" rel="stylesheet" href="{{ static_url }}css/materialize.min.css"  media="screen,projection"/>
+      <link rel="stylesheet" href="{{ static_url }}css/main.css">
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
@@ -47,8 +47,8 @@
 
       <!--Import jQuery before materialize.js-->
       <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.js') }} "></script>
-      <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }} "></script>
+      <script type="text/javascript" src="{{ static_url }}js/materialize.min.js"></script>
+      <script type="text/javascript" src="{{ static_url }}js/main.js"></script>
       {% block js %}{% endblock %}
     </body>
   </html>

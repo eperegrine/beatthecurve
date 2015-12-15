@@ -3,6 +3,7 @@ from flask.ext.login import LoginManager, current_user
 from peewee import DoesNotExist
 from .models import DATABASE
 from .auth.models import User
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
@@ -46,6 +47,23 @@ def after_request(response):
     """Close the database connection after each response"""
     g.db.close()
     return response
+
+# Environment has STATIC_URL='http://my_s3_bucket.aws.amazon.com/'
+@app.context_processor
+def inject_static_url():
+    """
+    Inject the variable 'static_url' into the templates. Grab it from
+    the environment variable STATIC_URL, or use the default.
+
+    Template variable will always have a trailing slash.
+
+    """
+    static_url = os.environ.get('STATIC_URL', app.static_url_path)
+    if not static_url.endswith('/'):
+        static_url += '/'
+    return dict(
+        static_url=static_url
+    )
 
 
 @app.route('/')
