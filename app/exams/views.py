@@ -22,7 +22,8 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    return render_template('exams/exam_listing.html', lesson=lesson)
+    exams = Exam.select().where(Exam.lesson == lessonid)
+    return render_template('exams/exam_listing.html', lesson=lesson, exams=exams)
 
 
 @exams_bp.route('/sign_s3/')
@@ -62,7 +63,8 @@ def add_exam():
             average_grade=form.average_grade.data,
             filename=form.file.data.filename,
             lesson=form.lesson.data,
-            publisher=g.user.user_id
+            publisher=g.user.user_id,
+            number_of_takers=form.number_of_takers.data
         )
 
     return render_template("exams/add-exam.html", form=form)

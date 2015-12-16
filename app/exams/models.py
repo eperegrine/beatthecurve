@@ -16,11 +16,3 @@ class Exam(Model):
         database = DATABASE
         db_table = 'TBL_EXAM'
 
-
-class ExamTakers(Model):
-    user = ForeignKeyField(User, db_column='USER')
-    exam = ForeignKeyField(Exam, db_column='EXAM')
-
-    class Meta:
-        database = DATABASE
-        db_table = 'TBL_EXAM_TAKERS'
