@@ -4,7 +4,9 @@ from app.lesson.models import Lesson, LessonStudent
 from .forms import AddLectureForm, AddNoteForm, AddDiscussionForm
 from .models import Lecture, Discussion, Note
 from werkzeug.utils import secure_filename
-import os
+import time, os, json, base64, hmac, urllib.parse
+from hashlib import sha1
+
 
 notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')
 
@@ -75,15 +77,19 @@ def add_note(lessonid):
     if form.validate_on_submit():
         # TODO: Add error handling
         # Upload file
-        filename = secure_filename(form.file.data.filename)
+        '''filename = secure_filename(form.file.data.filename)
         filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], "notes", lessonid, form.lecture.data, filename)
         file = request.files[form.file.name]
         file.save(filepath)
-        # Create model
+        # Create model'''
+        filename = form.file.data.filename
         if form.discussion.data == 'None':
             note = Note.create(filename=filename, uploader=g.user.user_id, lecture=form.lecture.data)
         else:
             note = Note.create(filename=filename, uploader=g.user.user_id, lecture=form.lecture.data, discussion=form.discussion.data)
+        lecture = Lecture.get(Lecture.id == form.lecture.data)
+        lecture.number_of_files += 1
+        lecture.save()
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('notes/add_note.html', form=form)
 
@@ -112,3 +118,29 @@ def add_discussion(lessonid):
         return redirect(url_for(".view", lessonid=lessonid))
 
     return render_template('notes/add_discussion.html', form=form)
+
+
+@notes_bp.route('/sign_s3/')
+def sign_s3():
+    AWS_ACCESS_KEY = 'AKIAJPAM7ZQCRQQ5GP3Q'
+    AWS_SECRET_KEY = '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'
+    S3_BUCKET = 'beatthecurve'
+
+    object_name = urllib.parse.quote_plus(request.args.get('file_name'))
+    mime_type = request.args.get('file_type')
+
+    expires = int(time.time()+60*60*24)
+    amz_headers = "x-amz-acl:public-read"
+
+    string_to_sign = "PUT\n\n%s\n%d\n%s\n/%s/notes/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
+
+    signature = base64.encodebytes(hmac.new(AWS_SECRET_KEY.encode(), string_to_sign.encode('utf8'), sha1).digest())
+    signature = urllib.parse.quote_plus(signature.strip())
+
+    url = 'https://s3-us-west-2.amazonaws.com/%s/notes/%s' % (S3_BUCKET, object_name)
+
+    content = json.dumps({
+        'signed_request': '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
+        'url': url,
+    })
+    return content
