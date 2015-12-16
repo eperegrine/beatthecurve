@@ -24,7 +24,9 @@ def view(lessonid):
     print(lectures)
     notes = {}
     for lecture in lectures:
-        notes[lecture.id] = [] # TODO: Modify to actually get files
+        query = Note.select().where(Note.lecture == lecture.id)
+        notes[lecture.id] = [note for note in query] # TODO: Modify to actually get files
+    print(notes)
     return render_template('notes/notes_listing.html', lesson=lesson, lectures=lectures, notes=notes)
 
 

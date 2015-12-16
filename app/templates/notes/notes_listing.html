@@ -16,7 +16,7 @@
         <tr>
           <td>{{ lecture.name }}</td>
           <td>{{ lecture.number_of_files }}</td>
-          <td>{% for note in notes[lecture.id] %}<a href="#">{{ note.filename }}</a>{% endfor %}</td>
+          <td>{% for note in notes[lecture.id] %}<a href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}">{{ note.filename }}</a>{% endfor %}</td>
       </tr>
     {% endfor %}
     </tbody>
