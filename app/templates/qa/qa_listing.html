@@ -22,7 +22,9 @@
                 <p>{{ data['question'].content[:100] }}</p>
               </td>
               <td>{{ data['question'].number_of_posts }}</td>
-              <td>{{ data['last_post'].datetime }}</td>
+              {% if data['question'].name in last_posts.keys() %}
+                <td>{{ last_posts[data['question'].name].datetime }}</td>
+              {% endif %}
             </tr>
           {% endfor %}
         </tbody>

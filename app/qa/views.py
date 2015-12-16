@@ -24,14 +24,21 @@ def view(lessonid):
     for lecture in lectures:
         data[lecture.name] = []
     questions = Question.select().where(Question.lesson == lessonid)
+    last_posts = {}
     for question in questions:
         reply = Reply.select().where(Reply.question == question.id).order_by(Reply.datetime).limit(1)
+        print(reply)
         if question.lecture is None:
             data['Misc'].append({'question': question, 'last_post': reply})
         else:
-            data[question.lecture.name].append({'question': question, 'last_post': reply})
+            data[question.lecture.name].append({'question': question})
+        try:
+            last_posts[question.name] = [r for r in reply][0]
+        except:
+            pass
+
     print(data)
-    return render_template('qa/qa_listing.html', lesson=lesson, questions=data)
+    return render_template('qa/qa_listing.html', lesson=lesson, questions=data, last_posts=last_posts)
 
 
 @qa_bp.route('/add-question/<lessonid>', methods=('POST', 'GET'))
@@ -97,5 +104,7 @@ def add_reply(questionid):
             user=g.user.user_id,
             content=form.content.data
         )
+        question.number_of_posts += 1
+        question.save()
 
     return redirect(url_for(".detail", lessonid=question.lesson.id, qid=question.id))
