@@ -37,7 +37,8 @@ def view(lessonid):
         except:
             pass
 
-    print(data)
+    if len(data['Misc']) < 1:
+        del data['Misc']
     return render_template('qa/qa_listing.html', lesson=lesson, questions=data, last_posts=last_posts)
 
 
