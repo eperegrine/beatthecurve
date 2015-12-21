@@ -1,6 +1,9 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, g
 from flask.ext.login import login_required
-from app.lesson.models import Lesson
+from app.lesson.models import Lesson, LessonStudent
+from .forms import AddStudyGroupForm, AddStudyGroupSessionForm
+from .models import StudyGroup, StudyGroupMembers, StudyGroupSession
+from datetime import datetime
 
 studygroups_bp = Blueprint('studygroups_bp', __name__, url_prefix='/studygroups')
 
@@ -15,3 +18,48 @@ def view(lessonid):
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
     return render_template('studygroups/study_groups_listing.html', lesson=lesson)
+
+
+@studygroups_bp.route('/add-studygroup', methods=('POST', 'GET'))
+@login_required
+def add_studygroup():
+    form = AddStudyGroupForm()
+    lesson_ids = [ls.lesson_id for ls in LessonStudent.select().where(LessonStudent.student_id == g.user.user_id)]
+    if len(lesson_ids) < 1:
+        flash("You do not have any lessons")
+        return redirect(url_for("auth_bp.profile"))
+    else:
+        lessons = Lesson.select().where(Lesson.id << lesson_ids)
+        form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in lessons]
+
+    if form.validate_on_submit():
+        study_group = StudyGroup.create(
+            location=form.location.data,
+            lesson=form.lesson.data,
+            founder=g.user.user_id
+        )
+        StudyGroupMembers.create(
+            user=g.user.user_id,
+            study_group=study_group
+        )
+        return redirect(url_for(".view", lessonid=form.lesson.data))
+    return render_template('studygroups/add_studygroup.html', form=form)
+
+
+@studygroups_bp.route('/add-session/<studygroupid>', methods=('POST', 'GET'))
+@login_required
+def add_studygroup_session(studygroupid):
+    if not StudyGroup.select().where((StudyGroup.id == studygroupid) & (StudyGroup.founder == g.user.user_id)).exists():
+        flash("Error! Invalid Study Group")
+        return redirect(url_for("auth_bp.profile"))
+
+    form = AddStudyGroupSessionForm()
+    if form.validate_on_submit():
+        dt = datetime.combine(form.date.data, form.time.data)
+        StudyGroupSession.create(
+            study_group=studygroupid,
+            datetime=dt
+        )
+        return redirect(url_for("auth_bp.profile"))
+
+    return render_template("studygroups/add_session.html", form=form)

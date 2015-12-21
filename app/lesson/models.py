@@ -31,7 +31,7 @@ class LessonStudent(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_LESSON_STUDENT'
-        primary_key = CompositeKey('student_id', 'lesson_id')
+        #primary_key = CompositeKey('student_id', 'lesson_id')
 
     @classmethod
     def get_attended_lessons(cls, user_id):

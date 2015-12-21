@@ -22,7 +22,6 @@ class StudyGroupMembers(Model):
     study_group = ForeignKeyField(StudyGroup, db_column='STUDY_GROUP_ID')
 
     class Meta:
-        primary_key = CompositeKey('user', 'study_group')
         database = DATABASE
         db_table = 'TBL_STUDY_GROUP_MEMBER'
 

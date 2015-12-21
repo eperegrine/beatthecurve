@@ -21,7 +21,7 @@
           {% else %}
             {{ field() }}
           {% endif %}
-          {% if field.type != "CSRFTokenField" and field.type != "SubmitField" %}
+          {% if field.type not in ["CSRFTokenField", "SubmitField", "TimeField", "DateField"] %}
               <label for="{{ field.id }}">{{ field.label.text }}</label>
           {% endif %}
       </div>
