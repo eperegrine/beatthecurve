@@ -2,6 +2,7 @@ from peewee import *
 from app.models import DATABASE
 from app.auth.models import User
 from app.lesson.models import Lesson
+from datetime import datetime
 
 
 class StudyGroup(Model):
@@ -16,6 +17,14 @@ class StudyGroup(Model):
         database = DATABASE
         db_table = 'TBL_STUDY_GROUP'
 
+    def get_next_session(self):
+        try:
+            query = StudyGroupSession.select().where((StudyGroupSession.datetime >= datetime.now()) & (StudyGroupSession.cancelled == False) & (StudyGroupSession.study_group == self.id)).order_by(StudyGroupSession.datetime.asc())
+            for q in query:
+                return q
+        except Exception as e:
+            print(e)
+            return None
 
 class StudyGroupMembers(Model):
     user = ForeignKeyField(User, db_column='USER_ID')

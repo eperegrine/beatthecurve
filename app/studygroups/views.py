@@ -17,7 +17,9 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    return render_template('studygroups/study_groups_listing.html', lesson=lesson)
+    studygroup_ids = [sgm.study_group for sgm in StudyGroupMembers.select().where(StudyGroupMembers.user == g.user.user_id)]
+    study_groups = [sg for sg in StudyGroup.select().where(StudyGroup.id << studygroup_ids)]
+    return render_template('studygroups/study_groups_listing.html', lesson=lesson, study_groups=study_groups)
 
 
 @studygroups_bp.route('/add-studygroup', methods=('POST', 'GET'))
