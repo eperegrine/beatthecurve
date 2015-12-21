@@ -65,3 +65,10 @@ def add_studygroup_session(studygroupid):
         return redirect(url_for("auth_bp.profile"))
 
     return render_template("studygroups/add_session.html", form=form)
+
+
+@studygroups_bp.route('/detail/<sgid>')
+@login_required
+def detail(sgid):
+    study_group = StudyGroup.get(StudyGroup.id == sgid)
+    return render_template('studygroups/detail.html', study_group=study_group)

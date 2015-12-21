@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block title %}{{ study_group.location }}{% endblock %}
+{% block main %}
+  <div class="container">
+    <h5 style="text-align: center">Productivity: {{ study_group.productivity }}</h5>
+    <h5>Upcoming Sessions</h5>
+    <ul>
+      {% for session in study_group.get_all_upcoming_sessions() %}
+        <li>{{ session.datetime }}{% if session.cancelled %} - Cancelled {% endif %}</li>
+      {% endfor %}
+    </ul>
+    <h5>Comments</h5>
+  </div>
+{% endblock %}

@@ -16,7 +16,7 @@
         {% for sg in study_groups %}
           <tr>
           <td>
-            <a href="#">{{ sg.location }}</a>
+            <a href="{{ url_for("studygroups_bp.detail", sgid=sg.id) }}">{{ sg.location }}</a>
           </td>
           {% set x = sg.get_next_session().datetime %}
           <td>{% if x %}{{ x }}{% else %}None{% endif %}</td>

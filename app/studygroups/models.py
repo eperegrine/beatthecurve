@@ -26,6 +26,14 @@ class StudyGroup(Model):
             print(e)
             return None
 
+    def get_all_upcoming_sessions(self):
+        try:
+            query = StudyGroupSession.select().where((StudyGroupSession.datetime >= datetime.now()) & (StudyGroupSession.study_group == self.id)).order_by(StudyGroupSession.datetime.asc())
+            return [q for q in query]
+        except Exception as e:
+            print(e)
+            return None
+
 class StudyGroupMembers(Model):
     user = ForeignKeyField(User, db_column='USER_ID')
     study_group = ForeignKeyField(StudyGroup, db_column='STUDY_GROUP_ID')
