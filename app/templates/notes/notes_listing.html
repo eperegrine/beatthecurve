@@ -7,7 +7,10 @@
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
       {% endfor %}
-    </ul>
+  </ul>
+  <a href="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}" class="btn">Upload Note</a>
+  <a href="{{ url_for("notes_bp.add_lecture") }}" class="btn">Add Lecture</a>
+  <a href="{{ url_for("notes_bp.add_discussion", lessonid=lesson.id) }}" class="btn">Add Discussion</a>
   <table class="striped">
     <thead>
       <tr>
