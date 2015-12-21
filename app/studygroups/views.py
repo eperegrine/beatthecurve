@@ -17,8 +17,7 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    studygroup_ids = [sgm.study_group for sgm in StudyGroupMembers.select().where(StudyGroupMembers.user == g.user.user_id)]
-    study_groups = [sg for sg in StudyGroup.select().where(StudyGroup.id << studygroup_ids)]
+    study_groups = [sg for sg in StudyGroup.select().where(StudyGroup.lesson == lessonid)]
     return render_template('studygroups/study_groups_listing.html', lesson=lesson, study_groups=study_groups)
 
 
@@ -72,3 +71,35 @@ def add_studygroup_session(studygroupid):
 def detail(sgid):
     study_group = StudyGroup.get(StudyGroup.id == sgid)
     return render_template('studygroups/detail.html', study_group=study_group)
+
+
+@studygroups_bp.route('/join/<sgid>')
+@login_required
+def join(sgid):
+    try:
+        sg = StudyGroup.get(StudyGroup.id == sgid)
+    except:
+        flash("Error. Invalid study group")
+        return redirect(url_for(".detail", sgid=sgid))
+
+    if sg.add_member(g.user):
+        flash("Success")
+    else:
+        flash("Error")
+    return redirect(url_for(".detail", sgid=sgid))
+
+
+@studygroups_bp.route('/leave/<sgid>')
+@login_required
+def leave(sgid):
+    try:
+        sg = StudyGroup.get(StudyGroup.id == sgid)
+    except:
+        flash("Error. Invalid study group")
+        return redirect(url_for(".detail", sgid=sgid))
+
+    if sg.remove_member(g.user):
+        flash("Success")
+    else:
+        flash("Error")
+    return redirect(url_for(".detail", sgid=sgid))

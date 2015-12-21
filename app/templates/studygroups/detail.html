@@ -2,7 +2,16 @@
 {% block title %}{{ study_group.location }}{% endblock %}
 {% block main %}
   <div class="container">
-    <h5 style="text-align: center">Productivity: {{ study_group.productivity }}</h5>
+    <h5 class="center">Productivity: {{ study_group.productivity }}</h5>
+    <p class="center">
+      {% if study_group.founder.user_id == current_user.user_id %}
+        You founded this study group!
+      {% elif study_group.is_member(current_user) %}
+        <a href="{{ url_for("studygroups_bp.leave", sgid=study_group.id) }}" class="btn">Leave</a>
+      {% else %}
+        <a href="{{ url_for("studygroups_bp.join",sgid=study_group.id) }}" class="btn">Join</a>
+      {% endif %}
+    </p>
     <h5>Upcoming Sessions</h5>
     <ul>
       {% for session in study_group.get_all_upcoming_sessions() %}

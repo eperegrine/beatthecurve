@@ -34,6 +34,30 @@ class StudyGroup(Model):
             print(e)
             return None
 
+    def add_member(self, user):
+        try:
+            if self.is_member(user):
+                return None
+            StudyGroupMembers.create(
+                user=user.user_id,
+                study_group=self.id
+            )
+            return True
+        except:
+            return None
+
+    def remove_member(self, user):
+        try:
+            StudyGroupMembers.delete().where((StudyGroupMembers.study_group == self.id) & (StudyGroupMembers.user == user.user_id)).execute()
+            return True
+        except:
+            return False
+
+    def is_member(self, user):
+        if StudyGroupMembers.select().where((StudyGroupMembers.user == user.user_id) & (StudyGroupMembers.study_group == self.id)).exists():
+                return True
+        return False
+
 class StudyGroupMembers(Model):
     user = ForeignKeyField(User, db_column='USER_ID')
     study_group = ForeignKeyField(StudyGroup, db_column='STUDY_GROUP_ID')
