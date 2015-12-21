@@ -38,6 +38,10 @@ class StudyGroup(Model):
         try:
             if self.is_member(user):
                 return None
+
+            self.number_of_members += 1
+            self.save()
+
             StudyGroupMembers.create(
                 user=user.user_id,
                 study_group=self.id
@@ -48,6 +52,8 @@ class StudyGroup(Model):
 
     def remove_member(self, user):
         try:
+            self.number_of_members -= 1
+            self.save()
             StudyGroupMembers.delete().where((StudyGroupMembers.study_group == self.id) & (StudyGroupMembers.user == user.user_id)).execute()
             return True
         except:
