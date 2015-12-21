@@ -12,6 +12,8 @@
     <p class="center">
       {% if study_group.founder.user_id == current_user.user_id %}
         You founded this study group!
+        <br>
+        <a href="{{ url_for("studygroups_bp.add_studygroup_session", studygroupid=study_group.id) }}" class="btn">Add Session</a>
       {% elif study_group.is_member(current_user) %}
         <a href="{{ url_for("studygroups_bp.leave", sgid=study_group.id) }}" class="btn">Leave</a>
       {% else %}

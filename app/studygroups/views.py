@@ -62,7 +62,8 @@ def add_studygroup_session(studygroupid):
             study_group=studygroupid,
             datetime=dt
         )
-        return redirect(url_for("auth_bp.profile"))
+        flash("Success")
+        return redirect(url_for(".detail",sgid=studygroupid))
 
     return render_template("studygroups/add_session.html", form=form)
 
