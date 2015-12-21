@@ -3,6 +3,11 @@
 {% block title %}{{ study_group.location }}{% endblock %}
 {% block main %}
   <div class="container">
+    <ul>
+      {% for message in get_flashed_messages() %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
     <h5 class="center">Productivity: {{ study_group.productivity }}</h5>
     <p class="center">
       {% if study_group.founder.user_id == current_user.user_id %}

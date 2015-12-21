@@ -3,6 +3,11 @@
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block main %}
   {{ render_lesson_tabs('qa', lesson.id) }}
+  <ul>
+      {% for message in get_flashed_messages() %}
+        <li>{{ message }}</li>
+      {% endfor %}
+  </ul>
   <h5>{{ question.name }}</h5>
   <p>
     {{ question.content }}
