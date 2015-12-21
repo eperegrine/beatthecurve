@@ -66,5 +66,6 @@ def add_exam():
             publisher=g.user.user_id,
             number_of_takers=form.number_of_takers.data
         )
+        return redirect(url_for(".view", lessonid=form.lesson.data))
 
     return render_template("exams/add-exam.html", form=form)
