@@ -18,3 +18,7 @@ class AddStudyGroupForm(Form):
 class AddStudyGroupSessionForm(Form):
     date = DateField('Date', validators=[DataRequired()])
     time = TimeField('Time', validators=[DataRequired()])
+
+
+class AddComment(Form):
+    comment = StringField('Comment', validators=[DataRequired()])

@@ -4,6 +4,7 @@ from app.lesson.models import Lesson, LessonStudent
 from .forms import AddStudyGroupForm, AddStudyGroupSessionForm
 from .models import StudyGroup, StudyGroupMembers, StudyGroupSession
 from datetime import datetime
+from .forms import AddComment
 
 studygroups_bp = Blueprint('studygroups_bp', __name__, url_prefix='/studygroups')
 
@@ -70,7 +71,11 @@ def add_studygroup_session(studygroupid):
 @login_required
 def detail(sgid):
     study_group = StudyGroup.get(StudyGroup.id == sgid)
-    return render_template('studygroups/detail.html', study_group=study_group)
+    comment_form = AddComment()
+    comments = study_group.get_comments()
+
+
+    return render_template('studygroups/detail.html', study_group=study_group, comments=comments, comment_form=comment_form)
 
 
 @studygroups_bp.route('/join/<sgid>')
@@ -102,4 +107,18 @@ def leave(sgid):
         flash("Success")
     else:
         flash("Error")
+    return redirect(url_for(".detail", sgid=sgid))
+
+
+@studygroups_bp.route('/add-comment/<sgid>', methods=('POST', 'GET'))
+@login_required
+def add_comment(sgid):
+    comment_form = AddComment()
+    study_group = StudyGroup.get(StudyGroup.id == sgid)
+
+    if comment_form.validate_on_submit():
+        if study_group.add_comment(comment_form.comment.data, user=g.user):
+            flash("Success")
+        else:
+            flash("Error")
     return redirect(url_for(".detail", sgid=sgid))

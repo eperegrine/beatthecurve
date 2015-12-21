@@ -1,3 +1,4 @@
+{% from 'macros.html' import render_field %}
 {% extends 'layout.html' %}
 {% block title %}{{ study_group.location }}{% endblock %}
 {% block main %}
@@ -19,5 +20,16 @@
       {% endfor %}
     </ul>
     <h5>Comments</h5>
+    <form method="post" action="{{ url_for("studygroups_bp.add_comment", sgid=study_group.id) }}">
+      {% for field in comment_form %}
+        {{ render_field(field) }}
+      {% endfor %}
+      <button type="submit" class="waves-effect waves-light btn">Add Comment</button>
+    </form>
+    <ul>
+      {% for comment in comments %}
+        <li>{{ comment.content }}<br>By {{ comment.user.first_name }} <div class="divider"></div></li>
+      {% endfor %}
+    </ul>
   </div>
 {% endblock %}

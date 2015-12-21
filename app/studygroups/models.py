@@ -64,6 +64,21 @@ class StudyGroup(Model):
                 return True
         return False
 
+    def add_comment(self, content, user):
+        try:
+            StudyGroupComment.create(
+                user=user.user_id,
+                content=content,
+                study_group=self.id
+            )
+            return True
+        except:
+            return False
+
+    def get_comments(self):
+        comments = StudyGroupComment.select().where(StudyGroupComment.study_group == self.id)
+        return [c for c in comments]
+
 class StudyGroupMembers(Model):
     user = ForeignKeyField(User, db_column='USER_ID')
     study_group = ForeignKeyField(StudyGroup, db_column='STUDY_GROUP_ID')
