@@ -41,6 +41,23 @@ class Note(Model):
         database = DATABASE
         db_table = 'TBL_NOTE'
 
+    def has_voted(self, user):
+        if NoteVote.select().where((NoteVote.user == user.user_id) & (NoteVote.note == self.id)).exists():
+            return True
+        return False
+
+    def vote(self, user):
+        if not self.has_voted(user):
+            try:
+                NoteVote.create(
+                    user=user.user_id,
+                    note=self.id
+                )
+                return True, ""
+            except Exception as e:
+                return False, str(e)
+        return False, "You have already voted!"
+
 
 class NoteVote(Model):
     id = PrimaryKeyField(db_column='ID')
