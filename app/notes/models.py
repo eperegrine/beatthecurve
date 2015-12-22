@@ -46,23 +46,41 @@ class Note(Model):
             return True
         return False
 
-    def vote(self, user):
+    def has_upvoted(self, user):
+        if NoteVote.select().where((NoteVote.user == user.user_id) & (NoteVote.note == self.id) & (NoteVote.upvote == True)).exists():
+            return True
+        return False
+
+    def vote(self, user, upvote):
         if not self.has_voted(user):
             try:
                 NoteVote.create(
                     user=user.user_id,
-                    note=self.id
+                    note=self.id,
+                    upvote=upvote,
                 )
-                return True, ""
             except Exception as e:
                 return False, str(e)
-        return False, "You have already voted!"
+        else:
+            try:
+                nv = NoteVote.get(NoteVote.user == user.user_id, NoteVote.note == self.id)
+                nv.upvote = upvote
+                nv.save()
+            except Exception as e:
+                return False, str(e)
+        if upvote:
+            self.votes += 1
+        else:
+            self.votes -= 1
+        self.save()
+        return True, ""
 
 
 class NoteVote(Model):
     id = PrimaryKeyField(db_column='ID')
     user = ForeignKeyField(User, db_column='USER_ID')
     note = ForeignKeyField(Note, db_column='NOTE_ID')
+    upvote = BooleanField()
 
     class Meta:
         database = DATABASE

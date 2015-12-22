@@ -146,3 +146,33 @@ def sign_s3():
         'url': url,
     })
     return content
+
+
+@notes_bp.route('/detail/<noteid>')
+@login_required
+def detail(noteid):
+    try:
+        note = Note.get(Note.id == noteid)
+    except:
+        flash("Invalid note")
+        return redirect(url_for("auth_bp.profile"))
+    return render_template("notes/detail.html", note=note)
+
+
+@notes_bp.route("/vote/<noteid>/<upvote>")
+@login_required
+def vote(noteid, upvote):
+    note = Note.get(Note.id == noteid)
+    vote = True if upvote == "1" else False
+    if note.has_upvoted(g.user) and vote:
+        flash("Error! You have already upvoted this note!")
+    elif not note.has_upvoted(g.user) and not vote:
+        flash("Error! You have already downvoted this note!")
+    else:
+        sucess, message = note.vote(g.user, vote)
+        if sucess:
+            flash("Success")
+        else:
+            flash(message)
+    return redirect(url_for(".detail", noteid=noteid))
+
