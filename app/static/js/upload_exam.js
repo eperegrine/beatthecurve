@@ -6,12 +6,14 @@ function upload_file(file, signed_request, url){
         if (xhr.status === 200) {
             console.log('submitting');
             alert("Submitting!");
+            undisableForm();
             document.createElement('form').submit.call(document.getElementById('add-exam-form'));
             console.log('called again')
         }
     };
 
     xhr.onerror = function() {
+        undisableForm();
         alert("Could not upload file.");
     };
     xhr.send(file);
@@ -26,6 +28,7 @@ function get_signed_request(file){
                 upload_file(file, response.signed_request, response.url);
             }
             else{
+                undisableForm();
                 alert("Could not get signed URL.");
             }
         }
@@ -47,9 +50,22 @@ $(document).ready(function() {
                 alert("No file selected.");
             }
             else {
+                disableForm();
+                $("#average_grade").parent().append('<div class="progress" id="progress"><div class="indeterminate"></div></div>');
                 get_signed_request(file);
             }
         }
 });
 });
+
+function disableForm() {
+    $("#add-exam-form").find('input, textarea, button, select').addClass("disabled");
+    $("form > div .btn").addClass("disabled")
+}
+
+function undisableForm() {
+    $("#add-exam-form").find('input, textarea, button, select').removeClass("disabled");
+    $("form > div .btn").removeClass("disabled")
+}
+
 
