@@ -16,3 +16,13 @@ class Exam(Model):
         database = DATABASE
         db_table = 'TBL_EXAM'
 
+
+class ExamVote(Model):
+    id = PrimaryKeyField(db_column='ID')
+    user = ForeignKeyField(User, db_column='USER_ID')
+    exam = ForeignKeyField(Exam, db_column='EXAM_ID')
+    upvote = BooleanField(db_column='UPVOTE')
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_EXAM_VOTE'
