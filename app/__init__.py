@@ -14,11 +14,11 @@ from app.auth.models import School, User
 from app.lesson.models import Lesson, LessonStudent
 from app.notes.models import Lecture, Discussion, Note, NoteVote
 from app.qa.models import Question, Reply
-from app.exams.models import Exam
+from app.exams.models import Exam, ExamVote
 from app.studygroups.models import StudyGroup, StudyGroupComment, StudyGroupMembers, StudyGroupSession
 
 DATABASE.create_tables([School, User, Lesson, LessonStudent, Lecture, Discussion, Note, NoteVote, Question, Reply, Exam,
-                        StudyGroup, StudyGroupComment, StudyGroupMembers, StudyGroupSession], safe=True)
+                        ExamVote, StudyGroup, StudyGroupComment, StudyGroupMembers, StudyGroupSession], safe=True)
 
 # Set up login manager
 login_manager = LoginManager()

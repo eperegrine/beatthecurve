@@ -29,7 +29,7 @@
         {% for exam in exams %}
           <tr>
           <td>
-            <a href="https://s3-us-west-2.amazonaws.com/beatthecurve/exams/{{ exam.filename }}" class="file">{{ exam.filename }}</a>
+            <a href="{{ url_for("exams_bp.detail", examid=exam.id) }}" class="file">{{ exam.filename }}</a>
           </td>
           <td>{{ exam.number_of_takers }}</td>
           <td>{{ exam.average_grade }}</td>

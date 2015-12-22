@@ -7,6 +7,7 @@ function upload_file(file, signed_request, url){
             console.log('submitting');
             alert("Submitting!");
             undisableForm();
+            $("#progress").remove();
             document.createElement('form').submit.call(document.getElementById('add-exam-form'));
             console.log('called again')
         }
@@ -14,6 +15,7 @@ function upload_file(file, signed_request, url){
 
     xhr.onerror = function() {
         undisableForm();
+        $("#progress").remove();
         alert("Could not upload file.");
     };
     xhr.send(file);
@@ -29,6 +31,7 @@ function get_signed_request(file){
             }
             else{
                 undisableForm();
+                $("#progress").remove();
                 alert("Could not get signed URL.");
             }
         }

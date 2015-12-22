@@ -69,3 +69,28 @@ def add_exam():
         return redirect(url_for(".view", lessonid=form.lesson.data))
 
     return render_template("exams/add-exam.html", form=form)
+
+
+@exams_bp.route('/vote/<examid>/<upvote>')
+@login_required
+def vote(examid, upvote):
+    exam = Exam.get(Exam.id == examid)
+    vote = True if upvote == "1" else False
+    if exam.has_upvoted(g.user) and vote:
+        flash("Error! You have already upvoted this exam!")
+    elif not exam.has_upvoted(g.user) and not vote:
+        flash("Error! You have already downvoted this exam!")
+    else:
+        sucess, message = exam.vote(g.user, vote)
+        if sucess:
+            flash("Success")
+        else:
+            flash(message)
+    return redirect(url_for(".detail", examid=examid))
+
+
+@exams_bp.route('/detail/<examid>')
+@login_required
+def detail(examid):
+    exam = Exam.get(Exam.id == examid)
+    return render_template("exams/detail.html", exam=exam)

@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_field %}
+{% block title %}{{ exam.filename }}{% endblock %}
+{% block main %}
+  <div class="container">
+    <ul>
+        {% for message in get_flashed_messages() %}
+          <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    <h5>Votes: {{ exam.votes }}</h5>
+    <div>
+      {% if exam.has_voted(current_user) %}
+      {% if exam.has_upvoted(current_user) %}
+        <i class="material-icons">thumb_up</i><a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a>
+      {% elif exam.has_voted(current_user) %}
+        <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a><i class="material-icons">thumb_down</i>
+      {% endif %}
+    {% else %}
+      <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a><a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a>
+    {% endif %}
+    </div>
+    <a href="https://s3-us-west-2.amazonaws.com/beatthecurve/exams/{{ exam.filename }}" class="btn">Download</a>
+  </div>
+{% endblock %}
