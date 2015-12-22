@@ -40,3 +40,13 @@ class Note(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_NOTE'
+
+
+class NoteVote(Model):
+    id = PrimaryKeyField(db_column='ID')
+    user = ForeignKeyField(User, db_column='USER_ID')
+    note = ForeignKeyField(Note, db_column='NOTE_ID')
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_NOTE_VOTE'
