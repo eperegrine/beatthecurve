@@ -6,6 +6,7 @@ function upload_file(file, signed_request, url){
         if (xhr.status === 200) {
             console.log('submitting');
             alert("Submitting!");
+            undisableForm();
             document.createElement('form').submit.call(document.getElementById('add-note-form'));
             console.log('called again')
         }
@@ -13,6 +14,8 @@ function upload_file(file, signed_request, url){
 
     xhr.onerror = function() {
         alert("Could not upload file.");
+        $("#progress").remove()
+        undisableForm();
     };
     xhr.send(file);
 }
@@ -27,6 +30,8 @@ function get_signed_request(file){
             }
             else{
                 alert("Could not get signed URL.");
+                $("#progress").remove()
+                undisableForm();
             }
         }
     };
@@ -47,9 +52,21 @@ $(document).ready(function() {
                 alert("No file selected.");
             }
             else {
+                $("#discussion").parent().parent().append('<div class="progress" id="progress"><div class="indeterminate"></div></div>');
+                disableForm();
                 get_signed_request(file);
             }
         }
 });
 });
+
+function disableForm() {
+    $("#add-note-form").find('input, textarea, button, select').addClass("disabled");
+    $("form > div .btn").addClass("disabled")
+}
+
+function undisableForm() {
+    $("#add-note-form").find('input, textarea, button, select').removeClass("disabled");
+    $("form > div .btn").removeClass("disabled")
+}
 

@@ -9,6 +9,7 @@
     {% endfor %}
   </ul>
     <form method="post" enctype="multipart/form-data" id="add-note-form">
+
       {% for field in form %}
         {{ render_field(field) }}
       {% endfor %}
