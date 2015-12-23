@@ -8,6 +8,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
 app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config["DEBUG"] = True
 
 from app.models import DATABASE
 from app.auth.models import School, User
