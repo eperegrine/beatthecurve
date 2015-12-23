@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_lesson_tabs %}
+{% block title %}{{ lesson.lesson_name }}{% endblock %}
+{% block main %}
+  {{ render_lesson_tabs('search', lesson.id) }}
+  <ul>
+      {% for message in get_flashed_messages() %}
+        <li>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  <ul>
+      {% for message in get_flashed_messages() %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  <div class="section">
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Willing to provide:</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr>
+            <td>{{ user['name'] }}</td>
+            <td>{{ user['email'] }}</td>
+            <td>{{ user['options'] }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

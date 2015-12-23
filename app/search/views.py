@@ -1,8 +1,11 @@
-from flask import Blueprint, g, render_template, redirect, url_for
+from flask import Blueprint, g, render_template, redirect, url_for, flash, jsonify
 from flask.ext.login import login_required
 from .forms import UserOptionsForm
 from .models import Option, UserOption
 from wtforms.fields import BooleanField
+from app.lesson.models import Lesson
+from app.auth.models import User
+from app.lesson.models import LessonStudent
 
 search_bp = Blueprint('search_bp', __name__, url_prefix='/search')
 
@@ -27,3 +30,28 @@ def options():
 
     return render_template('search/options.html', form=form)
 
+
+@search_bp.route('/view/<lessonid>')
+@login_required
+def view(lessonid):
+    try:
+        lesson = Lesson.get(Lesson.id == lessonid)
+    except:
+        flash('Id not found')
+        return redirect(url_for('auth_bp.profile'))
+
+    # Get all users in lesson
+    users = [ls.student_id.user_id for ls in LessonStudent.select().where(LessonStudent.lesson_id == 3)]
+    options = {}
+    for option in Option.select().where(Option.school == g.user.school_id):
+        options[option.id] = option.name
+    # Get all matching lessons
+    data = []
+    for user_id in users:
+        user_options = UserOption.select().where(UserOption.user == user_id)
+        user_options_list = [options[uo.option.id] for uo in user_options]
+        if len(user_options_list) < 1:
+            continue
+        user = User.get(User.user_id == user_id)
+        data.append({'name': user.first_name + " " + user.last_name, 'email': user.email, 'options': user_options_list})
+    return render_template('search/listing.html', lesson=lesson, users=data)

@@ -36,6 +36,7 @@
         <li class="tab"><a target="_self" class="{% if active == "qa" %}active{% endif %}" href="{{ url_for('qa_bp.view', lessonid=lessonid) }}">Q&A</a></li>
         <li class="tab"><a target="_self" class="{% if active == "exams" %}active{% endif %}" href="{{ url_for('exams_bp.view', lessonid=lessonid) }}">Exams</a></li>
         <li class="tab"><a target="_self" class="{% if active == "studygroups" %}active{% endif %}" href="{{ url_for('studygroups_bp.view', lessonid=lessonid) }}">Study Groups</a></li>
+            <li class="tab"><a target="_self" class="{% if active == "search" %}active{% endif %}" href="{{ url_for('search_bp.view', lessonid=lessonid) }}">Search</a></li>
       </ul>
     </div>
   </div>
