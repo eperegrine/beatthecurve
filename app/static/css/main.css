@@ -1,3 +1,7 @@
 .tab > .active {
     border-bottom: 2px #ee6e73 solid;
 }
+
+form div:last-of-type > input[type="checkbox"] + label {
+    margin-bottom: 1.5em;
+}

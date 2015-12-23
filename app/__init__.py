@@ -16,9 +16,11 @@ from app.notes.models import Lecture, Discussion, Note, NoteVote
 from app.qa.models import Question, Reply
 from app.exams.models import Exam, ExamVote
 from app.studygroups.models import StudyGroup, StudyGroupComment, StudyGroupMembers, StudyGroupSession
+from app.search.models import Option, UserOption
 
 DATABASE.create_tables([School, User, Lesson, LessonStudent, Lecture, Discussion, Note, NoteVote, Question, Reply, Exam,
-                        ExamVote, StudyGroup, StudyGroupComment, StudyGroupMembers, StudyGroupSession], safe=True)
+                        ExamVote, StudyGroup, StudyGroupComment, StudyGroupMembers, StudyGroupSession, Option,
+                        UserOption], safe=True)
 
 # Set up login manager
 login_manager = LoginManager()
@@ -90,6 +92,9 @@ app.register_blueprint(exams_bp)
 
 from app.studygroups.views import studygroups_bp
 app.register_blueprint(studygroups_bp)
+
+from app.search.views import search_bp
+app.register_blueprint(search_bp)
 
 from app.lesson.models import LessonStudent
 app.jinja_env.globals.update(get_lessons=LessonStudent.get_attended_lessons)
