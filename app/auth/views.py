@@ -6,7 +6,7 @@ from .forms import SignUpForm, LoginForm, ChangeEmailForm, ChangePasswordForm
 from .models import User
 
 auth_bp = Blueprint('auth_bp', __name__)
-# TODO: Add Flash Messages to Layout.html
+
 
 @auth_bp.route('/signup', methods=('POST', 'GET'))
 def signup():
@@ -14,7 +14,7 @@ def signup():
 
     if form.validate_on_submit():
         try:
-            User.create_user(
+            user = User.create_user(
                 email=form.email.data,
                 password=form.password.data,
                 school_id=int(form.school.data),
@@ -22,6 +22,7 @@ def signup():
                 last_name=form.last_name.data
             )
             flash('Successfully created an account!')
+            login_user(user)
             return redirect(url_for('lesson_bp.add'))
         except Exception as e:
             flash(e)
