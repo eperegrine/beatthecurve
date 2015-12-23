@@ -41,7 +41,7 @@ def view(lessonid):
         return redirect(url_for('auth_bp.profile'))
 
     # Get all users in lesson
-    users = [ls.student_id.user_id for ls in LessonStudent.select().where(LessonStudent.lesson_id == 3)]
+    users = [ls.student_id.user_id for ls in LessonStudent.select().where(LessonStudent.lesson_id == lesson.id)]
     options = {}
     for option in Option.select().where(Option.school == g.user.school_id):
         options[option.id] = option.name
@@ -54,5 +54,4 @@ def view(lessonid):
             continue
         user = User.get(User.user_id == user_id)
         data.append({'name': user.first_name + " " + user.last_name, 'email': user.email, 'options': user_options_list})
-    print(data)
     return render_template('search/listing.html', lesson=lesson, users=data)
