@@ -48,7 +48,7 @@ def view(lessonid):
     # Get all matching lessons
     data = []
     for user_id in users:
-        user_options = UserOption.select().where(UserOption.user == user_id)
+        user_options = UserOption.select().where((UserOption.user == user_id) & (UserOption.agreed == True))
         user_options_list = [options[uo.option.id] for uo in user_options]
         if len(user_options_list) < 1:
             continue

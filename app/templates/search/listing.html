@@ -27,7 +27,7 @@
           <tr>
             <td>{{ user['name'] }}</td>
             <td>{{ user['email'] }}</td>
-            <td>{{ user['options'] }}</td>
+            <td>{{ user['options']|join(", ") }}</td>
           </tr>
         {% endfor %}
       </tbody>
