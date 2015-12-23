@@ -11,6 +11,8 @@
     <h1>Hello, {{ current_user.first_name }}</h1>
     <h5>Karma Points: {{ current_user.karma_points }}</h5>
     <div class="divider"></div>
+    <h5>Change Search Preferences</h5>
+    <a href="{{ url_for("search_bp.options") }}" class="btn">Update Search Preferences</a>
     <h5>Change Email</h5>
     <form action="" method="post">
       {% for field in change_email_form %}
