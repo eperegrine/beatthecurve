@@ -54,4 +54,5 @@ def view(lessonid):
             continue
         user = User.get(User.user_id == user_id)
         data.append({'name': user.first_name + " " + user.last_name, 'email': user.email, 'options': user_options_list})
+    print(data)
     return render_template('search/listing.html', lesson=lesson, users=data)
