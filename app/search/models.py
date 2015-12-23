@@ -1,11 +1,12 @@
 from app.models import DATABASE
 from peewee import *
-from app.auth.models import User
+from app.auth.models import User, School
 
 
 class Option(Model):
     id = PrimaryKeyField(db_column='ID')
     description = CharField(db_column='DESCRIPTION')
+    school = ForeignKeyField(School, db_column='SCHOOL_ID')
 
     class Meta:
         database = DATABASE
