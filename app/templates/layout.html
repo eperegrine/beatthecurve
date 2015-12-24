@@ -11,8 +11,8 @@
     </head>
     <body>
       <nav>
-        <a href="#" class="brand-logo center">{% block title %}{% endblock %}</a>
-        <ul id="slide-out" class="side-nav">
+        <a href="#" class="brand-logo center" id="nav-title">{% block title %}{% endblock %}</a>
+        <ul id="slide-out" class="side-nav fixed">
           {% if current_user.is_authenticated %}
             <li><a href="{{ url_for("auth_bp.profile") }}">Profile</a></li>
             <li class="no-padding">
