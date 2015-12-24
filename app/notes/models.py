@@ -2,6 +2,14 @@ from peewee import *
 from app.auth.models import User
 from app.lesson.models import Lesson
 from app.models import DATABASE
+from enum import Enum
+
+
+class Semester(Enum):
+    winter = 1
+    fall = 2
+    spring = 3
+    summer = 4
 
 
 class Lecture(Model):
@@ -9,6 +17,8 @@ class Lecture(Model):
     lesson_id = ForeignKeyField(Lesson, db_column='LESSON_ID')
     name = CharField(db_column='NAME', unique=True)
     number_of_files = IntegerField(db_column='NUMBER_OF_FILES', default=0)
+    semester = IntegerField(db_column='SEMESTER', default=Semester.winter.value)
+    year = IntegerField(db_column='YEAR', default=2015)
 
     class Meta:
         database = DATABASE
