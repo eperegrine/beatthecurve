@@ -29,7 +29,7 @@ def email_in_use_validator(form, field):
 class SignUpForm(Form):
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
-    email = StringField('Email',
+    email = StringField('.edu Email',
                         validators=[DataRequired(),
                                     Email(),
                                     edu_email_validator,
