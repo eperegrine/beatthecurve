@@ -18,3 +18,11 @@
     </form>
   </div>
 {% endblock %}
+{% block js %}
+  <script>
+    $(document).ready(function () {
+        $("option[value='-1']").attr("disabled", "true")
+        $('select').material_select();
+    })
+  </script>
+{% endblock %}

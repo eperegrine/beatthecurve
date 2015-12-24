@@ -25,6 +25,10 @@ def email_in_use_validator(form, field):
     if User.select().where(User.email == form.data).exists():
         raise ValidationError('Email already in use')
 
+def get_school():
+    return [(str(school.school_id), school.name) for school in School.select()]
+
+
 
 class SignUpForm(Form):
     first_name = StringField('First Name', validators=[DataRequired()])
@@ -34,7 +38,7 @@ class SignUpForm(Form):
                                     Email(),
                                     edu_email_validator,
                                     email_in_use_validator])
-    school = SelectField('School', choices=[(str(school.school_id), school.name) for school in School.select()])
+    school = SelectField('School', choices=[("-1", "Choose a university")] + get_school())
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password',
                                                                                       message='Passwords must match')])
