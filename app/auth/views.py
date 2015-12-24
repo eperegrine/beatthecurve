@@ -43,7 +43,7 @@ def login():
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
                 flash('You have been logged in.')
-                return redirect(url_for('.login'))
+                return redirect(url_for('auth_bp.profile'))
             else:
                 flash('Your email or password does not exist.')
     return render_template('auth/login.html', form=form)
