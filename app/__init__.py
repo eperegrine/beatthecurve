@@ -74,7 +74,7 @@ def inject_static_url():
 
 @app.route('/')
 def index():
-    return render_template('layout.html')
+    return render_template('index.html')
 
 from app.auth.views import auth_bp
 app.register_blueprint(auth_bp)
