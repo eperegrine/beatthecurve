@@ -69,3 +69,23 @@ class User(UserMixin, Model):
             self.save()
         except Exception as e:
             raise e
+
+
+class Permission(Model):
+    id = PrimaryKeyField(db_column='ID')
+    school = ForeignKeyField(School, db_column='SCHOOL_ID')
+    name = CharField(db_column='NAME')
+    description = CharField(db_column='DESCRIPTION')
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_PERMISSION'
+
+
+class UserPermission(Model):
+    user = ForeignKeyField(User, db_column='USER')
+    permission = ForeignKeyField(Permission, db_column='PERMISSION')
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_USER_PERMISSION'
