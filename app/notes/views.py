@@ -29,7 +29,7 @@ def view(lessonid):
         query = Note.select().where(Note.lecture == lecture.id)
         notes[lecture.id] = [note for note in query]
     print(notes)
-    return render_template('notes/notes_listing.html', lesson=lesson, lectures=lectures, notes=notes, semesters=semesters)
+    return render_template('notes/notes_listing.html', lesson=lesson, lectures=lectures, notes=notes, semesters=sorted(semesters))
 
 
 @notes_bp.route('/add-lecture', methods=('POST', 'GET'))

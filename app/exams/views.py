@@ -26,8 +26,7 @@ def view(lessonid):
     semesters = set()
     for exam in exams:
         semesters.add((exam.year, exam.semester))
-
-    return render_template('exams/exam_listing.html', lesson=lesson, exams=exams, semesters=semesters)
+    return render_template('exams/exam_listing.html', lesson=lesson, exams=exams, semesters=sorted(semesters))
 
 
 @exams_bp.route('/sign_s3/')
