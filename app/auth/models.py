@@ -7,7 +7,18 @@ from flask.ext.bcrypt import generate_password_hash
 class School(Model):
     school_id = PrimaryKeyField(db_column='ID')
     name = CharField(db_column='NAME', unique=True)
-    # TODO: Auto generate permissions on creation
+
+    @classmethod
+    @DATABASE.transaction()
+    def create_school(cls, name):
+        try:
+            school = School.create(name=name)
+        except IntegrityError:
+            raise ValueError("Name is use.")
+
+        Permission.create(name='lecture_admin', description="Can create lectures", school=school.school_id)
+        Permission.create(name='discussion_admin', description="Can create discussions", school=school.school_id)
+        Permission.create(name='super_user', description="Is a superuser", school=school.school_id)
 
     class Meta:
         database = DATABASE
