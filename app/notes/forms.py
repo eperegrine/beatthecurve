@@ -16,7 +16,7 @@ from datetime import datetime
 
 def lecture_name_in_use_validator(form, field):
     if Lecture.select().where(
-                    (Lecture.name == field.data) & (Lecture.lesson_id == int(form.lesson.data))
+                    (Lecture.name == field.data) & (Lecture.lesson_id == int(form.lesson.data)) & (Lecture.year == form.year.data)
     ).exists():
         raise ValidationError('Name already in use')
 
