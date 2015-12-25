@@ -21,6 +21,7 @@
       <thead>
         <tr>
           <th>Exam</th>
+          <th>Year</th>
           <th>Number Of Takers</th>
           <th>Average Grade</th>
         </tr>
@@ -30,6 +31,9 @@
           <tr>
           <td>
             <a href="{{ url_for("exams_bp.detail", examid=exam.id) }}" class="file">{{ exam.filename }}</a>
+          </td>
+          <td>
+            {{ exam.year }}
           </td>
           <td>{{ exam.number_of_takers }}</td>
           <td>{{ exam.average_grade }}</td>
