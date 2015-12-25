@@ -6,6 +6,7 @@ from .models import Lecture, Discussion, Note
 from werkzeug.utils import secure_filename
 import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1
+from app.auth.decorators import permission_required
 
 
 notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')
@@ -32,6 +33,7 @@ def view(lessonid):
 
 @notes_bp.route('/add-lecture', methods=('POST', 'GET'))
 @login_required
+@permission_required('lecture_admin')
 def add_lecture():
     # TODO: Validate user is attending lesson
     form = AddLectureForm()
@@ -106,6 +108,7 @@ def download(lessonid, lectureid, noteid):
 
 @notes_bp.route('/add-discussion/<lessonid>', methods=('POST', 'GET'))
 @login_required
+@permission_required('discussion_admin')
 def add_discussion(lessonid):
     form = AddDiscussionForm()
     form.lecture.choices = [(str(lecture.id), lecture.name) for lecture in
