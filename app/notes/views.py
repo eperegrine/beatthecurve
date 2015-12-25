@@ -3,7 +3,6 @@ from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
 from .forms import AddLectureForm, AddNoteForm, AddDiscussionForm
 from .models import Lecture, Discussion, Note
-from werkzeug.utils import secure_filename
 import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1
 from app.auth.decorators import permission_required
@@ -21,12 +20,12 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    lectures = [lecture for lecture in Lecture.select().where(Lecture.lesson_id == lesson.id)]
+    lectures = [lecture for lecture in Lecture.select().where((Lecture.lesson_id == lesson.id)).order_by(Lecture.year)]
     print(lectures)
     notes = {}
     for lecture in lectures:
         query = Note.select().where(Note.lecture == lecture.id)
-        notes[lecture.id] = [note for note in query] # TODO: Modify to actually get files
+        notes[lecture.id] = [note for note in query]
     print(notes)
     return render_template('notes/notes_listing.html', lesson=lesson, lectures=lectures, notes=notes)
 
@@ -180,4 +179,3 @@ def vote(noteid, upvote):
         else:
             flash(message)
     return redirect(url_for(".detail", noteid=noteid))
-

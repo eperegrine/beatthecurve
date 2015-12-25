@@ -22,7 +22,7 @@
     <tbody>
       {% for lecture in lectures %}
         <tr>
-          <td>{{ lecture.name }}</td>
+          <td>{{ lecture.name }} - {{ lecture.year }}</td>
           <td>{{ lecture.number_of_files }}</td>
           <td>{% for note in notes[lecture.id] %}<a href="{{ url_for("notes_bp.detail", noteid=note.id) }}">{{ note.filename }}</a>, {% endfor %}</td>
       </tr>
