@@ -95,6 +95,16 @@ class User(UserMixin, Model):
         except DoesNotExist:
             return False
 
+    def has_any_permission(self, names):
+        query = Permission.select().where((Permission.name << names) & (Permission.school == self.school_id))
+        if not query.exists():
+            raise ValueError("No valid permission names")
+        ids = [p.id for p in query]
+        if UserPermission.select().where((UserPermission.user == self.user_id) & (UserPermission.permission << ids)).exists():
+            return True
+        return False
+
+
 
 class Permission(Model):
     id = PrimaryKeyField(db_column='ID')

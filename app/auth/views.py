@@ -4,6 +4,8 @@ from flask.ext.login import login_user, login_required, logout_user
 from peewee import DoesNotExist
 from .forms import SignUpForm, LoginForm, ChangeEmailForm, ChangePasswordForm
 from .models import User
+from .decorators import either_permission_required
+from app.lesson.models import Lesson
 
 auth_bp = Blueprint('auth_bp', __name__)
 
@@ -85,3 +87,15 @@ def profile():
 
     return render_template('auth/profile.html', change_email_form=change_email_form,
                            change_password_form=change_password_form)
+
+
+@auth_bp.route('/admin/<lessonid>')
+@login_required
+@either_permission_required(['lecture_admin', 'discussion_admin'])
+def admin(lessonid):
+    try:
+        lesson = Lesson.get(Lesson.id == lessonid)
+    except:
+        flash('Id not found')
+        return redirect(url_for('auth_bp.profile'))
+    return render_template('auth/admin.html',lesson=lesson)
