@@ -1,8 +1,10 @@
 {% extends 'layout.html' %}
-{% from 'macros.html' import render_lesson_tabs %}
+{% from 'macros.html' import render_lesson_tabs, render_semester_tabs %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block main %}
   {{ render_lesson_tabs('exams', lesson.id) }}
+  {{ render_semester_tabs(semesters, semester_enum) }}
+
   <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
@@ -28,7 +30,7 @@
       </thead>
       <tbody>
         {% for exam in exams %}
-          <tr>
+          <tr semester="{{ exam.semester }}" year="{{ exam.year }}">
           <td>
             <a href="{{ url_for("exams_bp.detail", examid=exam.id) }}" class="file">{{ exam.filename }}</a>
           </td>
@@ -42,4 +44,23 @@
       </tbody>
     </table>
   </div>
+{% endblock %}
+{% block js %}
+  <script>
+      $(document).ready(function() {
+        var active = $('.semester-tab > a.active')[0].parentElement;
+        var year = $(active).attr('year');
+        var semester = $(active).attr('semester');
+        $('tr').hide();
+        $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+        $('.semester-tab').click(
+          function(e) {
+            var year = $(this).attr('year');
+            var semester = $(this).attr('semester');
+            $('tr').hide();
+            $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+          }
+        );
+      });
+  </script>
 {% endblock %}

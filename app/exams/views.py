@@ -23,7 +23,11 @@ def view(lessonid):
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
     exams = Exam.select().where(Exam.lesson == lessonid)
-    return render_template('exams/exam_listing.html', lesson=lesson, exams=exams)
+    semesters = set()
+    for exam in exams:
+        semesters.add((exam.year, exam.semester))
+
+    return render_template('exams/exam_listing.html', lesson=lesson, exams=exams, semesters=semesters)
 
 
 @exams_bp.route('/sign_s3/')
