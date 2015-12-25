@@ -2,6 +2,7 @@ from peewee import *
 from app.notes.models import Lesson
 from app.auth.models import User
 from app.models import DATABASE
+from app.notes.models import Semester
 
 
 class Exam(Model):
@@ -12,6 +13,8 @@ class Exam(Model):
     number_of_takers = IntegerField(default=0, db_column='NUMBER_OF_TAKERS')
     publisher = ForeignKeyField(User, db_column='PUBLISHER')
     votes = IntegerField(db_column='VOTES', default=0)
+    year = IntegerField(db_column='YEAR', default=2015)
+    semester = IntegerField(db_column='SEMESTER', default=Semester.winter.value)
 
     class Meta:
         database = DATABASE
