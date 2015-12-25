@@ -7,6 +7,7 @@ from flask.ext.bcrypt import generate_password_hash
 class School(Model):
     school_id = PrimaryKeyField(db_column='ID')
     name = CharField(db_column='NAME', unique=True)
+    # TODO: Auto generate permissions on creation
 
     class Meta:
         database = DATABASE
@@ -69,6 +70,19 @@ class User(UserMixin, Model):
             self.save()
         except Exception as e:
             raise e
+
+    def has_permission(self, name):
+        try:
+            permission = Permission.get(Permission.name == name, Permission.school == self.school_id)
+        except DoesNotExist:
+            raise ValueError("Name does not exist.")
+
+        try:
+            user_permission = UserPermission.get(UserPermission.user == self.user_id,
+                                                 UserPermission.permission == permission.id)
+            return True
+        except DoesNotExist:
+            return False
 
 
 class Permission(Model):
