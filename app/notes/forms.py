@@ -15,7 +15,7 @@ from .models import Lecture, Discussion
 
 def lecture_name_in_use_validator(form, field):
     if Lecture.select().where(
-                    (Lecture.name == form.data) & (Lecture.lesson_id == int(form.lesson.data))
+                    (Lecture.name == field.data) & (Lecture.lesson_id == int(form.lesson.data))
     ).exists():
         raise ValidationError('Name already in use')
 
@@ -28,9 +28,8 @@ def discussion_name_in_use_validator(form, field):
 
 
 class AddLectureForm(Form):
-    # TODO: Add validators
-    lesson = SelectField('Lesson')
-    name = StringField('Name')
+    lesson = SelectField('Lesson', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired(), lecture_name_in_use_validator])
 
 
 class AddNoteForm(Form):
