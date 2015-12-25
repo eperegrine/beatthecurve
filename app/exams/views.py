@@ -68,7 +68,9 @@ def add_exam():
             filename=form.file.data.filename,
             lesson=form.lesson.data,
             publisher=g.user.user_id,
-            number_of_takers=form.number_of_takers.data
+            number_of_takers=form.number_of_takers.data,
+            year=form.year.data,
+            semester=form.semester.data
         )
         return redirect(url_for(".view", lessonid=form.lesson.data))
 
