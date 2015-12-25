@@ -41,3 +41,15 @@
     </div>
   </div>
 {% endmacro %}
+
+{% macro render_semester_tabs(semesters, semester_enum) %}
+  <div id="lesson-tabs">
+    <div>
+      <ul class="tabs" id="semesters">
+        {% for semester in semesters %}
+          <li class="tab semester-tab" semester="{{ semester[1] }}" year="{{ semester[0] }}"><a target="_self" href="#{{ semester_enum[semester[1]] }}{{ semester[0] }}">{{ semester_enum[semester[1]] }} {{ semester[0] }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endmacro %}

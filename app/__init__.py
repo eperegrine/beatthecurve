@@ -4,6 +4,7 @@ from peewee import DoesNotExist
 from .models import DATABASE
 from .auth.models import User
 import os
+from app.notes.models import Semester
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
@@ -71,6 +72,9 @@ def inject_static_url():
         static_url=static_url
     )
 
+@app.context_processor
+def inject_semester_enum():
+    return dict(semester_enum=dict(list(map(lambda x: [x.value, x.name], Semester))))
 
 @app.route('/')
 def index():

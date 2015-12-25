@@ -23,11 +23,13 @@ def view(lessonid):
     lectures = [lecture for lecture in Lecture.select().where((Lecture.lesson_id == lesson.id)).order_by(Lecture.year)]
     print(lectures)
     notes = {}
+    semesters = set()
     for lecture in lectures:
+        semesters.add((lecture.year, lecture.semester))
         query = Note.select().where(Note.lecture == lecture.id)
         notes[lecture.id] = [note for note in query]
     print(notes)
-    return render_template('notes/notes_listing.html', lesson=lesson, lectures=lectures, notes=notes)
+    return render_template('notes/notes_listing.html', lesson=lesson, lectures=lectures, notes=notes, semesters=semesters)
 
 
 @notes_bp.route('/add-lecture', methods=('POST', 'GET'))

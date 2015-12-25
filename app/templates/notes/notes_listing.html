@@ -1,8 +1,9 @@
 {% extends 'layout.html' %}
-{% from 'macros.html' import render_lesson_tabs %}
+{% from 'macros.html' import render_lesson_tabs, render_semester_tabs %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block main %}
   {{ render_lesson_tabs('notes', lesson.id) }}
+  {{ render_semester_tabs(semesters, semester_enum) }}
   <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
@@ -21,7 +22,7 @@
     </thead>
     <tbody>
       {% for lecture in lectures %}
-        <tr>
+        <tr semester="{{ lecture.semester }}" year="{{ lecture.year }}">
           <td>{{ lecture.name }} - {{ lecture.year }}</td>
           <td>{{ lecture.number_of_files }}</td>
           <td>{% for note in notes[lecture.id] %}<a href="{{ url_for("notes_bp.detail", noteid=note.id) }}">{{ note.filename }}</a>, {% endfor %}</td>
@@ -29,4 +30,23 @@
     {% endfor %}
     </tbody>
   </table>
+{% endblock %}
+{% block js %}
+  <script>
+      $(document).ready(function() {
+        var active = $('.semester-tab > a.active')[0].parentElement;
+        var year = $(active).attr('year');
+        var semester = $(active).attr('semester');
+        $('tr').hide();
+        $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+        $('.semester-tab').click(
+          function(e) {
+            var year = $(this).attr('year');
+            var semester = $(this).attr('semester');
+            $('tr').hide();
+            $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+          }
+        );
+      });
+  </script>
 {% endblock %}
