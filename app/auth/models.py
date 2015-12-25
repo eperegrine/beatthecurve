@@ -83,6 +83,7 @@ class Permission(Model):
 
 
 class UserPermission(Model):
+    id = PrimaryKeyField(db_column='ID')
     user = ForeignKeyField(User, db_column='USER')
     permission = ForeignKeyField(Permission, db_column='PERMISSION')
 
