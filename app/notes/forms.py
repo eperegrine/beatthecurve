@@ -10,7 +10,8 @@ from wtforms.validators import (
     Optional
 )
 
-from .models import Lecture, Discussion
+from .models import Lecture, Discussion, Semester
+from datetime import datetime
 
 
 def lecture_name_in_use_validator(form, field):
@@ -30,6 +31,8 @@ def discussion_name_in_use_validator(form, field):
 class AddLectureForm(Form):
     lesson = SelectField('Lesson', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired(), lecture_name_in_use_validator])
+    semester = SelectField('Semester', validators=[DataRequired()], choices=[(str(s.value), s.name.title()) for s in Semester])
+    year = SelectField('Year', choices=[(str(i), str(i)) for i in range(datetime.now().year, datetime.now().year + 5)])
 
 
 class AddNoteForm(Form):

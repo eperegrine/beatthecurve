@@ -39,14 +39,16 @@ def add_lecture():
     form = AddLectureForm()
     form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in
                            LessonStudent.get_attended_lessons(g.user.user_id)]
-
+    print(form.year.choices)
+    print(form.year.data)
     if form.validate_on_submit():
         try:
             lecture = Lecture.create(
                 lesson_id=int(form.lesson.data),
-                name=form.name.data
+                name=form.name.data,
+                year=form.year.data,
+                semester=form.semester.data
             )
-            os.makedirs(os.path.join(current_app.config['UPLOAD_FOLDER'], "notes", form.lesson.data, str(lecture.id)))
             flash('Success')
             return redirect(url_for('auth_bp.profile'))
         except Exception as e:
