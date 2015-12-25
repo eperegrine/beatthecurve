@@ -9,8 +9,6 @@
       {% endfor %}
   </ul>
   <a href="{{ url_for("qa_bp.add_question", lessonid=lesson.id) }}" class="btn">Add Question</a>
-  <a href="{{ url_for("notes_bp.add_lecture") }}" class="btn">Add Lecture</a>
-  <a href="{{ url_for("notes_bp.add_discussion", lessonid=lesson.id) }}" class="btn">Add Discussion</a>
   {% for key in questions %}
     <div class="section">
       <h5>{{ key }}</h5>
