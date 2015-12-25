@@ -15,7 +15,7 @@ class Semester(Enum):
 class Lecture(Model):
     id = PrimaryKeyField(db_column='ID')
     lesson_id = ForeignKeyField(Lesson, db_column='LESSON_ID')
-    name = CharField(db_column='NAME', unique=True)
+    name = CharField(db_column='NAME')
     number_of_files = IntegerField(db_column='NUMBER_OF_FILES', default=0)
     semester = IntegerField(db_column='SEMESTER', default=Semester.winter.value)
     year = IntegerField(db_column='YEAR', default=2015)
@@ -23,6 +23,9 @@ class Lecture(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_LECTURE'
+        indexes = (
+            (('NAME', 'YEAR', 'LESSON_ID'), True)
+        )
 
 
 class Discussion(Model):
