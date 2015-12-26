@@ -3,14 +3,17 @@
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block main %}
   {{ render_lesson_tabs('notes', lesson.id) }}
-  {{ render_semester_tabs(semesters, semester_enum) }}
+  {% if semesters|length > 0 %}
+    {{ render_semester_tabs(semesters, semester_enum) }}
+  {% endif %}
   <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
       {% endfor %}
   </ul>
+  <h5 class="no-content-message">No Lectures</h5>
   <a href="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}" class="btn">Upload Note</a>
-  <table class="striped">
+  <table id="notes-table" class="striped">
     <thead>
       <tr>
         <td>Lecture</td>
@@ -32,19 +35,25 @@
 {% block js %}
   <script>
       $(document).ready(function() {
-        var active = $('.semester-tab > a.active')[0].parentElement;
-        var year = $(active).attr('year');
-        var semester = $(active).attr('semester');
-        $('tr').hide();
-        $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-        $('.semester-tab').click(
-          function(e) {
-            var year = $(this).attr('year');
-            var semester = $(this).attr('semester');
-            $('tr').hide();
-            $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-          }
-        );
+        if ($("#notes-table tbody tr").length === 0) {
+          $("#notes-table").hide();
+          $(".no-content-message").show();
+        } else {
+          $(".no-content-message").hide();
+          var active = $('.semester-tab > a.active')[0].parentElement;
+          var year = $(active).attr('year');
+          var semester = $(active).attr('semester');
+          $('tr').hide();
+          $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+          $('.semester-tab').click(
+            function (e) {
+              var year = $(this).attr('year');
+              var semester = $(this).attr('semester');
+              $('tr').hide();
+              $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+            }
+          );
+        }
       });
   </script>
 {% endblock %}

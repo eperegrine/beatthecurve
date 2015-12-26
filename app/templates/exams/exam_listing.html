@@ -3,8 +3,11 @@
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block main %}
   {{ render_lesson_tabs('exams', lesson.id) }}
-  {{ render_semester_tabs(semesters, semester_enum) }}
-
+  {% if semesters|length > 0 %}
+    {{ render_semester_tabs(semesters, semester_enum) }}
+  {% else %}
+    <h5>No Exams</h5>
+  {% endif %}
   <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
@@ -17,7 +20,7 @@
       {% endfor %}
     </ul>
   <div class="section">
-    <table>
+    <table id="exams-table">
       <thead>
         <tr>
           <th>Exam</th>
@@ -46,19 +49,24 @@
 {% block js %}
   <script>
       $(document).ready(function() {
-        var active = $('.semester-tab > a.active')[0].parentElement;
-        var year = $(active).attr('year');
-        var semester = $(active).attr('semester');
-        $('tr').hide();
-        $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-        $('.semester-tab').click(
-          function(e) {
-            var year = $(this).attr('year');
-            var semester = $(this).attr('semester');
-            $('tr').hide();
-            $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-          }
-        );
+        if ($("#exams-table tbody tr").length === 0) {
+          $("#exams-table").hide()
+        } else {
+          var active = $('.semester-tab > a.active')[0].parentElement;
+          var year = $(active).attr('year');
+          var semester = $(active).attr('semester');
+          $('tr').hide();
+          $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+          $('.semester-tab').click(
+            function (e) {
+              var year = $(this).attr('year');
+              var semester = $(this).attr('semester');
+              $('tr').hide();
+              $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+            }
+          );
+        }
+
       });
   </script>
 {% endblock %}

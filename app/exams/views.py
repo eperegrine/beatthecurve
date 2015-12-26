@@ -26,6 +26,7 @@ def view(lessonid):
     semesters = set()
     for exam in exams:
         semesters.add((exam.year, exam.semester))
+    print(semesters)
     return render_template('exams/exam_listing.html', lesson=lesson, exams=exams, semesters=sorted(semesters))
 
 
