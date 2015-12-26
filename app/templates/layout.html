@@ -21,7 +21,10 @@
                   <a class="collapsible-header">Classes<i class="mdi-navigation-arrow-drop-down"></i></a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a href="{{ url_for("lesson_bp.add") }}">Add</a></li>
+                      {% if g.user.has_permission('lesson_admin') %}
+                        <li><a href="{{ url_for("lesson_bp.create") }}">Create</a></li>
+                      {% endif %}
+                      <li><a href="{{ url_for("lesson_bp.add") }}">Join</a></li>
                       {% for lesson in get_lessons(current_user) %}
                         <li><a href="{{ url_for("notes_bp.view", lessonid=lesson.id) }}">{{ lesson.lesson_name }}</a></li>
                       {% endfor %}
