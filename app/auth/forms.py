@@ -3,13 +3,11 @@ from wtforms.fields import (
     StringField,
     SelectField,
     PasswordField,
-    SubmitField,
 )
 from wtforms.validators import (
     Email,
     DataRequired,
     ValidationError,
-    Length,
     EqualTo,
 )
 from .models import User, School
@@ -58,3 +56,8 @@ class ChangePasswordForm(Form):
     new_password = PasswordField('New Password', validators=[DataRequired()])
     new_password2 = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password',
                                                                                       message='Passwords must match')])
+
+
+class UpdatePermissions(Form):
+    user = SelectField('Users', validators=[DataRequired()])
+    permission = SelectField('Permission', validators=[DataRequired()], choices=[("-1", "Choose a permission")])

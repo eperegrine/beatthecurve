@@ -1,10 +1,10 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, request, g
+from flask import Blueprint, render_template, flash, redirect, url_for, request, g, jsonify
 from flask.ext.bcrypt import check_password_hash
 from flask.ext.login import login_user, login_required, logout_user
 from peewee import DoesNotExist
-from .forms import SignUpForm, LoginForm, ChangeEmailForm, ChangePasswordForm
-from .models import User
-from .decorators import either_permission_required
+from .forms import SignUpForm, LoginForm, ChangeEmailForm, ChangePasswordForm, UpdatePermissions
+from .models import User, UserPermission, Permission
+from .decorators import either_permission_required, permission_required
 from app.lesson.models import Lesson
 
 auth_bp = Blueprint('auth_bp', __name__)
@@ -99,3 +99,48 @@ def admin(lessonid):
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
     return render_template('auth/admin.html',lesson=lesson)
+
+
+@auth_bp.route('/modify-permissions', methods=('POST', 'GET'))
+@login_required
+@permission_required('super_user')
+def modify_permissions():
+    # Get all users in school
+    users = User.select().where(User.school_id == g.user.school_id)
+
+    form = UpdatePermissions()
+    form.user.choices = [(str(u.user_id), u.first_name + " " + u.last_name) for u in users]
+
+    if form.permission.data != "None":
+        permissions = Permission.select().where(Permission.school == g.user.school_id)
+        form.permission.choices = [(str(p.id), p.name) for p in permissions]
+
+    if form.validate_on_submit():
+        user_permission, created = UserPermission.create_or_get(permission=form.permission.data, user=form.user.data)
+        if not created:
+            user_permission.delete_instance()
+        return redirect(url_for(".profile"))
+
+    return render_template('auth/modify_permissions.html', users=users, form=form)
+
+
+@auth_bp.route('/get-permissions/<userid>')
+@login_required
+@permission_required('super_user')
+def get_permissions(userid):
+    try:
+        user_permissions = [p.permission.id for p in UserPermission.select().where(UserPermission.user == userid)]
+        print(user_permissions)
+        permissions = Permission.select().where(Permission.school == g.user.school_id)
+        print([p.id for p in permissions])
+        return jsonify(
+            {'data': [
+                {
+                    'id': str(p.id),
+                    'name': p.name,
+                    'has': p.id in user_permissions
+                } for p in permissions
+            ]})
+    except Exception as e:
+        return jsonify({'error': e})
+

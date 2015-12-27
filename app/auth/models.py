@@ -106,7 +106,6 @@ class User(UserMixin, Model):
         return False
 
 
-
 class Permission(Model):
     id = PrimaryKeyField(db_column='ID')
     school = ForeignKeyField(School, db_column='SCHOOL_ID')
@@ -126,3 +125,6 @@ class UserPermission(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_USER_PERMISSION'
+        indexes = (
+            (('user', 'permission'), True),
+        )
