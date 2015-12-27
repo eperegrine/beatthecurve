@@ -33,6 +33,9 @@
                 </li>
               </ul>
             </li>
+            {% if g.user.has_permission('super_user') %}
+              <li><a href="{{ url_for('auth_bp.modify_permissions') }}">Modify User's Permissions</a></li>
+            {% endif %}
             <li><a href="{{ url_for("auth_bp.logout") }}">Logout</a></li>
           {% else %}
             <li><a href="{{ url_for("auth_bp.login") }}">Login</a></li>
