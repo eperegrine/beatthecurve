@@ -19,7 +19,7 @@ class School(Model):
         Permission.create(name='lecture_admin', description="Can create lectures", school=school.school_id)
         Permission.create(name='discussion_admin', description="Can create discussions", school=school.school_id)
         Permission.create(name='super_user', description="Is a superuser", school=school.school_id)
-        Permission.create(name='lesson_admin')
+        Permission.create(name='lesson_admin', description="Can crate lessons", school=school.school_id)
 
     class Meta:
         database = DATABASE
