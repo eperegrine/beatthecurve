@@ -16,6 +16,6 @@ for school in schools:
     if not has_superuser:
         try:
             u = User.get(User.school_id == school.school_id)
-            UserPermission.create(user=u.user_id, school=school.school_id)
+            UserPermission.create(user=u.user_id, permission=su.id)
         except:
             pass
