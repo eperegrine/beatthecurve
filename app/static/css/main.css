@@ -23,3 +23,8 @@ header, main, footer {
       margin-left: auto;
   }
 }
+
+.horizontal-ul li {
+    display: inline;
+    padding: 1em;
+}

@@ -164,15 +164,18 @@ def detail(noteid):
 @login_required
 def vote(noteid, upvote):
     note = Note.get(Note.id == noteid)
+    has_upvoted = note.has_upvoted(g.user)
+    has_voted = note.has_voted(g.user)
     vote = True if upvote == "1" else False
-    if note.has_upvoted(g.user) and vote:
+    if has_upvoted and vote:
         flash("Error! You have already upvoted this note!")
-    elif not note.has_upvoted(g.user) and not vote:
+    elif has_voted and not has_upvoted and not vote:
         flash("Error! You have already downvoted this note!")
     else:
-        sucess, message = note.vote(g.user, vote)
-        if sucess:
+        success, message = note.vote(g.user, vote)
+        if success:
             flash("Success")
         else:
             flash(message)
-    return redirect(url_for(".detail", noteid=noteid))
+    print(note.lecture.lesson_id)
+    return redirect(url_for(".view", lessonid=note.lecture.lesson_id.id))
