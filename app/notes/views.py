@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, g, jsoni
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
 from .forms import AddLectureForm, AddNoteForm, AddDiscussionForm
-from .models import Lecture, Discussion, Note
+from .models import Lecture, Discussion, Note, Semester
 import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1
 from app.auth.decorators import permission_required
@@ -73,7 +73,7 @@ def get_discussions(lectureid):
 @login_required
 def add_note(lessonid):
     form = AddNoteForm()
-    form.lecture.choices = [(str(lecture.id), lecture.name) for lecture in
+    form.lecture.choices = [(str(lecture.id), lecture.name + " - " + Semester(lecture.semester).name + " " + str(lecture.year)) for lecture in
                             Lecture.select().where(Lecture.lesson_id == int(lessonid))]
     print(form.discussion.data)
     if form.lecture.data == 'None' and request.method == 'GET':
@@ -84,11 +84,6 @@ def add_note(lessonid):
     if form.validate_on_submit():
         # TODO: Add error handling
         # Upload file
-        '''filename = secure_filename(form.file.data.filename)
-        filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], "notes", lessonid, form.lecture.data, filename)
-        file = request.files[form.file.name]
-        file.save(filepath)
-        # Create model'''
         filename = form.file.data.filename
         if form.discussion.data == 'None':
             note = Note.create(filename=filename, uploader=g.user.user_id, lecture=form.lecture.data)

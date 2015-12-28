@@ -115,6 +115,9 @@ class Permission(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_PERMISSION'
+        indexes = (
+            (('name', 'school'), True)
+        )
 
 
 class UserPermission(Model):
