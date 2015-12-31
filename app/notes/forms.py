@@ -36,9 +36,8 @@ class AddLectureForm(Form):
 
 
 class AddNoteForm(Form):
-    lecture = SelectField('Lecture', validators=[DataRequired()])
-    discussion = SelectField('Discussion', validators=[Optional()])
     file = FileField('File', validators=[DataRequired()])
+    description = StringField('Description', validators=[DataRequired()])
 
 
 class AddDiscussionForm(Form):

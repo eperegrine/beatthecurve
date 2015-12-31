@@ -73,25 +73,12 @@ def get_discussions(lectureid):
 @login_required
 def add_note(lessonid):
     form = AddNoteForm()
-    form.lecture.choices = [(str(lecture.id), lecture.name + " - " + Semester(lecture.semester).name + " " + str(lecture.year)) for lecture in
-                            Lecture.select().where(Lecture.lesson_id == int(lessonid))]
-    print(form.discussion.data)
-    if form.lecture.data == 'None' and request.method == 'GET':
-        form.discussion.choices = [('-1', '')]
-    else:
-        form.discussion.choices = [(str(discussion.id), discussion.name) for discussion in Discussion.select().where(Discussion.lecture_id == form.lecture.data)]
-
     if form.validate_on_submit():
         # TODO: Add error handling
         # Upload file
         filename = form.file.data.filename
-        if form.discussion.data == 'None':
-            note = Note.create(filename=filename, uploader=g.user.user_id, lecture=form.lecture.data)
-        else:
-            note = Note.create(filename=filename, uploader=g.user.user_id, lecture=form.lecture.data, discussion=form.discussion.data)
-        lecture = Lecture.get(Lecture.id == form.lecture.data)
-        lecture.number_of_files += 1
-        lecture.save()
+        note = Note.create(filename=filename, uploader=g.user.user_id, description=form.description.data)
+
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('notes/add_note.html', form=form)
 
