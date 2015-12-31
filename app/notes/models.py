@@ -47,6 +47,7 @@ class Note(Model):
     votes = IntegerField(db_column='VOTES', default=0)
     filename = CharField(db_column='FILENAME', unique=True)
     uploader = ForeignKeyField(User, db_column='UPLOADER')
+    description = CharField(db_column='DESCRIPTION')
 
     class Meta:
         database = DATABASE
