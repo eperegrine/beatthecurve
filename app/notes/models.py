@@ -47,8 +47,6 @@ class Note(Model):
     votes = IntegerField(db_column='VOTES', default=0)
     filename = CharField(db_column='FILENAME', unique=True)
     uploader = ForeignKeyField(User, db_column='UPLOADER')
-    discussion = ForeignKeyField(Discussion, db_column='DISCUSSION', null=True)
-    lecture = ForeignKeyField(Lecture, db_column='LECTURE')
 
     class Meta:
         database = DATABASE
