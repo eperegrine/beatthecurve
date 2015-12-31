@@ -11,63 +11,45 @@
         <li>{{ message }}</li>
       {% endfor %}
   </ul>
-  <h5 class="no-content-message">No Lectures</h5>
+  {% if semesters|length < 0 %}
+    <h5 class="no-content-message">No Lectures</h5>
+  {% endif %}
   <a href="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}" class="btn">Upload Note</a>
-  <table id="notes-table" class="striped">
-    <thead>
-      <tr>
-        <td>Lecture</td>
-        <td>Number Of Files</td>
-        <td>Files</td>
-      </tr>
-    </thead>
-    <tbody>
-      {% for lecture in lectures %}
-        <tr semester="{{ lecture.semester }}" year="{{ lecture.year }}">
-          <td>{{ lecture.name }} - {{ lecture.year }}</td>
-          <td>{{ lecture.number_of_files }}</td>
-          <td>
-            {% for note in notes[lecture.id] %}
-              <ul class="horizontal-ul">
-                <li>{{ note.filename }}</li>
-                <li>Votes: {{ note.votes }}</li>
-                {% if note.has_voted(current_user) %}
-                  {% if note.has_upvoted(current_user) %}
-                    <li>
-                      <i class="material-icons">thumb_up</i>
-                    </li>
-                    <li>
-                      <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a>
-                    </li>
-                  {% elif note.has_voted(current_user) %}
-                    <li>
-                      <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a>
-                    </li>
-                    <li>
-                      <i class="material-icons">thumb_down</i>
-                    </li>
-                  {% endif %}
-                {% else %}
-                  <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a></li>
-                  <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a></li>
-                {% endif %}
-                <li><a href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}">Download</a></li>
-              </ul>
-            {% endfor %}
-          </td>
+  <table>
+    {% for note in notes %}
+      <tr  semester="{{ note.semester }}" year="{{ note.year }}">
+        <ul class="horizontal-ul">
+          <li>{{ note.filename }}</li>
+          <li>Votes: {{ note.votes }}</li>
+          {% if note.has_voted(current_user) %}
+            {% if note.has_upvoted(current_user) %}
+              <li>
+                <i class="material-icons">thumb_up</i>
+              </li>
+              <li>
+                <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a>
+              </li>
+            {% elif note.has_voted(current_user) %}
+              <li>
+                <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a>
+              </li>
+              <li>
+                <i class="material-icons">thumb_down</i>
+              </li>
+            {% endif %}
+          {% else %}
+            <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a></li>
+            <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a></li>
+          {% endif %}
+          <li><a href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}">Download</a></li>
+        </ul>
       </tr>
     {% endfor %}
-    </tbody>
   </table>
 {% endblock %}
 {% block js %}
   <script>
       $(document).ready(function() {
-        if ($("#notes-table tbody tr").length === 0) {
-          $("#notes-table").hide();
-          $(".no-content-message").show();
-        } else {
-          $(".no-content-message").hide();
           var active = $('.semester-tab > a.active')[0].parentElement;
           var year = $(active).attr('year');
           var semester = $(active).attr('semester');
@@ -81,7 +63,6 @@
               $('tr[year="' + year + '"][semester="' + semester + '"]').show();
             }
           );
-        }
       });
   </script>
 {% endblock %}

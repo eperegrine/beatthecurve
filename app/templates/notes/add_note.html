@@ -18,15 +18,5 @@
   </div>
 {% endblock %}
 {% block js %}
-  <script src="{{ static_url }}js/get_discussions.js"></script>
   <script src="{{ static_url }}js/upload_note.js"></script>
-  <script>
-    $("#discussion").prop('disabled', true);
-    getDiscussions($("#lecture").val(), {'selectFieldId': "discussion"}, addNoteSelectFields);
-    $("#lecture").change(function () {
-    getDiscussions($("#lecture").val(), {'selectFieldId': "discussion"}, addNoteSelectFields)
-    });
-
-
-  </script>
 {% endblock %}

@@ -3,6 +3,7 @@ from app.auth.models import User
 from app.lesson.models import Lesson
 from app.models import DATABASE
 from enum import Enum
+from datetime import datetime
 
 
 class Semester(Enum):
@@ -48,6 +49,9 @@ class Note(Model):
     filename = CharField(db_column='FILENAME', unique=True)
     uploader = ForeignKeyField(User, db_column='UPLOADER')
     description = CharField(db_column='DESCRIPTION')
+    lesson = ForeignKeyField(Lesson, db_column='LESSON_ID')
+    semester = IntegerField(db_column='SEMESTER')
+    year = IntegerField(db_column='YEAR')
 
     class Meta:
         database = DATABASE

@@ -6,6 +6,7 @@ from .models import Lecture, Discussion, Note, Semester
 import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1
 from app.auth.decorators import permission_required
+from datetime import datetime
 
 
 notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')
@@ -20,16 +21,20 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    lectures = [lecture for lecture in Lecture.select().where((Lecture.lesson_id == lesson.id)).order_by(Lecture.year)]
+    '''lectures = [lecture for lecture in Lecture.select().where((Lecture.lesson_id == lesson.id)).order_by(Lecture.year)]
     print(lectures)
     notes = {}
-    semesters = set()
     for lecture in lectures:
         semesters.add((lecture.year, lecture.semester))
         query = Note.select().where(Note.lecture == lecture.id)
         notes[lecture.id] = [note for note in query]
-    print(notes)
-    return render_template('notes/notes_listing.html', lesson=lesson, lectures=lectures, notes=notes, semesters=sorted(semesters))
+    print(notes)'''
+    notes = Note.select().where(Note.lesson == lessonid)
+    semesters = set()
+    for note in notes:
+        semesters.add((note.year, note.semester))
+
+    return render_template('notes/notes_listing.html', lesson=lesson, notes=notes, semesters=sorted(semesters))
 
 
 @notes_bp.route('/add-lecture', methods=('POST', 'GET'))
@@ -75,9 +80,26 @@ def add_note(lessonid):
     form = AddNoteForm()
     if form.validate_on_submit():
         # TODO: Add error handling
+        # TODO: Improve validation
         # Upload file
         filename = form.file.data.filename
-        note = Note.create(filename=filename, uploader=g.user.user_id, description=form.description.data)
+        month = datetime.now().month
+        if month < 3 or month == 12:
+            semester = Semester.winter
+        elif month < 6:
+            semester = Semester.spring
+        elif month < 9:
+            semester = Semester.summer
+        else:
+            semester = Semester.fall
+
+        note = Note.create(
+            filename=filename,
+            uploader=g.user.user_id,
+            description=form.description.data,
+            lesson=lessonid,
+            semester=semester.value,
+            year=datetime.now().year)
 
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('notes/add_note.html', form=form)
