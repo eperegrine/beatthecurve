@@ -6,7 +6,7 @@ if 'LOCAL_DEV' in os.environ:
     database = {
         'engine': 'peewee.PostgresqlDatabase',
         'name': 'BEATTHECURVE',
-        'user': 'charliethomas',
+        'user': os.environ['PG_USERNAME'],
         'password': '',
         'host': '127.0.0.1',
         'port': '5432',
