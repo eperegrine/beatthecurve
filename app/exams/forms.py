@@ -11,7 +11,7 @@ from wtforms.validators import (
 )
 
 from datetime import datetime
-from app.notes.models import Semester
+from app.models import Semester
 
 
 class AddExamForm(Form):

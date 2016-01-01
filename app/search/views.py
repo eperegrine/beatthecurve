@@ -40,18 +40,26 @@ def view(lessonid):
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
 
-    # Get all users in lesson
-    users = [ls.student_id.user_id for ls in LessonStudent.select().where(LessonStudent.lesson_id == lesson.id)]
     options = {}
     for option in Option.select().where(Option.school == g.user.school_id):
         options[option.id] = option.name
-    # Get all matching lessons
+
+    # Get all users in lesson
+    query = LessonStudent.select().where(LessonStudent.lesson_id == lesson.id)
     data = []
-    for user_id in users:
-        user_options = UserOption.select().where((UserOption.user == user_id) & (UserOption.agreed == True))
+
+    semsters = set()
+    for ls in query:
+        user_options = UserOption.select().where((UserOption.user == ls.student_id.user_id) & (UserOption.agreed == True))
         user_options_list = [options[uo.option.id] for uo in user_options]
         if len(user_options_list) < 1:
             continue
-        user = User.get(User.user_id == user_id)
-        data.append({'name': user.first_name + " " + user.last_name, 'email': user.email, 'options': user_options_list})
-    return render_template('search/listing.html', lesson=lesson, users=data)
+        user = User.get(User.user_id == ls.student_id.user_id)
+        data.append({'name': user.first_name + " " + user.last_name,
+                     'email': user.email,
+                     'options': user_options_list,
+                     'semester': ls.semester,
+                     'year': ls.year})
+        semsters.add((ls.year, ls.semester))
+    print(sorted(semsters))
+    return render_template('search/listing.html', lesson=lesson, users=data, semesters=sorted(semsters))

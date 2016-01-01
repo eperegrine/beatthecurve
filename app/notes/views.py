@@ -2,11 +2,12 @@ from flask import Blueprint, render_template, flash, redirect, url_for, g, jsoni
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
 from .forms import AddLectureForm, AddNoteForm, AddDiscussionForm
-from .models import Lecture, Discussion, Note, Semester
+from .models import Lecture, Discussion, Note
 import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1
 from app.auth.decorators import permission_required
 from datetime import datetime
+from app.models import Semester
 
 
 notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')

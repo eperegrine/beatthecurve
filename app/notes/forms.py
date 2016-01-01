@@ -10,7 +10,8 @@ from wtforms.validators import (
     Optional
 )
 
-from .models import Lecture, Discussion, Semester
+from .models import Lecture, Discussion
+from app.models import Semester
 from datetime import datetime
 
 

@@ -1,6 +1,7 @@
 from peewee import *
 import os
 import urllib.parse
+from enum import Enum
 
 if 'LOCAL_DEV' in os.environ:
     database = {
@@ -26,3 +27,10 @@ else:
 
 DATABASE = PostgresqlDatabase(database['name'], user=database['user'], password=database['password'],
                               host=database['host'], port=database['port'],autorollback=True)
+
+
+class Semester(Enum):
+    winter = 1
+    fall = 2
+    spring = 3
+    summer = 4

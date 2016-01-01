@@ -1,8 +1,7 @@
 from peewee import *
 from app.notes.models import Lesson
 from app.auth.models import User
-from app.models import DATABASE
-from app.notes.models import Semester
+from app.models import DATABASE, Semester
 
 
 class Exam(Model):

@@ -4,13 +4,7 @@ from app.lesson.models import Lesson
 from app.models import DATABASE
 from enum import Enum
 from datetime import datetime
-
-
-class Semester(Enum):
-    winter = 1
-    fall = 2
-    spring = 3
-    summer = 4
+from app.models import Semester
 
 
 class Lecture(Model):
