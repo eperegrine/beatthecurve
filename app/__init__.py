@@ -18,10 +18,11 @@ from app.qa.models import Question, Reply
 from app.exams.models import Exam, ExamVote
 from app.studygroups.models import StudyGroup, StudyGroupComment, StudyGroupMembers, StudyGroupSession
 from app.search.models import Option, UserOption
+from app.chat.models import Message
 
 DATABASE.create_tables([School, User, Permission, UserPermission, Lesson, LessonStudent, Lecture, Discussion, Note,
                         NoteVote, Question, Reply, Exam, ExamVote, StudyGroup, StudyGroupComment, StudyGroupMembers,
-                        StudyGroupSession, Option, UserOption], safe=True)
+                        StudyGroupSession, Option, UserOption, Message], safe=True)
 
 # Set up login manager
 login_manager = LoginManager()
