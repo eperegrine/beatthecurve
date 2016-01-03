@@ -102,5 +102,8 @@ app.register_blueprint(studygroups_bp)
 from app.search.views import search_bp
 app.register_blueprint(search_bp)
 
+from app.chat.views import chat_bp
+app.register_blueprint(chat_bp)
+
 from app.lesson.models import LessonStudent
 app.jinja_env.globals.update(get_lessons=LessonStudent.get_attended_lessons)
