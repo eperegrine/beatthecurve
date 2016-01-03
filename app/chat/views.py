@@ -48,7 +48,7 @@ def join(message):
             'sent': msg.sent.strftime("%H:%M %d-%m-%Y"),
             'sender': msg.sender.first_name + ' ' + msg.sender.last_name
         }
-        for msg in Message.select().where(Message.lesson == message['room'])
+        for msg in Message.select().where(Message.lesson == message['room']).order_by(Message.sent)
     ]
     emit('my response',
          {'data': 'In rooms: ' + ', '.join(rooms()),
