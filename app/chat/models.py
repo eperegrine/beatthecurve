@@ -5,7 +5,7 @@ from app.lesson.models import Lesson
 from datetime import datetime
 
 
-class Message(User):
+class Message(Model):
     id = PrimaryKeyField(db_column='ID')
     text = CharField(db_column='TEXT')
     sender = ForeignKeyField(User, db_column='USER_ID')

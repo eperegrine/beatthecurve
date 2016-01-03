@@ -5,6 +5,7 @@ from flask.ext.login import current_user, login_required
 from app import app
 from datetime import datetime
 from app.lesson.models import Lesson
+from .models import Message
 
 chat_bp = Blueprint('chat_bp', __name__, url_prefix='/chat')
 socketio = SocketIO(app)
@@ -38,12 +39,21 @@ def test_broadcast_message(message):
 
 @socketio.on('join', namespace='/test')
 def join(message):
+    # TODO: Validate room
     join_room(message['room'])
     session['receive_count'] = session.get('receive_count', 0) + 1
+    messages = [
+        {
+            'text': msg.text,
+            'sent': msg.sent.strftime("%H:%M %d-%m-%Y"),
+            'sender': msg.sender.first_name + ' ' + msg.sender.last_name
+        }
+        for msg in Message.select().where(Message.lesson == message['room'])
+    ]
     emit('my response',
          {'data': 'In rooms: ' + ', '.join(rooms()),
           'count': session['receive_count'],
-          'hidden': 'true'})
+          'messages': messages})
 
 
 @socketio.on('leave', namespace='/test')
@@ -67,9 +77,21 @@ def close(message):
 @socketio.on('my room event', namespace='/test')
 def send_room_message(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
-    messages = [
-        {'text': message['data'], 'sent': datetime.now().strftime('%H:%M %d-%m-%Y'), 'sender': current_user.first_name + ' ' + current_user.last_name}
-    ]
+    messages = []
+    try:
+        msg = Message.create(
+            text=message['data'],
+            lesson=message['room'],
+            sender=current_user.user_id,
+        )
+        messages.append({
+            'text': msg.text,
+            'sent': msg.sent.strftime("%H:%M %d-%m-%Y"),
+            'sender': msg.sender.first_name + ' ' + msg.sender.last_name
+        })
+    except Exception as e:
+        print(e)
+
     emit('my response',
          {'data': message['data'], 'count': session['receive_count'], 'messages': messages},
          room=message['room'])
@@ -86,10 +108,7 @@ def disconnect_request():
 @socketio.on('connect', namespace='/test')
 def test_connect():
     # TODO: Add authentication
-    messsages = [
-        {'sender': 'Charles Thomas', 'text': 'Hello World', 'sent': datetime.now().strftime('%H:%M %d-%m-%Y')}
-    ]
-    emit('my response', {'data': 'Connected', 'count': 0, 'messages': messsages})
+    emit('my response', {'data': 'Connected', 'count': 0})
 
 
 @socketio.on('disconnect', namespace='/test')
