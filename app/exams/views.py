@@ -27,7 +27,10 @@ def view(lessonid):
     for exam in exams:
         semesters.add((exam.year, exam.semester))
     print(semesters)
-    return render_template('exams/exam_listing.html', lesson=lesson, exams=exams, semesters=sorted(semesters))
+    form = AddExamForm()
+    form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in Lesson.select()]
+
+    return render_template('exams/exam_listing.html', lesson=lesson, exams=exams, semesters=sorted(semesters), form=form)
 
 
 @exams_bp.route('/sign_s3/')
