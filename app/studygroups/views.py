@@ -149,7 +149,7 @@ def contact_organiser(lessonid):
         print(studygroup.founder.email)
         message.add_to(studygroup.founder.email)
         message.set_subject('Beat The Curve')
-        message.set_text(form.message)
+        message.set_text(form.message.data)
         message.set_from(g.user.email)
         status, msg = sg.send(message)
         print(status)
