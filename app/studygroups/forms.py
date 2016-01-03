@@ -2,6 +2,8 @@ from flask_wtf import Form
 from wtforms.fields import (
     StringField,
     SelectField,
+    TextAreaField,
+    HiddenField
 )
 from wtforms.validators import (
     DataRequired
@@ -22,3 +24,8 @@ class AddStudyGroupSessionForm(Form):
 
 class AddComment(Form):
     comment = StringField('Comment', validators=[DataRequired()])
+
+
+class ContactOrganiserForm(Form):
+    message = TextAreaField('Message', validators=[DataRequired()])
+    study_group = HiddenField()

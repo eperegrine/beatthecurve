@@ -33,8 +33,27 @@
           <td>{% if x %}{{ x }}{% else %}None{% endif %}</td>
           <td>{{ sg.number_of_members }}</td>
           <td>{{ sg.productivity }}</td>
+          <td>
+            <a href="#{{ sg.id }}">Contact Organiser</a>
+          </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
+    {% for sg in study_groups %}
+      <div id="{{ sg.id }}" class="modalDialog">
+	      <div>
+          <a href="#close" title="Close" class="close">X</a>
+          <h5>Contact The Organiser</h5>
+          <form action="{{ url_for("studygroups_bp.contact_organiser", lessonid=lesson.id) }}" method="post">
+              {{ render_field(contact_form.csrf_token) }}
+              {{ contact_form.study_group(value=sg.id) }}
+
+              {{ render_field(contact_form.message) }}
+
+              <button type="submit">Contact</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
 {% endblock %}

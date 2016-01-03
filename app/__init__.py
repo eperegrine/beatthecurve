@@ -4,11 +4,14 @@ from peewee import DoesNotExist
 from .models import DATABASE, Semester
 from .auth.models import User
 import os
+import sendgrid
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config["DEBUG"] = True
+
+sg = sendgrid.SendGridClient(os.environ['SENDGRID_KEY'])
 
 from app.models import DATABASE
 from app.auth.models import School, User, Permission, UserPermission

@@ -1,10 +1,13 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, g
+from flask import Blueprint, render_template, flash, redirect, url_for, g, request
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
-from .forms import AddStudyGroupForm, AddStudyGroupSessionForm
+from .forms import AddStudyGroupForm, AddStudyGroupSessionForm, ContactOrganiserForm
 from .models import StudyGroup, StudyGroupMembers, StudyGroupSession
 from datetime import datetime
 from .forms import AddComment
+import sendgrid
+from app import sg
+from app.auth.models import User
 
 studygroups_bp = Blueprint('studygroups_bp', __name__, url_prefix='/studygroups')
 
@@ -27,8 +30,9 @@ def view(lessonid):
     else:
         lessons = Lesson.select().where(Lesson.id << lesson_ids)
         form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in lessons]
-
-    return render_template('studygroups/study_groups_listing.html', lesson=lesson, study_groups=study_groups, form=form)
+    contact_form = ContactOrganiserForm()
+    return render_template('studygroups/study_groups_listing.html', lesson=lesson, study_groups=study_groups,
+                           form=form, contact_form=contact_form)
 
 
 @studygroups_bp.route('/add-studygroup', methods=('POST', 'GET'))
@@ -132,3 +136,23 @@ def add_comment(sgid):
         else:
             flash("Error")
     return redirect(url_for(".detail", sgid=sgid))
+
+
+@studygroups_bp.route('/contact-organiser/<lessonid>', methods=('POST', 'GET'))
+@login_required
+def contact_organiser(lessonid):
+    form = ContactOrganiserForm(request.form)
+
+    if form.validate_on_submit():
+        message = sendgrid.Mail()
+        studygroup = StudyGroup.get(StudyGroup.id == form.study_group.data)
+        print(studygroup.founder.email)
+        message.add_to(studygroup.founder.email)
+        message.set_subject('Beat The Curve')
+        message.set_text(form.message)
+        message.set_from(g.user.email)
+        status, msg = sg.send(message)
+        print(status)
+        flash('Success')
+
+    return redirect(url_for(".view", lessonid=lessonid))
