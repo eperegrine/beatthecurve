@@ -1,17 +1,24 @@
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, flash, redirect, url_for
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
 from flask.ext.login import current_user, login_required
 from app import app
 from datetime import datetime
+from app.lesson.models import Lesson
 
 chat_bp = Blueprint('chat_bp', __name__, url_prefix='/chat')
 socketio = SocketIO(app)
 
 
-@chat_bp.route('/')
-def index():
-    return render_template('chat/listing.html')
+@chat_bp.route('/<lessonid>')
+@login_required
+def index(lessonid):
+    try:
+        lesson = Lesson.get(Lesson.id == lessonid)
+    except:
+        flash('Id not found')
+        return redirect(url_for('auth_bp.profile'))
+    return render_template('chat/listing.html', lesson=lesson)
 
 @socketio.on('my event', namespace='/test')
 def test_message(message):
