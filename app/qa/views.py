@@ -39,7 +39,17 @@ def view(lessonid):
 
     if len(data['Misc']) < 1:
         del data['Misc']
-    return render_template('qa/qa_listing.html', lesson=lesson, questions=data, last_posts=last_posts)
+
+    form = AddQuestionForm()
+    form.lecture.choices = [(str(lecture.id), lecture.name) for lecture in
+                            Lecture.select().where(Lecture.lesson_id == int(lessonid))]
+    form.lecture.choices.append(('-1', "N/A"))
+    form.discussion.choices = [('-1', "None")]
+
+    if request.method == 'POST':
+        form.discussion.choices += [(str(discussion.id), discussion.name) for discussion in Discussion.select().where(Discussion.lecture_id == form.lecture.data)]
+
+    return render_template('qa/qa_listing.html', lesson=lesson, questions=data, last_posts=last_posts, form=form)
 
 
 @qa_bp.route('/add-question/<lessonid>', methods=('POST', 'GET'))
