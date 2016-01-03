@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% from 'macros.html' import render_lesson_tabs, render_semester_tabs %}
+{% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block main %}
   {{ render_lesson_tabs('notes', lesson.id) }}
@@ -11,6 +11,13 @@
         <li>{{ message }}</li>
       {% endfor %}
   </ul>
+   <form method="post" enctype="multipart/form-data" id="add-note-form" action="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}">
+
+      {% for field in form %}
+        {{ render_field(field) }}
+      {% endfor %}
+      <button type="button" class="waves-effect waves-light btn-large" id="submit">Add Note</button>
+    </form>
   {% if semesters|length < 0 %}
     <h5 class="no-content-message">No Lectures</h5>
   {% endif %}
@@ -65,4 +72,6 @@
           );
       });
   </script>
+    <script src="{{ static_url }}js/upload_note.js"></script>
+
 {% endblock %}

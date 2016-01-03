@@ -22,20 +22,14 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    '''lectures = [lecture for lecture in Lecture.select().where((Lecture.lesson_id == lesson.id)).order_by(Lecture.year)]
-    print(lectures)
-    notes = {}
-    for lecture in lectures:
-        semesters.add((lecture.year, lecture.semester))
-        query = Note.select().where(Note.lecture == lecture.id)
-        notes[lecture.id] = [note for note in query]
-    print(notes)'''
+
     notes = Note.select().where(Note.lesson == lessonid)
     semesters = set()
     for note in notes:
         semesters.add((note.year, note.semester))
+    form = AddNoteForm()
 
-    return render_template('notes/notes_listing.html', lesson=lesson, notes=notes, semesters=sorted(semesters))
+    return render_template('notes/notes_listing.html', lesson=lesson, notes=notes, semesters=sorted(semesters), form=form)
 
 
 @notes_bp.route('/add-lecture', methods=('POST', 'GET'))
