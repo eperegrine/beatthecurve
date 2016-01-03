@@ -20,6 +20,7 @@ def index(lessonid):
         return redirect(url_for('auth_bp.profile'))
     return render_template('chat/listing.html', lesson=lesson)
 
+
 @socketio.on('my event', namespace='/test')
 def test_message(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
@@ -41,7 +42,8 @@ def join(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
     emit('my response',
          {'data': 'In rooms: ' + ', '.join(rooms()),
-          'count': session['receive_count']})
+          'count': session['receive_count'],
+          'hidden': 'true'})
 
 
 @socketio.on('leave', namespace='/test')
@@ -65,8 +67,11 @@ def close(message):
 @socketio.on('my room event', namespace='/test')
 def send_room_message(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
+    messages = [
+        {'text': message['data'], 'sent': datetime.now().strftime('%H:%M %d-%m-%Y'), 'sender': current_user.first_name + ' ' + current_user.last_name}
+    ]
     emit('my response',
-         {'data': message['data'], 'count': session['receive_count']},
+         {'data': message['data'], 'count': session['receive_count'], 'messages': messages},
          room=message['room'])
 
 
@@ -80,7 +85,11 @@ def disconnect_request():
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
-    emit('my response', {'data': 'Connected', 'count': 0})
+    # TODO: Add authentication
+    messsages = [
+        {'sender': 'Charles Thomas', 'text': 'Hello World', 'sent': datetime.now().strftime('%H:%M %d-%m-%Y')}
+    ]
+    emit('my response', {'data': 'Connected', 'count': 0, 'messages': messsages})
 
 
 @socketio.on('disconnect', namespace='/test')
