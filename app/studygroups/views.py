@@ -19,7 +19,16 @@ def view(lessonid):
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
     study_groups = [sg for sg in StudyGroup.select().where(StudyGroup.lesson == lessonid)]
-    return render_template('studygroups/study_groups_listing.html', lesson=lesson, study_groups=study_groups)
+    form = AddStudyGroupForm()
+    lesson_ids = [ls.lesson_id for ls in LessonStudent.select().where(LessonStudent.student_id == g.user.user_id)]
+    if len(lesson_ids) < 1:
+        flash("You do not have any lessons")
+        return redirect(url_for("auth_bp.profile"))
+    else:
+        lessons = Lesson.select().where(Lesson.id << lesson_ids)
+        form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in lessons]
+
+    return render_template('studygroups/study_groups_listing.html', lesson=lesson, study_groups=study_groups, form=form)
 
 
 @studygroups_bp.route('/add-studygroup', methods=('POST', 'GET'))
