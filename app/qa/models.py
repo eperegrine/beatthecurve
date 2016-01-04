@@ -1,7 +1,7 @@
 from peewee import *
 from app.auth.models import User
 from app.notes.models import Lecture, Discussion, Lesson
-from app.models import DATABASE
+from app.models import DATABASE, Semester
 from datetime import datetime
 
 
@@ -12,7 +12,8 @@ class Question(Model):
     document = CharField(db_column='DOCUMENT')
     name = CharField(db_column='NAME', unique=True)
     content = CharField(db_column='CONTENT')
-
+    semester = IntegerField(db_column='SEMESTER', default=Semester.winter.value)
+    year = IntegerField(db_column='YEAR', default=2016)
     class Meta:
         database = DATABASE
         db_table = 'TBL_QUESTION'
