@@ -23,6 +23,7 @@ def question_name_in_use(form, field):
 class AddQuestionForm(Form):
     '''lecture = SelectField('Lecture', validators=[Optional()])
     discussion = SelectField('Discussion', validators=[Optional()])'''
+    document = StringField('Document', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired(), question_name_in_use])
     content = TextAreaField('Content', validators=[DataRequired()])
 
