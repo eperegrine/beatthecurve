@@ -916,3 +916,17 @@ select {
    border-radius: 2px;
    height: 3rem;
 }
+
+//Submit Button
+[type=submit] {
+  background-color: $formCol;
+  color: white;
+
+  &:hover {
+    background-color: lighten($formCol, 3%)
+  }
+
+  &:active, &:focus {
+    background-color: $formCol;
+  }
+}

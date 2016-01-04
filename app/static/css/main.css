@@ -6422,24 +6422,24 @@ button:focus {
 
 label {
   font-size: 0.8rem;
-  color: #9e9e9e; }
+  color: #5FB7F4; }
 
 /***************************
    Text Inputs + Textarea
 ****************************/
 ::-webkit-input-placeholder {
-  color: #d1d1d1; }
+  color: #bee2fb; }
 
 :-moz-placeholder {
   /* Firefox 18- */
-  color: #d1d1d1; }
+  color: #bee2fb; }
 
 ::-moz-placeholder {
   /* Firefox 19+ */
-  color: #d1d1d1; }
+  color: #bee2fb; }
 
 :-ms-input-placeholder {
-  color: #d1d1d1; }
+  color: #bee2fb; }
 
 input:not([type]),
 input[type=text],
@@ -6455,7 +6455,7 @@ input[type=search],
 textarea.materialize-textarea {
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid #9e9e9e;
+  border-bottom: 1px solid #5FB7F4;
   border-radius: 0;
   outline: none;
   height: 3rem;
@@ -6527,8 +6527,8 @@ textarea.materialize-textarea {
   input[type=number]:focus:not([readonly]),
   input[type=search]:focus:not([readonly]),
   textarea.materialize-textarea:focus:not([readonly]) {
-    border-bottom: 1px solid #26a69a;
-    box-shadow: 0 1px 0 0 #26a69a; }
+    border-bottom: 1px solid #5FB7F4;
+    box-shadow: 0 1px 0 0 #5FB7F4; }
   input:not([type]):focus:not([readonly]) + label,
   input[type=text]:focus:not([readonly]) + label,
   input[type=password]:focus:not([readonly]) + label,
@@ -6541,7 +6541,7 @@ textarea.materialize-textarea {
   input[type=number]:focus:not([readonly]) + label,
   input[type=search]:focus:not([readonly]) + label,
   textarea.materialize-textarea:focus:not([readonly]) + label {
-    color: #26a69a; }
+    color: #5FB7F4; }
   input:not([type]).valid, input:not([type]):focus.valid,
   input[type=text].valid,
   input[type=text]:focus.valid,
@@ -6565,8 +6565,8 @@ textarea.materialize-textarea {
   input[type=search]:focus.valid,
   textarea.materialize-textarea.valid,
   textarea.materialize-textarea:focus.valid {
-    border-bottom: 1px solid #4CAF50;
-    box-shadow: 0 1px 0 0 #4CAF50; }
+    border-bottom: 1px solid #5FB7F4;
+    box-shadow: 0 1px 0 0 #5FB7F4; }
   input:not([type]).valid + label:after, input:not([type]):focus.valid + label:after,
   input[type=text].valid + label:after,
   input[type=text]:focus.valid + label:after,
@@ -6591,7 +6591,7 @@ textarea.materialize-textarea {
   textarea.materialize-textarea.valid + label:after,
   textarea.materialize-textarea:focus.valid + label:after {
     content: attr(data-success);
-    color: #4CAF50;
+    color: #5FB7F4;
     opacity: 1; }
   input:not([type]).invalid, input:not([type]):focus.invalid,
   input[type=text].invalid,
@@ -6667,7 +6667,7 @@ textarea.materialize-textarea {
   position: relative;
   margin-top: 1rem; }
   .input-field label {
-    color: #9e9e9e;
+    color: #5FB7F4;
     position: absolute;
     top: 0.8rem;
     left: 0.75rem;
@@ -6683,7 +6683,7 @@ textarea.materialize-textarea {
     font-size: 2rem;
     transition: color .2s; }
     .input-field .prefix.active {
-      color: #26a69a; }
+      color: #5FB7F4; }
   .input-field .prefix ~ input,
   .input-field .prefix ~ textarea {
     margin-left: 3rem;
@@ -7064,7 +7064,7 @@ input[type=checkbox]:not(:disabled) ~ .lever:active:after {
     cursor: pointer;
     background-color: transparent;
     border: none;
-    border-bottom: 1px solid #9e9e9e;
+    border-bottom: 1px solid #5FB7F4;
     outline: none;
     height: 3rem;
     line-height: 3rem;
@@ -7294,6 +7294,14 @@ select {
   border: 1px solid #f2f2f2;
   border-radius: 2px;
   height: 3rem; }
+
+[type=submit] {
+  background-color: #5FB7F4;
+  color: white; }
+  [type=submit]:hover {
+    background-color: #6dbdf5; }
+  [type=submit]:active, [type=submit]:focus {
+    background-color: #5FB7F4; }
 
 /***************
     Nav List
@@ -8500,6 +8508,11 @@ main {
   color: #5FB7F4;
   margin-top: 7%;
   font-size: 2.5em; }
+
+.content_title {
+  text-align: center;
+  color: #5FB7F4;
+  font-size: 2.2em; }
 
 html {
   background-color: #F8FDFC; }
