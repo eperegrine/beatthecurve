@@ -1,0 +1,38 @@
+.visually-hidden {
+  @extend %visuallyhidden;
+}
+
+.tab > .active {
+    border-bottom: 2px #ee6e73 solid;
+}
+
+form div:last-of-type > input[type="checkbox"] + label {
+    margin-bottom: 1.5em;
+}
+
+header, main, footer {
+  padding-left: 240px;
+}
+
+#nav-title {
+  margin-left: 120px;
+}
+
+@media only screen and (max-width : 992px) {
+  header, main, footer {
+    padding-left: 0;
+  }
+
+  #nav-title {
+      margin-left: auto;
+  }
+}
+
+.horizontal-ul li {
+    display: inline;
+    padding: 1em;
+}
+
+@import "vendor/tp";
+@import "modules/all";
+@import "partials/base";
