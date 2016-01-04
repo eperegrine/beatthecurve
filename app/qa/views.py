@@ -5,6 +5,8 @@ from app.notes.models import Lecture, Discussion
 from .forms import AddQuestionForm, AddReplyForm
 from .models import Question, Reply
 from collections import OrderedDict
+from app.models import Semester
+from datetime import datetime
 
 qa_bp = Blueprint('qa_bp', __name__, url_prefix='/qa')
 
@@ -18,7 +20,7 @@ def view(lessonid):
     except:
         flash('Id not found')
         return redirect(url_for('auth_bp.profile'))
-    data = OrderedDict()
+    '''data = OrderedDict()
     data['Misc'] = []
     lectures = Lecture.select().where(Lecture.lesson_id == lessonid)
     for lecture in lectures:
@@ -38,11 +40,24 @@ def view(lessonid):
             pass
 
     if len(data['Misc']) < 1:
-        del data['Misc']
+        del data['Misc']'''
+
+    questions = Question.select().where(Question.lesson == lessonid)
+    last_posts = {}
+    semesters = set()
+
+    for question in questions:
+        semesters.add((question.year, question.semester))
+
+        reply = Reply.select().where(Reply.question == question.id).order_by(Reply.datetime).limit(1)
+        try:
+            last_posts[question.name] = [r for r in reply][0]
+        except:
+            pass
 
     form = AddQuestionForm()
 
-    return render_template('qa/qa_listing.html', lesson=lesson, questions=data, last_posts=last_posts, form=form)
+    return render_template('qa/qa_listing.html', lesson=lesson, questions=questions, form=form, last_posts=last_posts, semesters=sorted(semesters))
 
 
 @qa_bp.route('/add-question/<lessonid>', methods=('POST', 'GET'))
@@ -51,7 +66,18 @@ def add_question(lessonid):
     form = AddQuestionForm()
 
     if form.validate_on_submit():
-        Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lesson=lessonid, document=form.document.data)
+        semester = None
+        month = datetime.now().month
+        if month < 3 or month == 12:
+            semester = Semester.winter
+        elif month < 6:
+            semester = Semester.spring
+        elif month < 9:
+            semester = Semester.summer
+        else:
+            semester = Semester.fall
+
+        Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lesson=lessonid, document=form.document.data, semester=semester, year=datetime.now().year)
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('qa/add_question.html', form=form)
 

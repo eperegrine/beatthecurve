@@ -14,6 +14,8 @@ class Question(Model):
     content = CharField(db_column='CONTENT')
     semester = IntegerField(db_column='SEMESTER', default=Semester.winter.value)
     year = IntegerField(db_column='YEAR', default=2016)
+    lesson = ForeignKeyField(Lesson, db_column='LESSON_ID')
+
     class Meta:
         database = DATABASE
         db_table = 'TBL_QUESTION'

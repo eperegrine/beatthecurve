@@ -1,8 +1,11 @@
 {% extends 'layout.html' %}
-{% from 'macros.html' import render_lesson_tabs, render_field %}
+{% from 'macros.html' import render_lesson_tabs, render_field, render_semester_tabs %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block main %}
   {{ render_lesson_tabs('qa', lesson.id) }}
+  {% if semesters|length > 0 %}
+    {{ render_semester_tabs(semesters, semester_enum) }}
+  {% endif %}
   <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
@@ -14,9 +17,6 @@
       {% endfor %}
       <button type="submit" class="waves-effect waves-light btn-large">Add Question</button>
     </form>
-  {% for key in questions %}
-    <div class="section">
-      <h5>{{ key }}</h5>
       <table>
         <thead>
           <tr>
@@ -26,22 +26,20 @@
           </tr>
         </thead>
         <tbody>
-          {% for data in questions[key] %}
-            <tr>
+          {% for question in questions %}
+            <tr  semester="{{ question.semester }}" year="{{ question.year }}">
               <td>
-                <h5><a href="{{ url_for('qa_bp.detail', lessonid=lesson.id, qid=data['question'].id) }}">{{ data['question'].name }}</a></h5>
-                <p>{{ data['question'].content[:100] }}</p>
+                <h5><a href="{{ url_for('qa_bp.detail', lessonid=lesson.id, qid=question.id) }}">{{ question.name }}</a></h5>
+                <p>{{ question.content[:100] }}</p>
               </td>
-              <td>{{ data['question'].number_of_posts }}</td>
-              {% if data['question'].name in last_posts.keys() %}
-                <td>{{ last_posts[data['question'].name].datetime }}</td>
+              <td>{{ question.number_of_posts }}</td>
+              {% if question.name in last_posts.keys() %}
+                <td>{{ last_posts[question.name].datetime }}</td>
               {% endif %}
             </tr>
           {% endfor %}
         </tbody>
       </table>
-    </div>
-  {% endfor %}
 {% endblock %}
 {% block js %}
   <script src="{{ url_for("static", filename="js/get_discussions.js") }}"></script>
@@ -65,7 +63,20 @@
 
           }
 
-        })
+        });
+        var active = $('.semester-tab > a.active')[0].parentElement;
+          var year = $(active).attr('year');
+          var semester = $(active).attr('semester');
+          $('tr').hide();
+          $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+          $('.semester-tab').click(
+            function (e) {
+              var year = $(this).attr('year');
+              var semester = $(this).attr('semester');
+              $('tr').hide();
+              $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+            }
+          );
       }
     )
   </script>
