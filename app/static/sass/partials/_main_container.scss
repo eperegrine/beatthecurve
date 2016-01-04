@@ -1,0 +1,15 @@
+main {
+  @extend .card-panel;
+  margin: 10%;
+  -webkit-box-shadow: 0px 0px 21px 1px rgba(0,0,0,0.61);
+  -moz-box-shadow: 0px 0px 21px 1px rgba(0,0,0,0.61);
+  box-shadow: 0px 0px 21px 1px rgba(0,0,0,0.61);
+  //border-radius: 20px;
+}
+
+.page_title {
+  text-align: center;
+  color: $primaryCol;
+  margin-top: 7%;
+  font-size: 2.5em;
+}
