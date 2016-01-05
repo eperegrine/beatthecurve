@@ -19,13 +19,13 @@ def view(lessonid):
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
-        flash('Id not found')
+        flash('Id not found', 'error')
         return redirect(url_for('auth_bp.profile'))
     study_groups = [sg for sg in StudyGroup.select().where(StudyGroup.lesson == lessonid)]
     form = AddStudyGroupForm()
     lesson_ids = [ls.lesson_id for ls in LessonStudent.select().where(LessonStudent.student_id == g.user.user_id)]
     if len(lesson_ids) < 1:
-        flash("You do not have any lessons")
+        flash("You do not have any lessons", 'warning')
         return redirect(url_for("auth_bp.profile"))
     else:
         lessons = Lesson.select().where(Lesson.id << lesson_ids)
@@ -41,7 +41,7 @@ def add_studygroup():
     form = AddStudyGroupForm()
     lesson_ids = [ls.lesson_id for ls in LessonStudent.select().where(LessonStudent.student_id == g.user.user_id)]
     if len(lesson_ids) < 1:
-        flash("You do not have any lessons")
+        flash("You do not have any lessons", 'warning')
         return redirect(url_for("auth_bp.profile"))
     else:
         lessons = Lesson.select().where(Lesson.id << lesson_ids)
@@ -65,7 +65,7 @@ def add_studygroup():
 @login_required
 def add_studygroup_session(studygroupid):
     if not StudyGroup.select().where((StudyGroup.id == studygroupid) & (StudyGroup.founder == g.user.user_id)).exists():
-        flash("Error! Invalid Study Group")
+        flash("Error! Invalid Study Group", 'error')
         return redirect(url_for("auth_bp.profile"))
 
     form = AddStudyGroupSessionForm()
@@ -75,7 +75,7 @@ def add_studygroup_session(studygroupid):
             study_group=studygroupid,
             datetime=dt
         )
-        flash("Success")
+        flash("Success", 'success')
         return redirect(url_for(".detail",sgid=studygroupid))
 
     return render_template("studygroups/add_session.html", form=form)
@@ -98,13 +98,13 @@ def join(sgid):
     try:
         sg = StudyGroup.get(StudyGroup.id == sgid)
     except:
-        flash("Error. Invalid study group")
+        flash("Error. Invalid study group", 'error')
         return redirect(url_for(".detail", sgid=sgid))
 
     if sg.add_member(g.user):
-        flash("Success")
+        flash("Success", 'success')
     else:
-        flash("Error")
+        flash("Error", 'error')
     return redirect(url_for(".detail", sgid=sgid))
 
 
@@ -114,13 +114,13 @@ def leave(sgid):
     try:
         sg = StudyGroup.get(StudyGroup.id == sgid)
     except:
-        flash("Error. Invalid study group")
+        flash("Error. Invalid study group", 'error')
         return redirect(url_for(".detail", sgid=sgid))
 
     if sg.remove_member(g.user):
-        flash("Success")
+        flash("Success", 'success')
     else:
-        flash("Error")
+        flash("Error", 'error')
     return redirect(url_for(".detail", sgid=sgid))
 
 
@@ -132,9 +132,9 @@ def add_comment(sgid):
 
     if comment_form.validate_on_submit():
         if study_group.add_comment(comment_form.comment.data, user=g.user):
-            flash("Success")
+            flash("Success", 'success')
         else:
-            flash("Error")
+            flash("Error", 'error')
     return redirect(url_for(".detail", sgid=sgid))
 
 
@@ -153,6 +153,6 @@ def contact_organiser(lessonid):
         message.set_from(g.user.email)
         status, msg = sg.send(message)
         print(status)
-        flash('Success')
+        flash('Success', 'success')
 
     return redirect(url_for(".view", lessonid=lessonid))
