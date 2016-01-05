@@ -23,11 +23,11 @@ def signup():
                 first_name=form.first_name.data,
                 last_name=form.last_name.data
             )
-            flash('Successfully created an account!')
+            flash('Successfully created an account!', 'success')
             login_user(user)
             return redirect(url_for('lesson_bp.add'))
         except Exception as e:
-            flash(e)
+            flash(e, 'error')
 
     return render_template('auth/signup.html', form=form)
 
@@ -40,14 +40,14 @@ def login():
         try:
             user = User.get(User.email == form.email.data)
         except DoesNotExist:
-            flash('Your email or password does not exist.')
+            flash('Your email or password does not exist.', 'error')
         else:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
-                flash('You have been logged in.')
+                flash('You have been logged in.', 'success')
                 return redirect(url_for('auth_bp.profile'))
             else:
-                flash('Your email or password does not exist.')
+                flash('Your email or password does not exist.', 'error')
     return render_template('auth/login.html', form=form)
 
 
@@ -69,7 +69,7 @@ def profile():
             # TODO: Add Error handling
             g.user.email = change_email_form.email.data
             g.user.save()
-            flash('Email Updated!')
+            flash('Email Updated!', 'success')
             return redirect(url_for('.profile'))
 
     elif 'change_password' in request.form:
@@ -77,13 +77,13 @@ def profile():
             if check_password_hash(g.user.password, change_password_form.current_password.data):
                 try:
                     g.user.update_password(change_password_form.new_password.data)
-                    flash('Updated Password!')
+                    flash('Updated Password!', 'success')
                     return redirect(url_for('.profile'))
                 # TODO: improve error handling
                 except:
-                    flash('There was an error!')
+                    flash('There was an error!', 'error')
         else:
-            flash('Incorrect Password')
+            flash('Incorrect Password', 'error')
 
     return render_template('auth/profile.html', change_email_form=change_email_form,
                            change_password_form=change_password_form)
@@ -96,7 +96,7 @@ def admin(lessonid):
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
-        flash('Id not found')
+        flash('Id not found', 'error')
         return redirect(url_for('auth_bp.profile'))
     return render_template('auth/admin.html',lesson=lesson)
 
