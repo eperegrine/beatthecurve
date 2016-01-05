@@ -18,29 +18,8 @@ def view(lessonid):
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
-        flash('Id not found')
+        flash('Id not found', 'error')
         return redirect(url_for('auth_bp.profile'))
-    '''data = OrderedDict()
-    data['Misc'] = []
-    lectures = Lecture.select().where(Lecture.lesson_id == lessonid)
-    for lecture in lectures:
-        data[lecture.name] = []
-    questions = Question.select().where(Question.lesson == lessonid)
-    last_posts = {}
-    for question in questions:
-        reply = Reply.select().where(Reply.question == question.id).order_by(Reply.datetime).limit(1)
-        print(reply)
-        if question.lecture is None:
-            data['Misc'].append({'question': question, 'last_post': reply})
-        else:
-            data[question.lecture.name].append({'question': question})
-        try:
-            last_posts[question.name] = [r for r in reply][0]
-        except:
-            pass
-
-    if len(data['Misc']) < 1:
-        del data['Misc']'''
 
     questions = Question.select().where(Question.lesson == lessonid)
     last_posts = {}
@@ -89,7 +68,7 @@ def detail(lessonid, qid):
     try:
         question = Question.get(Question.id == qid)
     except:
-        flash('Id not found')
+        flash('Id not found', 'error')
         return redirect(url_for('.view', lessonid=lessonid))
 
     replies = Reply.select().where(Reply.question == qid)
@@ -107,7 +86,7 @@ def add_reply(questionid):
     try:
         question = Question.get(Question.id == questionid)
     except:
-        flash('Id not found')
+        flash('Id not found', 'error')
         # TODO: Add 404
         return redirect(url_for('auth_bp.profile'))
 
