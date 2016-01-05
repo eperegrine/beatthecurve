@@ -20,7 +20,7 @@ def view(lessonid):
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
-        flash('Id not found')
+        flash('Id not found', 'error')
         return redirect(url_for('auth_bp.profile'))
     exams = Exam.select().where(Exam.lesson == lessonid)
     semesters = set()
@@ -86,13 +86,13 @@ def vote(examid, upvote):
     exam = Exam.get(Exam.id == examid)
     vote = True if upvote == "1" else False
     if exam.has_upvoted(g.user) and vote:
-        flash("Error! You have already upvoted this exam!")
+        flash("Error! You have already upvoted this exam!", 'error')
     elif not exam.has_upvoted(g.user) and not vote:
-        flash("Error! You have already downvoted this exam!")
+        flash("Error! You have already downvoted this exam!", 'error')
     else:
         sucess, message = exam.vote(g.user, vote)
         if sucess:
-            flash("Success")
+            flash("Success", 'success')
         else:
             flash(message)
     return redirect(url_for(".detail", examid=examid))
