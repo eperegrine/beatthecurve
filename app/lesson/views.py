@@ -17,7 +17,7 @@ def add():
     if form.validate_on_submit():
         lesson_ids = [int(id) for id in form.lessons.data]
         LessonStudent.attend(g.user.user_id, lesson_ids)
-        flash("Added!")
+        flash("Added!", 'success')
 
         if UserOption.select().where(UserOption.user == g.user.user_id).exists():
             return redirect(url_for('auth_bp.profile'))
