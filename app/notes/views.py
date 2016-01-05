@@ -50,12 +50,12 @@ def add_lecture():
                 year=form.year.data,
                 semester=form.semester.data
             )
-            flash('Success')
+            flash('Success', 'success')
             return redirect(url_for('auth_bp.profile'))
         except Exception as e:
             print(e)
             # TODO: Improve exception handling
-            flash('There was an error')
+            flash('There was an error', 'error')
 
     return render_template('notes/add_lecture.html', form=form)
 
@@ -121,7 +121,7 @@ def add_discussion(lessonid):
             lecture_id=form.lecture.data,
             name=form.name.data
         )
-        flash('Success')
+        flash('Success', 'success')
         return redirect(url_for(".view", lessonid=lessonid))
 
     return render_template('notes/add_discussion.html', form=form)
@@ -159,7 +159,7 @@ def detail(noteid):
     try:
         note = Note.get(Note.id == noteid)
     except:
-        flash("Invalid note")
+        flash("Invalid note", 'error')
         return redirect(url_for("auth_bp.profile"))
     return render_template("notes/detail.html", note=note)
 
@@ -172,14 +172,14 @@ def vote(noteid, upvote):
     has_voted = note.has_voted(g.user)
     vote = True if upvote == "1" else False
     if has_upvoted and vote:
-        flash("Error! You have already upvoted this note!")
+        flash("Error! You have already upvoted this note!", 'error')
     elif has_voted and not has_upvoted and not vote:
-        flash("Error! You have already downvoted this note!")
+        flash("Error! You have already downvoted this note!", 'error')
     else:
         success, message = note.vote(g.user, vote)
         if success:
-            flash("Success")
+            flash("Success", 'success')
         else:
-            flash(message)
+            flash(message, 'error')
     print(note.lecture.lesson_id)
     return redirect(url_for(".view", lessonid=note.lecture.lesson_id.id))
