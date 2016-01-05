@@ -17,7 +17,7 @@ def index(lessonid):
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
-        flash('Id not found')
+        flash('Id not found', 'error')
         return redirect(url_for('auth_bp.profile'))
     return render_template('chat/listing.html', lesson=lesson)
 
