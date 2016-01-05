@@ -4,8 +4,8 @@
 {% block main %}
   <div class="container">
     <ul>
-      {% for message in get_flashed_messages() %}
-        <li>{{ message }}</li>
+      {% for category, message in get_flashed_messages(with_categories=true) %}
+        <li>{{ message }}{{ category }}</li>
       {% endfor %}
     </ul>
     <h1>Hello, {{ current_user.first_name }}</h1>
