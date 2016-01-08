@@ -4,11 +4,11 @@
 {% block main %}
   <div class="container">
     <h2 class="content_title">Log in</h2>
-  <ul>
-    {% for message in get_flashed_messages() %}
-      <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
+    <ul>
+      {% for message in get_flashed_messages() %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
     <form method="post">
       {% for field in form %}
         {{ render_field(field) }}
@@ -20,4 +20,10 @@
       </div>
     </form>
   </div>
+  <a href="/signup">
+    <div class="card-action main-action">
+      Sign Up
+      <i class="material-icons right chevron_right">chevron_right</i>
+    </div>
+  </a>
 {% endblock %}

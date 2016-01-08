@@ -4,7 +4,23 @@ main {
   -webkit-box-shadow: 0px 0px 21px 1px rgba(0,0,0,0.61);
   -moz-box-shadow: 0px 0px 21px 1px rgba(0,0,0,0.61);
   box-shadow: 0px 0px 21px 1px rgba(0,0,0,0.61);
-  //border-radius: 20px;
+  padding: 0px;
+  padding-top: 30px;
+
+  .card-action {
+    padding: 30px;
+    background-color: $bgCol;
+    text-align: center;
+    font-size: 1.3em !important;
+    color: $lightBlue;
+    a {
+      color: $lightBlue;
+    }
+    .chevron_right {
+      font-size: 32px;
+      line-height: normal;
+    }
+  }
 }
 
 .page_title {
