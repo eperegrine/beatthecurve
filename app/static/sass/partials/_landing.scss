@@ -1,0 +1,18 @@
+.insp-quote {
+  border-width: 0.5em;
+  border-color: white;
+  border-style: solid;
+  text-align: center;
+  padding: 3em;
+  padding-top: 6em;
+  padding-bottom: 6em;
+  margin: 5em;
+  color: white;
+}
+
+#insp-quote-box {
+  //#4285B8
+  //#F8FDFC
+  //@extend .blue, .darken-4;
+  @include linear-gradient(to bottom, #4285B8, $bgCol);
+}

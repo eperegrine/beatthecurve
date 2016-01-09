@@ -3,3 +3,23 @@ $primaryCol: #5FB7F4;
 $greyText: #979797;
 $lightBlue: #BFE0FA;
 $modalBg: rgba(#000000, 0.64);
+
+.bg {
+  background-color: $bgCol;
+}
+
+.bg-primary {
+  background-color: $primaryCol !important;
+}
+
+.bg-lightBlue {
+  background-color: $lightBlue;
+}
+
+.primary {
+  color: $primaryCol;
+}
+
+.lightBlue {
+  color: $lightBlue;
+}

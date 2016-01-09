@@ -1,6 +1,118 @@
-{% extends "layout.html" %}
-{% block main %}
-  <div class="container">
-    <h2 class="center"><a href="{{ url_for("auth_bp.login") }}">Login</a> or <a href="{{ url_for("auth_bp.signup") }}">Sign Up</a> Now!</h2>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Beat The Curve</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="{{ static_url }}css/main.css">
+    <link rel="stylesheet" href="{{ static_url }}css/modal.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center primary">Beat The Curve</h1>
+      <div class="row center">
+        <h5 class="header col s12 grey-text">Connecting students to a database of crowd-sourced information to help success.</h5>
+      </div>
+      <div class="row center">
+        <a href="/login" id="download-button" class="btn-large waves-effect waves-light bg-primary ">Login</a>
+        <span>&nbsp;&nbsp;&nbsp;</span>
+        <a href="/signup" id="download-button" class="btn-large waves-effect waves-light bg-primary ">Sign Up</a>
+      </div>
+      <br><br>
+
+    </div>
   </div>
-{% endblock %}
+
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <img class="col s12 center" src="http://trustedfinance.co.uk/wp-content/uploads/2014/06/placeholder.png" alt="A picture of a laptop with beat the curve open" />
+      </div>
+    </div>
+  </div>
+
+<div id="insp-quote-box">
+  <div class="container">
+    <div class="section" >
+      <div class="row">
+        <div class="insp-quote">
+          Take control of your learning experience. Use the knowledge of everyone before you. Give back to those to come.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="container">
+    <div class="section">
+
+      <h2 class="center grey-text text-darken-2">Your Resources</h2>
+<br><br>
+      <div class="row">
+        <img class="col s6" src="http://trustedfinance.co.uk/wp-content/uploads/2014/06/placeholder.png" alt="A picture of a laptop with beat the curve open" />
+
+        <div class="col s6 grey-text">
+          <h4 class="center grey-text text-darken-1">Header 1</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+<br><br>
+      <div class="row">
+        <div class="col s6 grey-text darken-1">
+          <h4 class="center grey-text text-darken-1">Header 1</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+
+        <img class="col s6" src="http://trustedfinance.co.uk/wp-content/uploads/2014/06/placeholder.png" alt="A picture of a laptop with beat the curve open" />
+      </div>
+<br><br>
+      <div class="row">
+        <img class="col s6" src="http://trustedfinance.co.uk/wp-content/uploads/2014/06/placeholder.png" alt="A picture of a laptop with beat the curve open" />
+
+        <div class="col s6 grey-text darken-1">
+          <h4 class="center grey-text text-darken-1">Header 1</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <div class="row center">
+        <a href="/signup" id="download-button" class="btn-large waves-effect waves-light bg-primary ">Sign Up Now!</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer bg-primary center">
+    <div class="container ">
+      <div class="row">
+        <div class="col s12">
+          <h5 class="white-text">Company Bio</h5>
+          <p class="grey-text text-lighten-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo sapiente dolor, quasi ipsum nam eligendi molestias corporis qui nemo iste.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container center">
+      &copy; Beat The Curve 2016
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="{{ static_url }}js/materialize.min.js"></script>
+  <script type="text/javascript" src="{{ static_url }}js/main.js"></script>
+
+  </body>
+</html>

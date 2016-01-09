@@ -8497,6 +8497,21 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
   clip: rect(0, 0, 0, 0);
   position: absolute; }
 
+.bg {
+  background-color: #F8FDFC; }
+
+.bg-primary {
+  background-color: #5FB7F4 !important; }
+
+.bg-lightBlue {
+  background-color: #BFE0FA; }
+
+.primary {
+  color: #5FB7F4; }
+
+.lightBlue {
+  color: #BFE0FA; }
+
 main {
   margin: 10%;
   -webkit-box-shadow: 0px 0px 21px 1px rgba(0, 0, 0, 0.61);
@@ -8526,6 +8541,22 @@ main {
   text-align: center;
   color: #5FB7F4;
   font-size: 2.2em; }
+
+.insp-quote {
+  border-width: 0.5em;
+  border-color: white;
+  border-style: solid;
+  text-align: center;
+  padding: 3em;
+  padding-top: 6em;
+  padding-bottom: 6em;
+  margin: 5em;
+  color: white; }
+
+#insp-quote-box {
+  background: #4285B8;
+  background: -webkit-linear-gradient(top, #4285B8, #F8FDFC);
+  background: linear-gradient(to bottom, #4285B8, #F8FDFC); }
 
 html {
   background-color: #F8FDFC; }
