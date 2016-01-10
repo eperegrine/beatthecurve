@@ -8519,6 +8519,8 @@ main {
   box-shadow: 0px 0px 21px 1px rgba(0, 0, 0, 0.61);
   padding: 0px;
   padding-top: 30px; }
+  main .container.pad {
+    padding-bottom: 5em; }
   main .card-action {
     padding: 30px;
     background-color: #F8FDFC;
@@ -8560,5 +8562,11 @@ main {
 
 html {
   background-color: #F8FDFC; }
+
+hr {
+  border-style: solid;
+  border-color: #e0e0e0;
+  margin-top: 2em;
+  margin-bottom: 2em; }
 
 /*# sourceMappingURL=main.css.map */

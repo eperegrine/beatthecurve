@@ -4,8 +4,13 @@ main {
   -webkit-box-shadow: 0px 0px 21px 1px rgba(0,0,0,0.61);
   -moz-box-shadow: 0px 0px 21px 1px rgba(0,0,0,0.61);
   box-shadow: 0px 0px 21px 1px rgba(0,0,0,0.61);
+
   padding: 0px;
   padding-top: 30px;
+
+  .container.pad {
+      padding-bottom: 5em;
+  }
 
   .card-action {
     padding: 30px;

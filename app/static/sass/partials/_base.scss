@@ -1,5 +1,13 @@
 @import "main_container";
 @import "landing";
+
 html {
   background-color: $bgCol;
+}
+
+hr {
+  border-style: solid;
+  border-color: color("grey", "lighten-2");
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
