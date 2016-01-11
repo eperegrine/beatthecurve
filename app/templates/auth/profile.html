@@ -1,7 +1,7 @@
-{% extends 'layout.html' %}
+{% extends 'li_layout.html' %}
 {% from 'macros.html' import render_field %}
 {% block title %}Profile{% endblock %}
-{% block main %}
+{% block content %}
   <div class="container pad">
     <ul>
       {% for category, message in get_flashed_messages(with_categories=true) %}
