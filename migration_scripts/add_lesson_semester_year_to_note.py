@@ -4,9 +4,9 @@ from app.notes.models import Note
 
 migrator = PostgresqlMigrator(DATABASE)
 
-Note.lesson.default = 3
+Note.lesson.default = 2
 Note.semester.default = 1
-Note.year.default = 2015
+Note.year.default = 2016
 
 migrate(
     migrator.add_column('TBL_NOTE', Note.lesson.db_column, Note.lesson),
