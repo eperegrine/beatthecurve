@@ -2,7 +2,6 @@
 {% from 'macros.html' import render_field %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-  <div class="container pad">
     <ul>
       {% for category, message in get_flashed_messages(with_categories=true) %}
         <li>{{ message }}{{ category }}</li>
@@ -38,5 +37,4 @@
       {% endfor %}
       <button type="submit" class="btn waves-effect waves-light" name="change_password">Change Password</button>
     </form>
-  </div>
 {% endblock %}

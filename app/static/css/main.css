@@ -8560,6 +8560,19 @@ main {
   background: -webkit-linear-gradient(top, #4285B8, #F8FDFC);
   background: linear-gradient(to bottom, #4285B8, #F8FDFC); }
 
+.class_drop_btn {
+  background-color: #5FB7F4;
+  color: white;
+  padding: 0.3em !important;
+  font-size: 2em; }
+
+.dropdown-content {
+  color: #5FB7F4 !important; }
+  .dropdown-content li {
+    color: #5FB7F4 !important; }
+    .dropdown-content li a {
+      color: #5FB7F4 !important; }
+
 html {
   background-color: #F8FDFC; }
 

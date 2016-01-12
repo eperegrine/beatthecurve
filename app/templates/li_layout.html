@@ -2,9 +2,9 @@
 {% from 'macros.html' import render_field %}
 {% block title %}Add Lessons{% endblock %}
 {% block main %}
-{#<!-- Dropdown Trigger -->
+<!-- Dropdown Trigger -->
 <div class="row">
-  <a class='col s12 center class_drop_btn button' href='#' data-activates='class_drop'>Change Lesson</a>
+  <a class='col s12 center class_drop_btn' href='#' data-activates='class_drop'>Lessons</a>
 </div>
 
 <!-- Dropdown Structure -->
@@ -17,7 +17,7 @@
 {% for lesson in get_lessons(current_user) %}
   <li><a href="{{ url_for("notes_bp.view", lessonid=lesson.id) }}">{{ lesson.lesson_name }}</a></li>
 {% endfor %}
-</ul>#}
+</ul>
 
   <div class="container pad">
     <ul>
@@ -44,7 +44,7 @@
       }
     );
 
-    //$("main").addClass("pad_t0");
+    $("main").addClass("pad_t0");
   });
 </script>
 {% endblock %}
