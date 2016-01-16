@@ -181,5 +181,4 @@ def vote(noteid, upvote):
             flash("Success", 'success')
         else:
             flash(message, 'error')
-    print(note.lecture.lesson_id)
-    return redirect(url_for(".view", lessonid=note.lecture.lesson_id.id))
+    return redirect(url_for(".view", lessonid=note.lesson.id))
