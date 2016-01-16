@@ -1,0 +1,17 @@
+.class-page-nav {
+  .class-nav-item {
+    margin-top: 1.4em;
+    margin-bottom: 1.4em;
+    color: color("grey", "base");
+    a {
+      color: inherit;
+    }
+    &.active {
+      color: color("blue", "base");
+    }
+  }
+
+  .divider {
+    background-color: $primaryCol;
+  }
+}

@@ -1,11 +1,11 @@
-{% extends 'layout.html' %}
+{% extends 'class_layout.html' %}
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
-{% block main %}
-  {{ render_lesson_tabs('notes', lesson.id) }}
+{% block page %}
+  <!-- {{ render_lesson_tabs('notes', lesson.id) }}
   {% if semesters|length > 0 %}
     {{ render_semester_tabs(semesters, semester_enum) }}
-  {% endif %}
+  {% endif %} -->
   <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
@@ -55,6 +55,7 @@
   </table>
 {% endblock %}
 {% block js %}
+{{super()}}
   <script>
       $(document).ready(function() {
           var active = $('.semester-tab > a.active')[0].parentElement;

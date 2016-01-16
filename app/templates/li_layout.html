@@ -18,16 +18,17 @@
   <li><a href="{{ url_for("notes_bp.view", lessonid=lesson.id) }}">{{ lesson.lesson_name }}</a></li>
 {% endfor %}
 </ul>
-
-  <div class="container pad">
-    <ul>
-      {% for category, message in get_flashed_messages(with_categories=true) %}
-        <li class="message {{category}}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% block content %}
-    {% endblock %}
-  </div>
+  {% block container %}
+    <div class="container pad">
+      <ul>
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+          <li class="message {{category}}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% block content %}
+      {% endblock %}
+    </div>
+  {% endblock %}
 {% endblock %}
 
 {% block js %}
