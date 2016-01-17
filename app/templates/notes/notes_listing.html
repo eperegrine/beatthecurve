@@ -17,13 +17,13 @@
 
   <div class="col s10">
     <div class="row">
-      <a class="waves-effect waves-light btn modal-trigger col s12 bg-primary" href="#newNoteModal">Uplaod a note</a>
+      <a class="waves-effect waves-light btn modal-trigger col s12 bg-primary" href="#newNoteModal">Upload a note</a>
     </div>
 
     <div id="newNoteModal" class="modal">
       <div class="modal-content">
         <div class="container">
-          <h1>Upload a note</h1>
+          <h3>Upload a note</h3>
           <form method="post" enctype="multipart/form-data" id="add-note-form" action="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}">
            {% for field in form %}
              {{ render_field(field) }}
@@ -47,16 +47,6 @@
     <ul class="collapsible " data-collapsible="expandable">
       {% for note in notes %}
         <li class="note-item" semester="{{ note.semester }}" year="{{ note.year }}">
-          <!-- <ul class="horizontal-ul">
-            <li>{{ note.filename }}</li>
-            <li>Votes: {{ note.votes }}</li>
-            {% if note.has_upvoted(current_user) %}
-              <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_up</i> {{ note.votes}}</a></li>
-            {% else %}
-              <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp"><i class="material-icons">thumb_up</i> {{ note.votes }}</a></li>
-            {% endif %}
-            <li><a href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}"><i class="material-icons">file_download</i></a></li>
-          </ul> -->
           <div class="collapsible-header">
             {% if note.has_upvoted(current_user) %}
               <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_up</i> {{ note.votes}}</a>
@@ -70,7 +60,7 @@
             <p>{{note.description}}</p>
             <div class="row">
               <div class="col s1">&nbsp;</div>
-              <button class="waves-effect waves-light btn col s10 bg-primary"><i class="material-icons left">file_download</i>  Download</button>
+              <a  href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}" class="waves-effect waves-light btn col s10 bg-primary"><i class="material-icons left">file_download</i>  Download</a>
               <div class="col s1">&nbsp;</div>
             </div>
           </div>
@@ -83,25 +73,26 @@
 {% block js %}
 {{super()}}
   <script>
-      $(document).ready(function() {
-          var active = $('.semester-tab > a.active')[0].parentElement;
-          var year = $(active).attr('year');
-          var semester = $(active).attr('semester');
-          $('.note-item').hide();
-          $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
-          $('.semester-tab').click( function (e) {
-            var year = $(this).attr('year');
-            var semester = $(this).attr('semester');
-            $('.note-item').hide();
-            $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
-          });
-      });
+      // $(document).ready(function() {
+      //     var active = $('.semester-tab > a.active')[0].parentElement;
+      //     var year = $(active).attr('year');
+      //     var semester = $(active).attr('semester');
+      //     $('.note-item').hide();
+      //     $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
+      //     $('.semester-tab').click( function (e) {
+      //       var year = $(this).attr('year');
+      //       var semester = $(this).attr('semester');
+      //       $('.note-item').hide();
+      //       $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
+      //     });
+      // });
   </script>
     <script src="{{ static_url }}js/upload_note.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
   // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
   $('.modal-trigger').leanModal();
+  $('.collapsible-header').click();
 })
 </script>
 {% endblock %}
