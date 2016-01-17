@@ -17,6 +17,9 @@ form div:last-of-type > input[type="checkbox"] + label {
   display: inline;
   padding: 1em; }
 
+.grey-text-imp {
+  color: grey !important; }
+
 .materialize-red.lighten-5 {
   background-color: #fdeaeb !important; }
 
@@ -8573,16 +8576,27 @@ main {
     .dropdown-content li a {
       color: #5FB7F4 !important; }
 
-.class-page-nav .class-nav-item {
-  margin-top: 1.4em;
-  margin-bottom: 1.4em;
-  color: #9e9e9e; }
-  .class-page-nav .class-nav-item a {
-    color: inherit; }
-  .class-page-nav .class-nav-item.active {
-    color: #2196F3; }
-.class-page-nav .divider {
-  background-color: #5FB7F4; }
+.class-page-nav {
+  padding-left: 1em; }
+  .class-page-nav .class-nav-item {
+    margin-top: 1.4em;
+    margin-bottom: 1.4em;
+    color: #9e9e9e; }
+    .class-page-nav .class-nav-item a {
+      color: inherit; }
+    .class-page-nav .class-nav-item.active {
+      color: #2196F3; }
+  .class-page-nav .divider {
+    background-color: #5FB7F4; }
+
+.semester-tab {
+  background-color: #F8FDFC !important;
+  color: #979797 !important; }
+  .semester-tab a {
+    color: inherit !important; }
+
+.filename_title {
+  color: #a7d5f8; }
 
 html {
   background-color: #F8FDFC; }

@@ -29,6 +29,10 @@ form div:last-of-type > input[type="checkbox"] + label {
     padding: 1em;
 }
 
+.grey-text-imp {
+  color: grey !important;
+}
+
 $formCol: #5FB7F4;
 
 @import "vendor/tp";

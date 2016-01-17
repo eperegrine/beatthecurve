@@ -2,72 +2,83 @@
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
-  {{ render_lesson_tabs('notes', lesson.id) }}
-  {% if semesters|length > 0 %}
-    {{ render_semester_tabs(semesters, semester_enum) }}
-  {% endif %}
+<div class="row">
   <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
       {% endfor %}
   </ul>
 
-  <div class="row">
-    <a class="waves-effect waves-light btn modal-trigger col s12 bg-primary" href="#newNoteModal">Uplaod a note</a>
+  <div class="col s2">
+    {% if semesters|length > 0 %}
+      {{ render_semester_tabs(semesters, semester_enum) }}
+    {% endif %}
   </div>
-  <div id="newNoteModal" class="modal">
-    <div class="modal-content">
-      <form method="post" enctype="multipart/form-data" id="add-note-form" action="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}">
 
-         {% for field in form %}
-           {{ render_field(field) }}
-         {% endfor %}
-         <div class="row">
-           <div class="col s2">&nbsp;</div>
-           <button type="submit" class="waves-effect waves-light btn-large col s8">Upload</button>
-           <div class="col s2">&nbsp;</div>
-         </div>
-       </form>
+  <div class="col s10">
+    <div class="row">
+      <a class="waves-effect waves-light btn modal-trigger col s12 bg-primary" href="#newNoteModal">Uplaod a note</a>
     </div>
-    <div class="modal-footer">
-      <a href="#!" class=" modal-action modal-close waves-effect btn-flat">Cancel</a>
+
+    <div id="newNoteModal" class="modal">
+      <div class="modal-content">
+        <div class="container">
+          <h1>Upload a note</h1>
+          <form method="post" enctype="multipart/form-data" id="add-note-form" action="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}">
+           {% for field in form %}
+             {{ render_field(field) }}
+           {% endfor %}
+           <div class="row">
+             <div class="col s2">&nbsp;</div>
+             <button type="submit" class="waves-effect waves-light btn-large col s8">Upload</button>
+             <div class="col s2">&nbsp;</div>
+           </div>
+         </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect btn-flat">Cancel</a>
+      </div>
     </div>
-  </div>
-  {% if semesters|length < 0 %}
-    <h5 class="no-content-message">No Lectures</h5>
-  {% endif %}
-  <!-- <a href="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}" class="btn">Upload Note</a> -->
-  <table>
-    {% for note in notes %}
-      <tr  semester="{{ note.semester }}" year="{{ note.year }}">
-        <ul class="horizontal-ul">
-          <li>{{ note.filename }}</li>
-          <li>Votes: {{ note.votes }}</li>
-          {% if note.has_voted(current_user) %}
+    {% if semesters|length < 0 %}
+      <h5 class="no-content-message">No Lectures</h5>
+    {% endif %}
+    <!-- <a href="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}" class="btn">Upload Note</a> -->
+    <ul class="collapsible " data-collapsible="expandable">
+      {% for note in notes %}
+        <li class="note-item" semester="{{ note.semester }}" year="{{ note.year }}">
+          <!-- <ul class="horizontal-ul">
+            <li>{{ note.filename }}</li>
+            <li>Votes: {{ note.votes }}</li>
             {% if note.has_upvoted(current_user) %}
-              <li>
-                <i class="material-icons">thumb_up</i>
-              </li>
-              <li>
-                <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a>
-              </li>
-            {% elif note.has_voted(current_user) %}
-              <li>
-                <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a>
-              </li>
-              <li>
-                <i class="material-icons">thumb_down</i>
-              </li>
+              <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_up</i> {{ note.votes}}</a></li>
+            {% else %}
+              <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp"><i class="material-icons">thumb_up</i> {{ note.votes }}</a></li>
             {% endif %}
-          {% else %}
-            <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a></li>
-            <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a></li>
-          {% endif %}
-          <li><a href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}">Download</a></li>
-        </ul>
-      </tr>
-    {% endfor %}
-  </table>
+            <li><a href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}"><i class="material-icons">file_download</i></a></li>
+          </ul> -->
+          <div class="collapsible-header">
+            {% if note.has_upvoted(current_user) %}
+              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_up</i> {{ note.votes}}</a>
+            {% else %}
+              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp"><i class="material-icons">thumb_up</i> {{ note.votes }}</a>
+            {% endif %}
+            &emsp;
+            <span class="filename_title">{{ note.filename }}</span>
+          </div>
+          <div class="collapsible-body">
+            <p>{{note.description}}</p>
+            <div class="row">
+              <div class="col s1">&nbsp;</div>
+              <button class="waves-effect waves-light btn col s10 bg-primary"><i class="material-icons left">file_download</i>  Download</button>
+              <div class="col s1">&nbsp;</div>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
 {% endblock %}
 {% block js %}
 {{super()}}
@@ -76,16 +87,14 @@
           var active = $('.semester-tab > a.active')[0].parentElement;
           var year = $(active).attr('year');
           var semester = $(active).attr('semester');
-          $('tr').hide();
-          $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-          $('.semester-tab').click(
-            function (e) {
-              var year = $(this).attr('year');
-              var semester = $(this).attr('semester');
-              $('tr').hide();
-              $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-            }
-          );
+          $('.note-item').hide();
+          $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
+          $('.semester-tab').click( function (e) {
+            var year = $(this).attr('year');
+            var semester = $(this).attr('semester');
+            $('.note-item').hide();
+            $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
+          });
       });
   </script>
     <script src="{{ static_url }}js/upload_note.js"></script>

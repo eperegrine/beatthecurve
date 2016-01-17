@@ -1,4 +1,5 @@
 .class-page-nav {
+  padding-left: 1em;
   .class-nav-item {
     margin-top: 1.4em;
     margin-bottom: 1.4em;
@@ -14,4 +15,19 @@
   .divider {
     background-color: $primaryCol;
   }
+}
+
+.semester-tab {
+  background-color: $bgCol !important;
+
+  color: $greyText !important;
+
+  a {
+    color: inherit !important;
+  }
+}
+
+.filename_title {
+  color: darken($lightBlue,5);;
+
 }
