@@ -28,6 +28,18 @@
 }
 
 .filename_title {
-  color: darken($lightBlue,5);;
+  font-size: 1.1em;
+  color: darken($lightBlue,10);
+}
 
+.note_description {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  color: color("grey", "base");
+}
+
+.note_date {
+  @extend .note_description;
+  font-size: 0.8em;
+  font-style: italic;
 }

@@ -43,30 +43,25 @@
     {% if semesters|length < 0 %}
       <h5 class="no-content-message">No Lectures</h5>
     {% endif %}
-    <!-- <a href="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}" class="btn">Upload Note</a> -->
-    <ul class="collapsible " data-collapsible="expandable">
       {% for note in notes %}
-        <li class="note-item" semester="{{ note.semester }}" year="{{ note.year }}">
-          <div class="collapsible-header">
+        <div class="note-item row valign-wrapper" semester="{{ note.semester }}" year="{{ note.year }}">
+          <span class="col s1 ">
             {% if note.has_upvoted(current_user) %}
-              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_up</i> {{ note.votes}}</a>
+              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}" class="valign"><i class="material-icons">thumb_up</i> {{ note.votes}}</a>
             {% else %}
-              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp"><i class="material-icons">thumb_up</i> {{ note.votes }}</a>
+              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ note.votes }}</a>
             {% endif %}
-            &emsp;
+          </span>
+          <span class="col s10">
             <span class="filename_title">{{ note.filename }}</span>
-          </div>
-          <div class="collapsible-body">
-            <p>{{note.description}}</p>
-            <div class="row">
-              <div class="col s1">&nbsp;</div>
-              <a  href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}" class="waves-effect waves-light btn col s10 bg-primary"><i class="material-icons left">file_download</i>  Download</a>
-              <div class="col s1">&nbsp;</div>
-            </div>
-          </div>
-        </li>
+            <p class="note_description">{{note.description}}</p>
+            <p class="note_date">{{note.year}}</p>
+          </span>
+          <span class="col s1">
+            <a  href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}"><i class="material-icons left valign ">file_download</i></a>
+          </span>
+        </div>
       {% endfor %}
-    </ul>
   </div>
 </div>
 {% endblock %}
