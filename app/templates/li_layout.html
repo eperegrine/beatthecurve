@@ -4,7 +4,7 @@
 {% block main %}
 <!-- Dropdown Trigger -->
 <div class="row">
-  <a class='col s12 center class_drop_btn' href='#' data-activates='class_drop'>Lessons</a>
+  <a class='col s12 center class_drop_btn' href='#' data-activates='class_drop'>{% if lesson %}{{lesson.lesson_name}}{% else %} Lessons {% endif %}</a>
 </div>
 
 <!-- Dropdown Structure -->
