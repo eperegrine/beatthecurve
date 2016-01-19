@@ -1,3 +1,4 @@
+{% set active = 'notes' %}
 {% extends 'class_layout.html' %}
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
@@ -87,7 +88,6 @@
 $(document).ready(function(){
   // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
   $('.modal-trigger').leanModal();
-  $('.collapsible-header').click();
 })
 </script>
 {% endblock %}
