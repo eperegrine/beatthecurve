@@ -1,13 +1,8 @@
-{% extends 'layout.html' %}
+{% set active="studygroups"%}
+{% extends 'class_layout.html' %}
 {% from 'macros.html' import render_lesson_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name}}{% endblock %}
-{% block main %}
-  {{ render_lesson_tabs('studygroups', lesson.id) }}
-  <ul>
-    {% for message in get_flashed_messages() %}
-      <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
+{% block page %}
   <form method="post" action="{{ url_for("studygroups_bp.add_studygroup") }}">
       {% for field in form %}
         {{ render_field(field) }}
