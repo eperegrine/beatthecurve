@@ -18,7 +18,7 @@
       <div class="modal-content">
         <div class="container">
           <h3 class="center">Upload an Exam</h3>
-          <form method="post" enctype="multipart/form-data" id="add-exam-form" action="{{ url_for("exams_bp.add_exam") }}">
+          <form method="post" enctype="multipart/form-data" id="add-exam-form" action="{{ url_for("exams_bp.add_exam", lessonid=lesson.id) }}">
             {% for field in form %}
               {{ render_field(field) }}
             {% endfor %}
