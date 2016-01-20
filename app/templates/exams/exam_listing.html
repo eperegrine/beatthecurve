@@ -41,30 +41,25 @@
         {% endfor %}
       </ul>
     <div class="section">
-      <table id="exams-table">
-        <thead>
-          <tr>
-            <th>Exam</th>
-            <th>Year</th>
-            <th>Number Of Takers</th>
-            <th>Average Grade</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for exam in exams %}
-            <tr semester="{{ exam.semester }}" year="{{ exam.year }}">
-            <td>
-              <a href="{{ url_for("exams_bp.detail", examid=exam.id) }}" class="file">{{ exam.filename }}</a>
-            </td>
-            <td>
-              {{ exam.year }}
-            </td>
-            <td>{{ exam.number_of_takers }}</td>
-            <td>{{ exam.average_grade }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      {% for exam in exams %}
+      <div class="row exam-item valign-wrapper" semester="{{ exam.semester }}" year="{{ exam.year }}">
+        <span class="col s1 ">
+          {% if exam.has_upvoted(current_user) %}
+            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="0") }}" class="valign"><i class="material-icons">thumb_up</i> {{ exam.votes}}</a>
+          {% else %}
+            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="1") }}" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ exam.votes }}</a>
+          {% endif %}
+        </span>
+        <span class="col s10">
+          <span class="filename_title">{{ exam.filename }}</span>
+          <!-- <p class="note_description">Exam description</p> -->
+          <p class="note_date">{{exam.year}}</p>
+        </span>
+        <span class="col s1">
+          <a  href="https://s3-us-west-2.amazonaws.com/beatthecurve/exams/{{ exam.filename }}"><i class="material-icons left valign ">file_download</i></a>
+        </span>
+      </div>
+      {% endfor %}
     </div>
   </div>
 {% endblock %}
