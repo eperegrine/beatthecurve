@@ -27,33 +27,6 @@
       <a href="#!" class=" modal-action modal-close waves-effect btn-flat">Cancel</a>
     </div>
   </div>
-
-  {# <table>
-      <thead>
-        <tr>
-          <th>Location</th>
-          <th>Next Session</th>
-          <th>Members</th>
-          <th>Productivity Level</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for sg in study_groups %}
-          <tr>
-          <td>
-            <a href="{{ url_for("studygroups_bp.detail", sgid=sg.id) }}">{{ sg.location }}</a> {{sg.id}}
-          </td>
-          {% set x = sg.get_next_session().datetime %}
-          <td>{% if x %}{{ x }}{% else %}None{% endif %}</td>
-          <td>{{ sg.number_of_members }}</td>
-          <td>{{ sg.productivity }}</td>
-          <td>
-            <a href="#{{ sg.id }}">Contact Organiser</a>
-          </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table> #}
     {% for sg in study_groups %}
     {% set x = sg.get_next_session().datetime %}
     <div class="row valign-wrapper">
@@ -68,28 +41,38 @@
       </div>
       <div class="col s3">
         <div class="row">
-          <button class="waves-effect waves-light btn bg-primary col s12">Join Group</button>
+          <a href="{{ url_for("studygroups_bp.join",sgid=sg.id) }}" class="waves-effect waves-light btn bg-primary col s12">Join Group</a>
         </div>
         <div class="row">
-          <button class="waves-effect waves-light btn bg-primary col s12">Contact Organiser</button>
+          <a href="#{{sg.id}}" class="waves-effect waves-light btn bg-primary col s12 modal-trigger">
+            Contact Organiser
+          </a>
         </div>
       </div>
     </div>
     {% endfor %}
 
     {% for sg in study_groups %}
-      <div id="{{ sg.id }}" class="modalDialog">
-	      <div>
-          <a href="#close" title="Close" class="close">X</a>
-          <h5>Contact The Organiser</h5>
-          <form action="{{ url_for("studygroups_bp.contact_organiser", lessonid=lesson.id) }}" method="post">
+      <div class="modal" id="{{sg.id}}">
+        <div class="modal-content">
+          <div class="container">
+            <h3 class="center">Contact The Organiser</h3><br>
+            <form action="{{ url_for("studygroups_bp.contact_organiser", lessonid=lesson.id) }}" method="post">
               {{ render_field(contact_form.csrf_token) }}
               {{ contact_form.study_group(value=sg.id) }}
 
               {{ render_field(contact_form.message) }}
 
-              <button type="submit">Contact</button>
-          </form>
+              <div class="row">
+                <div class="col s2">&nbsp;</div>
+                <button type="submit" class="waves-effect waves-light btn-large col s8">Contact</button>
+                <div class="col s2">&nbsp;</div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class=" modal-action modal-close waves-effect btn-flat">Cancel</a>
         </div>
       </div>
     {% endfor %}
