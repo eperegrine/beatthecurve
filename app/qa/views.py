@@ -56,7 +56,7 @@ def add_question(lessonid):
         else:
             semester = Semester.fall
 
-        Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lesson=lessonid, document=form.document.data, semester=semester, year=datetime.now().year)
+        Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lesson=lessonid, document=form.document.data, semester=semester.value, year=datetime.now().year)
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('qa/add_question.html', form=form)
 
