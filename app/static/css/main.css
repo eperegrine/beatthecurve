@@ -2106,7 +2106,7 @@ i {
 
 img.responsive-img,
 video.responsive-video {
-  max-width: 100%;
+  width: 100%;
   height: auto; }
 
 .pagination li {
@@ -8599,7 +8599,7 @@ main {
   font-size: 1.1em;
   color: #90c9f6; }
 
-.note_description, .note_date {
+.note_description, .desc, .note_date {
   margin-top: 0.3em;
   margin-bottom: 0.3em;
   color: #9e9e9e; }

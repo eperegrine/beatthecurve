@@ -28,7 +28,7 @@
     </div>
   </div>
 
-  <table>
+  {# <table>
       <thead>
         <tr>
           <th>Location</th>
@@ -41,7 +41,7 @@
         {% for sg in study_groups %}
           <tr>
           <td>
-            <a href="{{ url_for("studygroups_bp.detail", sgid=sg.id) }}">{{ sg.location }}</a>
+            <a href="{{ url_for("studygroups_bp.detail", sgid=sg.id) }}">{{ sg.location }}</a> {{sg.id}}
           </td>
           {% set x = sg.get_next_session().datetime %}
           <td>{% if x %}{{ x }}{% else %}None{% endif %}</td>
@@ -53,7 +53,30 @@
           </tr>
         {% endfor %}
       </tbody>
-    </table>
+    </table> #}
+    {% for sg in study_groups %}
+    {% set x = sg.get_next_session().datetime %}
+    <div class="row valign-wrapper">
+      <div class="col s1">
+        {# <i class="material-icons md-48 valign">group</i> #}
+        <img class="responsive-img" src="https://storage.googleapis.com/material-icons/external-assets/v2/icons/svg/ic_group_black_48px.svg" alt="group logo">
+      </div>
+      <div class="col s8">
+        <h5 class="filename_title">Group {{sg.id}}</h5>
+        <p class="desc">{{sg.location}}</p>
+        <p class="desc">{% if x %}{{ x }}{% else %}No meetings scheduled{% endif %}</p>
+      </div>
+      <div class="col s3">
+        <div class="row">
+          <button class="waves-effect waves-light btn bg-primary col s12">Join Group</button>
+        </div>
+        <div class="row">
+          <button class="waves-effect waves-light btn bg-primary col s12">Contact Organiser</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
     {% for sg in study_groups %}
       <div id="{{ sg.id }}" class="modalDialog">
 	      <div>

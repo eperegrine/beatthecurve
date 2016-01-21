@@ -38,6 +38,10 @@
   color: color("grey", "base");
 }
 
+.desc {
+  @extend .note_description;
+}
+
 .note_date {
   @extend .note_description;
   font-size: 0.8em;
