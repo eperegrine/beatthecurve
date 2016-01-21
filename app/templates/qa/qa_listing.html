@@ -57,13 +57,19 @@
           <p>{{q.content}}</p>
         </div>
         <div class="divider bg-primary"></div>
-        {% for reply in q.replies %}
+        {% for reply in q.replies() %}
           <div class="row">
             <p>By {{ reply.user.first_name }}</p>
             <p>{{ reply.content }}</p>
           </div>
         {% endfor %}
       </div>
+      <form method="post" action="{{ url_for("qa_bp.add_reply", questionid=q.id) }}">
+        {% for field in comment_form %}
+          {{ render_field(field) }}
+        {% endfor %}
+        <button type="submit" class="waves-effect waves-light btn">Add Reply</button>
+      </form>
     {% endfor %}
 </div>
 </div>
