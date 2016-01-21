@@ -1,10 +1,10 @@
-{% extends 'layout.html' %}
+{% set active="chat"%}
+{% extends 'class_layout.html' %}
 {% from 'macros.html' import render_lesson_tabs %}
 {% block title %}
   Real Time Chat
 {% endblock %}
-{% block main %}
-  {{ render_lesson_tabs('chat', lesson.id) }}
+{% block page %}
   <h2>Send:</h2>
     <form id="send_room" method="POST" action='#'>
         <input type="hidden" name="room_name" id="room_name" value="{{ lesson.id }}">
@@ -15,6 +15,7 @@
     <div id="log"></div>
 {% endblock %}
 {% block js %}
+{{super()}}
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.7/socket.io.min.js"></script>
   <script type="text/javascript" charset="utf-8">
         $(document).ready(function(){
