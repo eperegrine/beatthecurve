@@ -45,6 +45,7 @@
         </tbody>
       </table> #}
     {% for q in questions %}
+    <br>
       <div class="card-panel">
         <div class="row">
           <span class="primary poster_name">{{q.user.first_name + " " + q.user.last_name}}</span>
@@ -58,18 +59,29 @@
         </div>
         <div class="divider bg-primary"></div>
         {% for reply in q.replies() %}
-          <div class="row">
-            <p>By {{ reply.user.first_name }}</p>
-            <p>{{ reply.content }}</p>
+          <div class="comment">
+            <div class="row comment_name primary">{{ reply.user.first_name + " " + q.user.last_name }} <span class="lightBlue right">{{reply.datetime.date()}}</span></div>
+            <p class="grey-text">{{ reply.content }}</p>
           </div>
+          {% if loop.last %}
+            <div class="divider bg-primary"></div>
+          {% else %}
+            <div class="divider light-grey"></div>
+          {% endif %}
         {% endfor %}
+        <form method="post" action="{{ url_for("qa_bp.add_reply", questionid=q.id) }}">
+        <br>
+          <span class="lightBlue">Type a reply</span>
+          <br>
+          {% for field in comment_form %}
+            {{ render_field(field) }}
+          {% endfor %}
+          <div class="row">
+            <button type="submit" class="waves-effect waves-light btn col s12">Add Reply</button>
+          </div>
+        </form>
       </div>
-      <form method="post" action="{{ url_for("qa_bp.add_reply", questionid=q.id) }}">
-        {% for field in comment_form %}
-          {{ render_field(field) }}
-        {% endfor %}
-        <button type="submit" class="waves-effect waves-light btn">Add Reply</button>
-      </form>
+      
     {% endfor %}
 </div>
 </div>
