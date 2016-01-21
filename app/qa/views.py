@@ -36,7 +36,10 @@ def view(lessonid):
 
     form = AddQuestionForm()
 
-    return render_template('qa/qa_listing.html', lesson=lesson, questions=questions, form=form, last_posts=last_posts, semesters=sorted(semesters))
+    comment_form = AddReplyForm()
+
+    return render_template('qa/qa_listing.html', lesson=lesson, questions=questions, form=form, last_posts=last_posts,
+                           semesters=sorted(semesters), comment_form=comment_form)
 
 
 @qa_bp.route('/add-question/<lessonid>', methods=('POST', 'GET'))
@@ -99,4 +102,4 @@ def add_reply(questionid):
         question.number_of_posts += 1
         question.save()
 
-    return redirect(url_for(".detail", lessonid=question.lesson.id, qid=question.id))
+    return redirect(url_for(".view", lessonid=question.lesson.id))

@@ -20,6 +20,10 @@ class Question(Model):
         database = DATABASE
         db_table = 'TBL_QUESTION'
 
+    def replies(self):
+        return Reply.select().where(Reply.question == self.id)
+
+
 
 class Reply(Model):
     id = PrimaryKeyField(db_column='ID')
