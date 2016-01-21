@@ -21,7 +21,11 @@ class Question(Model):
         db_table = 'TBL_QUESTION'
 
     def replies(self):
-        return Reply.select().where(Reply.question == self.id)
+        try:
+            return Reply.select().where(Reply.question == self.id)
+        except Exception as e:
+            print(e)
+            return []
 
 
 
