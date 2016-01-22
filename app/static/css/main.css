@@ -8630,7 +8630,8 @@ main {
   padding: 0px; }
   .chat_box #chat_box {
     padding: 1em;
-    overflow: hidden; }
+    overflow-y: scroll;
+    height: 30em; }
   .chat_box .send-box {
     border-top-width: 1px;
     border-top-style: solid;
