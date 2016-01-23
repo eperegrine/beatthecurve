@@ -836,85 +836,85 @@ form div:last-of-type > input[type="checkbox"] + label {
 .teal-text.text-accent-4 {
   color: #00bfa5 !important; }
 
-.green.lighten-5 {
+.green.lighten-5, .lighten-5.success {
   background-color: #E8F5E9 !important; }
 
 .green-text.text-lighten-5 {
   color: #E8F5E9 !important; }
 
-.green.lighten-4 {
+.green.lighten-4, .lighten-4.success {
   background-color: #C8E6C9 !important; }
 
 .green-text.text-lighten-4 {
   color: #C8E6C9 !important; }
 
-.green.lighten-3 {
+.green.lighten-3, .lighten-3.success {
   background-color: #A5D6A7 !important; }
 
 .green-text.text-lighten-3 {
   color: #A5D6A7 !important; }
 
-.green.lighten-2 {
+.green.lighten-2, .lighten-2.success {
   background-color: #81C784 !important; }
 
 .green-text.text-lighten-2 {
   color: #81C784 !important; }
 
-.green.lighten-1 {
+.green.lighten-1, .lighten-1.success {
   background-color: #66BB6A !important; }
 
 .green-text.text-lighten-1 {
   color: #66BB6A !important; }
 
-.green {
+.green, .success {
   background-color: #4CAF50 !important; }
 
 .green-text {
   color: #4CAF50 !important; }
 
-.green.darken-1 {
+.green.darken-1, .darken-1.success {
   background-color: #43A047 !important; }
 
 .green-text.text-darken-1 {
   color: #43A047 !important; }
 
-.green.darken-2 {
+.green.darken-2, .darken-2.success {
   background-color: #388E3C !important; }
 
 .green-text.text-darken-2 {
   color: #388E3C !important; }
 
-.green.darken-3 {
+.green.darken-3, .darken-3.success {
   background-color: #2E7D32 !important; }
 
 .green-text.text-darken-3 {
   color: #2E7D32 !important; }
 
-.green.darken-4 {
+.green.darken-4, .darken-4.success {
   background-color: #1B5E20 !important; }
 
 .green-text.text-darken-4 {
   color: #1B5E20 !important; }
 
-.green.accent-1 {
+.green.accent-1, .accent-1.success {
   background-color: #B9F6CA !important; }
 
 .green-text.text-accent-1 {
   color: #B9F6CA !important; }
 
-.green.accent-2 {
+.green.accent-2, .accent-2.success {
   background-color: #69F0AE !important; }
 
 .green-text.text-accent-2 {
   color: #69F0AE !important; }
 
-.green.accent-3 {
+.green.accent-3, .accent-3.success {
   background-color: #00E676 !important; }
 
 .green-text.text-accent-3 {
   color: #00E676 !important; }
 
-.green.accent-4 {
+.green.accent-4, .accent-4.success {
   background-color: #00C853 !important; }
 
 .green-text.text-accent-4 {
@@ -1631,7 +1631,7 @@ form div:last-of-type > input[type="checkbox"] + label {
 .white {
   background-color: #FFFFFF !important; }
 
-.white-text {
+.white-text, .success {
   color: #FFFFFF !important; }
 
 .transparent {

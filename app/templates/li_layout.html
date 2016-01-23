@@ -19,12 +19,12 @@
 {% endfor %}
 </ul>
   {% block container %}
-  <ul>
+    <div class="container pad">
+    <ul>
     {% for category, message in get_flashed_messages(with_categories=true) %}
-      <li class="message {{category}}">{{ message }}</li>
+      <li class="message card-panel {{category}}">{{ message }}</li>
     {% endfor %}
   </ul>
-    <div class="container pad">
       {% block content %}
       {% endblock %}
     </div>
