@@ -4,20 +4,25 @@
 {% block main %}
 <!-- Dropdown Trigger -->
 <div class="row">
-  <a class='col s12 center class_drop_btn' href='#' data-activates='class_drop'>{% if lesson %}{{lesson.lesson_name}}{% else %} Lessons {% endif %}</a>
+  <!-- <a class='col s12 center class_drop_btn' href='#' data-activates='class_drop'>{% if lesson %}{{lesson.lesson_name}}{% else %} Lessons {% endif %}</a> -->
+
+  <ul id='class_drop' class='_tabs'>
+  {% if g.user.has_permission('lesson_admin') %}
+    <li class="tabs_item"><a href="{{ url_for("lesson_bp.create") }}">Create Lesson</a></li>
+  {% endif %}
+    <li class="tabs_item"><a href="{{ url_for("lesson_bp.add") }}">Join Lesson</a></li>
+    <!-- <li class="divider"></li> -->
+    {# {% if lesson %} #}
+      {% for l in get_lessons(current_user) %}
+        <li class="tabs_item {% if lesson and l.id == lesson.id %}active{% endif %}"><a href="{{ url_for("notes_bp.view", lessonid=l.id) }}">{{ l.lesson_name }}</a></li>
+      {% endfor %}
+    {# {% endif %} #}
+  </ul>
 </div>
 
 <!-- Dropdown Structure -->
-<ul id='class_drop' class='dropdown-content'>
-{% if g.user.has_permission('lesson_admin') %}
-  <li><a href="{{ url_for("lesson_bp.create") }}">Create</a></li>
-{% endif %}
-  <li><a href="{{ url_for("lesson_bp.add") }}">Join</a></li>
-  <li class="divider"></li>
-{% for lesson in get_lessons(current_user) %}
-  <li><a href="{{ url_for("notes_bp.view", lessonid=lesson.id) }}">{{ lesson.lesson_name }}</a></li>
-{% endfor %}
-</ul>
+
+
   {% block container %}
     <div class="container pad">
     <ul>
@@ -34,16 +39,16 @@
 {% block js %}
 <script type="text/javascript">
   jQuery(document).ready(function () {
-    $('.class_drop_btn').dropdown({
-        inDuration: 300,
-        outDuration: 225,
-        constrain_width: true, // Does not change width of dropdown to that of the activator
-        hover: false, // Activate on hover
-        gutter: 0, // Spacing from edge
-        belowOrigin: false, // Displays dropdown below the button
-        alignment: 'left' // Displays dropdown with edge aligned to the left of button
-      }
-    );
+    // $('.class_drop_btn').dropdown({
+    //     inDuration: 300,
+    //     outDuration: 225,
+    //     constrain_width: true, // Does not change width of dropdown to that of the activator
+    //     hover: false, // Activate on hover
+    //     gutter: 0, // Spacing from edge
+    //     belowOrigin: false, // Displays dropdown below the button
+    //     alignment: 'left' // Displays dropdown with edge aligned to the left of button
+    //   }
+    // );
 
     $("main").addClass("pad_t0");
   });

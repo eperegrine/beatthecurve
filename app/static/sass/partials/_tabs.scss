@@ -1,0 +1,37 @@
+._tab {
+	// Idk
+	&.active {
+		// idk
+	}
+}
+
+._tabs {
+    margin:  0;
+    padding: 0;
+    list-style: none;
+    display: table; /* [1] */
+    table-layout: fixed; /* [2] */
+    width: 100%; /* [3] */
+    .tabs_item {
+    		text-align: center;
+    		padding: 1em;
+        display: table-cell; /* [4] */
+        background-color: $lightBlue;
+      	color: white !important;
+      	box-shadow: inset 0 0 2px color("grey", "base");
+      	a {
+        	color: inherit !important; /* [5] */
+        }
+      	&.active {
+      		background-color: white;
+        	color: $primaryCol;
+        	box-shadow: none;
+        	a {
+	        	color: $primaryCol !important; /* [5] */
+	        }
+        }
+        .tabs_link {
+            display: block; /* [5] */
+        }
+    }
+}
