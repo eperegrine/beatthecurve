@@ -4,11 +4,13 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, \
 from flask.ext.login import current_user, login_required
 from app import app
 from datetime import datetime
-from app.lesson.models import Lesson
+from app.lesson.models import Lesson, LessonStudent
 from .models import Message
 
 chat_bp = Blueprint('chat_bp', __name__, url_prefix='/chat')
 socketio = SocketIO(app)
+
+clients = {}
 
 
 @chat_bp.route('/<lessonid>')
@@ -54,6 +56,13 @@ def join(message):
          {'data': 'In rooms: ' + ', '.join(rooms()),
           'count': session['receive_count'],
           'messages': messages})
+    clients[current_user.user_id][1] = message['room']
+    active_users = {}
+    for key,data in clients.items():
+        if data[1] == message['room']:
+            active_users[key] = clients[key]
+    print(active_users)
+    emit('clients', {'clients': active_users}, room=message['room'])
 
 
 @socketio.on('leave', namespace='/test')
@@ -71,6 +80,7 @@ def close(message):
     emit('my response', {'data': 'Room ' + message['room'] + ' is closing.',
                          'count': session['receive_count']},
          room=message['room'])
+    print("leaving room")
     close_room(message['room'])
 
 
@@ -108,9 +118,18 @@ def disconnect_request():
 @socketio.on('connect', namespace='/test')
 def test_connect():
     # TODO: Add authentication
+    clients[current_user.user_id] = [current_user.first_name + " " + current_user.last_name, '-1']
     emit('my response', {'data': 'Connected', 'count': 0})
 
 
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
+    room = clients[current_user.user_id][1]
+    clients.__delitem__(current_user.user_id)
+    active_users = {}
+    for key,data in clients.items():
+        if data[1] == room:
+            active_users[key] = clients[key]
+    emit('clients', {'clients': active_users}, room=room)
+
     print('Client disconnected', request.sid)

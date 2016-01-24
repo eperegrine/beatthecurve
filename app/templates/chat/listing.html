@@ -75,6 +75,12 @@
                 //socket.emit('my event', {data: 'I\'m connected!'});
             });
 
+            socket.on('clients', function(clients) {
+              for (id in clients.clients) {
+                console.log(clients.clients[id]);
+              }
+            });
+
             socket.on('disconnect', function() {
               console.log('disconnect');
               io.connect('http://' + document.domain + ':' + location.port + namespace);
