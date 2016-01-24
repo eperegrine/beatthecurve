@@ -8667,16 +8667,14 @@ main {
     padding: 1em;
     display: table-cell;
     /* [4] */
-    background-color: #BFE0FA;
-    color: white !important;
-    box-shadow: inset 0 0 2px #9e9e9e; }
+    background-color: #5FB7F4;
+    color: white !important; }
     ._tabs .tabs_item a {
       color: inherit !important;
       /* [5] */ }
     ._tabs .tabs_item.active {
       background-color: white;
-      color: #5FB7F4;
-      box-shadow: none; }
+      color: #5FB7F4; }
       ._tabs .tabs_item.active a {
         color: #5FB7F4 !important;
         /* [5] */ }
