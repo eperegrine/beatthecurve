@@ -39,7 +39,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.0/jquery.scrollTo.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.7/socket.io.min.js"></script>
   <script type="text/javascript" charset="utf-8">
-        connected_students = null;
+        connected_students = [];
 
         $(document).ready(function(){
 
@@ -92,7 +92,7 @@
               connected_students = [];
               for (id in clients.clients) {
                 console.log(clients.clients[id]);
-                vs.students.push(clients.clients[id][0]);
+                sv.users.push(clients.clients[id][0]);
               }
             });
 
