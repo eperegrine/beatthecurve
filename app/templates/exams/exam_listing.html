@@ -69,26 +69,21 @@
 {% block js %}
 {{super()}}
   <script>
-      // $(document).ready(function() {
-      //   if ($("#exams-table tbody tr").length === 0) {
-      //     $("#exams-table").hide()
-      //   } else {
-      //     var active = $('.semester-tab > a.active')[0].parentElement;
-      //     var year = $(active).attr('year');
-      //     var semester = $(active).attr('semester');
-      //     $('tr').hide();
-      //     $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-      //     $('.semester-tab').click(
-      //       function (e) {
-      //         var year = $(this).attr('year');
-      //         var semester = $(this).attr('semester');
-      //         $('tr').hide();
-      //         $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-      //       }
-      //     );
-      //   }
-      //
-      // });
+      $(document).ready(function() {
+        var active = $('.semester-tab.active');
+        var year = $(active).attr('year');
+        var semester = $(active).attr('semester');
+        $('.exam-item').hide();
+        $('.exam-item[year="' + year + '"][semester="' + semester + '"]').show();
+        $('.semester-tab').click(
+          function (e) {
+            var year = $(this).attr('year');
+            var semester = $(this).attr('semester');
+            $('.exam-item').hide();
+            $('.exam-item[year="' + year + '"][semester="' + semester + '"]').show();
+          }
+        );
+      });
   </script>
   <script src="{{ static_url }}js/upload_exam.js"></script>
   <script type="text/javascript">

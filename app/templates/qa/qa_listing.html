@@ -46,7 +46,7 @@
       </table> #}
     {% for q in questions %}
     <br>
-      <div class="card-panel">
+      <div class="card-panel question" semester="{{ q.semester }}" year="{{ q.year }}">
         <div class="row">
           <span class="primary poster_name">{{q.user.first_name + " " + q.user.last_name}}</span>
           <span class="lightBlue right q_document">{{q.document}}</span>
@@ -110,19 +110,19 @@
           }
 
         });
-        var active = $('.semester-tab > a.active')[0].parentElement;
-          var year = $(active).attr('year');
-          var semester = $(active).attr('semester');
-          $('tr').hide();
-          $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-          $('.semester-tab').click(
-            function (e) {
-              var year = $(this).attr('year');
-              var semester = $(this).attr('semester');
-              $('tr').hide();
-              $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-            }
-          );
+        var active = $('.semester-tab.active');
+        var year = $(active).attr('year');
+        var semester = $(active).attr('semester');
+        $('.question').hide();
+        $('.question[year="' + year + '"][semester="' + semester + '"]').show();
+        $('.semester-tab').click(
+          function (e) {
+            var year = $(this).attr('year');
+            var semester = $(this).attr('semester');
+            $('.question').hide();
+            $('.question[year="' + year + '"][semester="' + semester + '"]').show();
+          }
+        );
       }
     ) #}
   </script>
