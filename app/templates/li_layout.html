@@ -8,9 +8,9 @@
 
   <ul id='class_drop' class='_tabs'>
   {% if g.user.has_permission('lesson_admin') %}
-    <li class="tabs_item"><a href="{{ url_for("lesson_bp.create") }}">Create Lesson</a></li>
+    <li class="tabs_item {% if create_lesson %}active{% endif %}"><a href="{{ url_for("lesson_bp.create") }}">Create Lesson</a></li>
   {% endif %}
-    <li class="tabs_item"><a href="{{ url_for("lesson_bp.add") }}">Join Lesson</a></li>
+    <li class="tabs_item {% if join_lesson %}active{% endif %}"><a href="{{ url_for("lesson_bp.add") }}">Join Lesson</a></li>
     <!-- <li class="divider"></li> -->
     {# {% if lesson %} #}
       {% for l in get_lessons(current_user) %}
