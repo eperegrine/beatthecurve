@@ -13,6 +13,8 @@
   <div class="col s2">
     {% if semesters|length > 0 %}
       {{ render_semester_tabs(semesters, semester_enum) }}
+    {% else %}
+      <h5>No notes found</h5>
     {% endif %}
   </div>
 

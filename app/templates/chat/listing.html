@@ -6,7 +6,7 @@
 {% endblock %}
 {% block page %}
 <div class="row">
-  <div class="card-panel pad0 clearfix bg chat_box col s8">
+  <div class="card-panel pad0 clearfix bg chat_box col s9">
     <div class="clearfix" id="chat_box"></div>
     <div class="send-box row valign-wrapper">
         <form id="send_room" method="POST" action='#'>
@@ -17,7 +17,7 @@
         </form>
     </div>
   </div>
-  <div class="col s4">
+  <div class="col s3">
     <div class="card-panel user_listing bg">
       <div id="app">
         <h5 class="white-text center">Who's here?</h5>
@@ -86,6 +86,7 @@
             socket.on('connect', function() {
               console.log('connect');
               socket.emit('join', {room: $('#room_name').val()});
+              $('#chat_box').html("");
                 //socket.emit('my event', {data: 'I\'m connected!'});
             });
 
