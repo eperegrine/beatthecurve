@@ -72,19 +72,22 @@
 {% block js %}
 {{super()}}
   <script>
-      // $(document).ready(function() {
-      //     var active = $('.semester-tab > a.active')[0].parentElement;
-      //     var year = $(active).attr('year');
-      //     var semester = $(active).attr('semester');
-      //     $('.note-item').hide();
-      //     $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
-      //     $('.semester-tab').click( function (e) {
-      //       var year = $(this).attr('year');
-      //       var semester = $(this).attr('semester');
-      //       $('.note-item').hide();
-      //       $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
-      //     });
-      // });
+      $(document).ready(function() {
+          var active = $('.semester-tab.active');
+          var year = $(active).attr('year');
+          var semester = $(active).attr('semester');
+          $('.note-item').hide();
+          $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
+
+          $('.semester-tab').click( function (e) {
+            $('.semester-tab').removeClass('active');
+            var year = $(this).attr('year');
+            var semester = $(this).attr('semester');
+            $(this).addClass('active');
+            $('.note-item').hide();
+            $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
+          });
+      });
   </script>
     <script src="{{ static_url }}js/upload_note.js"></script>
 <script type="text/javascript">
