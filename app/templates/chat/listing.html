@@ -5,38 +5,51 @@
   Real Time Chat
 {% endblock %}
 {% block page %}
-     <div class="card-panel clearfix bg chat_box">
-        <div class="clearfix" id="chat_box"></div>
-        {# <div class="chat-message">
-            <span class="name">John Doe</span>
-            <span class="date">Dec 24 - 10:00 am</span>
-            <div class="content">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta eius dolor, culpa? Eius inventore commodi cumque consequatur, voluptates illum esse omnis porro amet. Laborum quisquam quod aliquam libero expedita perferendis!
-            </div>
-        </div>
-        <div class="chat-message you">
-            <span class="name">You</span>
-            <span class="date">Dec 24 - 10:01 am</span>
-            <div class="content">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta eius dolor, culpa? Eius inventore commodi cumque consequatur, voluptates illum esse omnis porro amet. Laborum quisquam quod aliquam libero expedita perferendis!
-            </div>
-        </div> #}
-        <div class="send-box row valign-wrapper">
-            <form id="send_room" method="POST" action='#'>
-                <input type="hidden" name="room_name" id="room_name" value="{{ lesson.id }}">
-                <input type="text" name="room_data" class="col s11" id="room_data" placeholder="Message">
-                {# <input type="submit" class="btn col s2" value="send"/> #}
-                <button type="submit" class=""><i class='material-icons '>send</i></button>
-            </form>
-        </div>
-    </div>          
+<div class="row">
+  <div class="card-panel pad0 clearfix bg chat_box col s8">
+    <div class="clearfix" id="chat_box"></div>
+    <div class="send-box row valign-wrapper">
+        <form id="send_room" method="POST" action='#'>
+            <input type="hidden" name="room_name" id="room_name" value="{{ lesson.id }}">
+            <input type="text" name="room_data" class="col s10" id="room_data" placeholder="Message">
+            {# <input type="submit" class="btn col s2" value="send"/> #}
+            <button type="submit" class="right"><i class='material-icons '>send</i></button>
+        </form>
+    </div>
+  </div>
+  <div class="col s3">
+    <div class="card-panel user_listing bg">
+      <div id="app">
+        <h5 class="white-text center">Who's here?</h5>
+        {% raw %}
+        <ul class="center white-text">
+          <li v-for="user in users">
+            {{ user }}
+          </li>
+        </ul>
+        {% endraw %}
+      </div>
+    </div>
+  </div> 
+</div>         
 {% endblock %}
 {% block js %}
 {{super()}}
+<script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.15/vue.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.0/jquery.scrollTo.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.7/socket.io.min.js"></script>
   <script type="text/javascript" charset="utf-8">
+        connected_students = null;
+
         $(document).ready(function(){
+
+            var sv = new Vue({
+              el: '#app',
+              data: {
+                users: connected_students
+              }
+            });
+
             count = 0;
             var user_name = "{{current_user.first_name + ' ' + current_user.last_name}}";
             namespace = '/test'; // change to an empty string to use the global namespace
@@ -76,8 +89,10 @@
             });
 
             socket.on('clients', function(clients) {
+              connected_students = [];
               for (id in clients.clients) {
                 console.log(clients.clients[id]);
+                vs.students.push(clients.clients[id][0]);
               }
             });
 
