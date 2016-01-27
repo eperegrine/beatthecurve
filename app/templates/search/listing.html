@@ -4,12 +4,14 @@
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
   {% if semesters|length > 0 %}
+  <div class="col s2">
     {{ render_semester_tabs(semesters, semester_enum) }}
+  </div>
   {% endif %}
   {% if semesters|length < 1 %}
     <h5 class="no-content-message">No Students Available</h5>
   {% else %}
-    <div class="section">
+    <div class="col s10">
       <table class="striped">
         <thead>
           <tr>
@@ -20,7 +22,7 @@
         </thead>
         <tbody>
           {% for user in users %}
-            <tr  semester="{{ user['semester'] }}" year="{{ user['year'] }}">
+            <tr class="student" semester="{{ user['semester'] }}" year="{{ user['year'] }}">
               <td>{{ user['name'] }}</td>
               <td>{{ user['email'] }}</td>
               <td>{{ user['options']|join(", ") }}</td>
@@ -35,17 +37,17 @@
   {{super()}}
   <script>
       $(document).ready(function() {
-          var active = $('.semester-tab > a.active')[0].parentElement;
+          var active = $('.semester-tab.active');
           var year = $(active).attr('year');
           var semester = $(active).attr('semester');
-          $('tr').hide();
-          $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+          $('.student').hide();
+          $('.student[year="' + year + '"][semester="' + semester + '"]').show();
           $('.semester-tab').click(
             function (e) {
               var year = $(this).attr('year');
               var semester = $(this).attr('semester');
-              $('tr').hide();
-              $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+              $('.student').hide();
+              $('.student[year="' + year + '"][semester="' + semester + '"]').show();
             }
           );
       });
