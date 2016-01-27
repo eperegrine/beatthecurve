@@ -6,7 +6,7 @@
 {% endblock %}
 {% block page %}
 <div class="row">
-  <div class="card-panel pad0 clearfix bg chat_box col s9">
+  <div class="card-panel pad0 bg chat_box col s9">
     <div class="clearfix" id="chat_box"></div>
     <div class="send-box row valign-wrapper">
         <form id="send_room" method="POST" action='#'>
@@ -103,6 +103,18 @@
               io.connect('http://' + document.domain + ':' + location.port + namespace);
             // event handler for server sent data
             });
+
+            socket.on('leave', function() {
+              console.log('leave');
+            });
+
+            socket.on('disconnected', function() {
+              console.log('disconnect request');
+            });
+
+            $(window).bind("beforeunload", function() {
+              socket.emit('disconnect request');
+            })
             // handlers for the different forms in the page
             // these send data to the server in a variety of ways
             $('form#emit').submit(function(event) {
@@ -131,6 +143,7 @@
             });
             $('form#disconnect').submit(function(event) {
                 socket.emit('disconnect request');
+                alert("Hi");
                 return false;
             });
         });
