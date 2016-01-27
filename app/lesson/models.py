@@ -17,7 +17,7 @@ class Lesson(Model):
     @classmethod
     def get_unattended_lessons(cls, user_id, school_id):
         schools_lessons = cls.select().where(cls.school_id == school_id)
-        users_lessons = [ls.id for ls in LessonStudent.select().where(LessonStudent.student_id == user_id)]
+        users_lessons = [ls.lesson_id for ls in LessonStudent.select().where(LessonStudent.student_id == user_id)]
         lessons = []
         for lesson in schools_lessons:
             if lesson.id not in users_lessons:
