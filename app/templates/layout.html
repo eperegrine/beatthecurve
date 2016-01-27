@@ -5,48 +5,14 @@
       <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!--Import materialize.css-->
       <!-- <link type="text/css" rel="stylesheet" href="{{ static_url }}css/materialize.min.css"  media="screen,projection"/> -->
+      <link href="{{ static_url }}css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
       <link rel="stylesheet" href="{{ static_url }}css/main.css">
-      <link rel="stylesheet" href="{{ static_url }}css/modal.css">
+
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <title>{% block title %}Beat the Curve{% endblock %}</title>
     </head>
     <body>
-
-      <!-- <nav>
-        <a href="#" class="brand-logo center" id="nav-title"></a>
-        <ul id="slide-out" class="side-nav fixed">
-          {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for("auth_bp.profile") }}">Profile</a></li>
-            <li class="no-padding">
-              <ul class="collapsible collapsible-accordion">
-                <li>
-                  <a class="collapsible-header">Classes<i class="mdi-navigation-arrow-drop-down"></i></a>
-                  <div class="collapsible-body">
-                    <ul>
-                      {% if g.user.has_permission('lesson_admin') %}
-                        <li><a href="{{ url_for("lesson_bp.create") }}">Create</a></li>
-                      {% endif %}
-                      <li><a href="{{ url_for("lesson_bp.add") }}">Join</a></li>
-                      {% for lesson in get_lessons(current_user) %}
-                        <li><a href="{{ url_for("notes_bp.view", lessonid=lesson.id) }}">{{ lesson.lesson_name }}</a></li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-            </li>
-            {% if g.user.has_permission('super_user') %}
-              <li><a href="{{ url_for('auth_bp.modify_permissions') }}">Modify User's Permissions</a></li>
-            {% endif %}
-            <li><a href="{{ url_for("auth_bp.logout") }}">Logout</a></li>
-          {% else %}
-            <li><a href="{{ url_for("auth_bp.login") }}">Login</a></li>
-            <li><a href="{{ url_for("auth_bp.signup") }}">Sign Up</a></li>
-          {% endif %}
-        </ul>
-        <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
-      </nav> -->
 
       {% block page_title %}
       <h1 class="page_title">Beat The Curve</h1>
@@ -61,6 +27,7 @@
       <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
       <script type="text/javascript" src="{{ static_url }}js/materialize.min.js"></script>
       <script type="text/javascript" src="{{ static_url }}js/main.js"></script>
+      <script src="{{static_url}}js/jquery.multi-select.js" type="text/javascript"></script>
       {% block js %}{% endblock %}
     </body>
   </html>

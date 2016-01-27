@@ -20,3 +20,22 @@
       </div>
     </form>
 {% endblock %}
+{% block js %}
+{{super()}}
+<script>
+  $(document).ready(function () {
+    for (var i = 0; i < $("#lessons").siblings().length; i++) {
+      var item = $("#lessons").siblings()[i]; 
+      $(item).hide();
+    }
+    $("label").hide();
+    lessons_select = $("#lessons");
+    lessons_select.show();
+    lessons_select.multiSelect({
+      selectableHeader: "<div class='select-header'>Available Classes</div>",
+      selectionHeader: "<div class='selection-header'>Classes to join</div>"
+    });
+    // lessons_select.attr("size",lessons_select.children().size());
+  });
+</script>
+{% endblock %}
