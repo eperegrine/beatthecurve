@@ -2,12 +2,6 @@
 {% from 'macros.html' import render_field %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-  <div class="container pad">
-    <ul>
-      {% for category, message in get_flashed_messages(with_categories=true) %}
-        <li>{{ message }}{{ category }}</li>
-      {% endfor %}
-    </ul>
     <h1>Hello, {{ current_user.first_name }}</h1>
     <h5>Karma Points: {{ current_user.karma_points }}</h5>
 
@@ -38,5 +32,4 @@
       {% endfor %}
       <button type="submit" class="btn waves-effect waves-light" name="change_password">Change Password</button>
     </form>
-  </div>
 {% endblock %}

@@ -134,7 +134,7 @@ i {
 // Images
 img.responsive-img,
 video.responsive-video {
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 
@@ -480,18 +480,18 @@ td, th{
 
 // Collections
 .collection {
-  margin: $element-top-margin 0 $element-bottom-margin 0;
-  border: 1px solid $collection-border-color;
-  border-radius: 2px;
-  overflow: hidden;
-  position: relative;
+  margin: $element-top-margin 0 $element-bottom-margin 0 !important;
+  border: 1px solid $collection-border-color !important;
+  border-radius: 2px !important;
+  overflow: hidden !important;
+  position: relative !important;
 
   .collection-item {
-    background-color: $collection-bg-color;
-    line-height: 1.5rem;
-    padding: 10px 20px;
-    margin: 0;
-    border-bottom: 1px solid $collection-border-color;
+    background-color: $collection-bg-color !important;
+    line-height: 1.5rem !important;
+    padding: 10px 20px !important;
+    margin: 0 !important;
+    border-bottom: 1px solid $collection-border-color !important;
 
     // Avatar Collection
     &.avatar {

@@ -23,3 +23,8 @@ $modalBg: rgba(#000000, 0.64);
 .lightBlue {
   color: $lightBlue;
 }
+
+.success {
+	@extend .green;
+	@extend .white-text;
+}

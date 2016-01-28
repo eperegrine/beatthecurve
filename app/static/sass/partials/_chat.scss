@@ -1,0 +1,63 @@
+.chat-message {
+	width: 60%;
+	.name {
+		color: color("grey", "base");
+	}
+	.date {
+		color: color("grey", "base");
+		@extend .right;
+	}
+	.content {
+		background-color: color("grey", "lighten-2");
+		color: color("grey", "base");
+		padding: 1em;
+	}
+
+	&.you {
+		@extend .right;
+		.content {
+			background-color: $primaryCol;
+			color: white;
+		}
+	}
+
+	@extend .left;
+	margin-bottom: 2em;
+}
+
+.chat_box { 
+	padding: 0px;
+	#chat_box{
+		padding: 1em;
+		overflow-y: scroll;
+		height: 30em;
+	}
+	.send-box {
+		border-top-width: 1px;
+		border-top-style: solid;
+		border-top-color: color("grey", "lighten-2");
+		background-color: white;
+		display: block;
+		clear: both;
+		margin: 0px;
+		padding: 10px;
+		#room_data {
+			margin: 0px;
+		}
+		[type="submit"] {
+			background-color: white;
+			border-style: none;
+			border-width: 0px;
+			color: color("grey", "base");
+			padding-top: 13px;
+			padding-left: 30px;
+			padding-right: 30px;
+		}
+	}
+}
+
+.user_listing {
+	min-height: 30em;
+	margin-left: 2em;
+	background-color: $lightBlue;
+}

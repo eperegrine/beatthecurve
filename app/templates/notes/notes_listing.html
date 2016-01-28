@@ -1,77 +1,101 @@
-{% extends 'layout.html' %}
+{% set active = 'notes' %}
+{% extends 'class_layout.html' %}
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
-{% block main %}
-  {{ render_lesson_tabs('notes', lesson.id) }}
-  {% if semesters|length > 0 %}
-    {{ render_semester_tabs(semesters, semester_enum) }}
-  {% endif %}
+{% block page %}
+<div class="row">
   <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
       {% endfor %}
   </ul>
-   <form method="post" enctype="multipart/form-data" id="add-note-form" action="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}">
 
-      {% for field in form %}
-        {{ render_field(field) }}
-      {% endfor %}
-      <button type="button" class="waves-effect waves-light btn-large" id="submit">Add Note</button>
-    </form>
-  {% if semesters|length < 0 %}
-    <h5 class="no-content-message">No Lectures</h5>
-  {% endif %}
-  <a href="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}" class="btn">Upload Note</a>
-  <table>
-    {% for note in notes %}
-      <tr  semester="{{ note.semester }}" year="{{ note.year }}">
-        <ul class="horizontal-ul">
-          <li>{{ note.filename }}</li>
-          <li>Votes: {{ note.votes }}</li>
-          {% if note.has_voted(current_user) %}
+  <div class="col s2">
+    {% if semesters|length > 0 %}
+      {{ render_semester_tabs(semesters, semester_enum) }}
+    {% else %}
+      <h5>No notes found</h5>
+    {% endif %}
+  </div>
+
+  <div class="col s10">
+    <div class="row valign-wrapper">
+      <a class="waves-effect waves-light btn-large modal-trigger col s1 bg-primary" href="#newNoteModal"><i class="material-icons">file_upload</i></a>
+      <div class="col s11 vaglign desc">
+        <h5>Upload a note</h5>
+      </div>
+    </div>
+
+    <div id="newNoteModal" class="modal">
+      <div class="modal-content">
+        <div class="container">
+          <h3>Upload a note</h3>
+          <form method="post" enctype="multipart/form-data" id="add-note-form" action="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}">
+           {% for field in form %}
+             {{ render_field(field) }}
+           {% endfor %}
+           <div class="row">
+             <div class="col s2">&nbsp;</div>
+             <button type="submit" class="waves-effect waves-light btn-large col s8">Upload</button>
+             <div class="col s2">&nbsp;</div>
+           </div>
+         </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect btn-flat">Cancel</a>
+      </div>
+    </div>
+    {% if semesters|length < 0 %}
+      <h5 class="no-content-message">No Lectures</h5>
+    {% endif %}
+      {% for note in notes %}
+        <div class="note-item row valign-wrapper" semester="{{ note.semester }}" year="{{ note.year }}">
+          <span class="col s1 ">
             {% if note.has_upvoted(current_user) %}
-              <li>
-                <i class="material-icons">thumb_up</i>
-              </li>
-              <li>
-                <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a>
-              </li>
-            {% elif note.has_voted(current_user) %}
-              <li>
-                <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a>
-              </li>
-              <li>
-                <i class="material-icons">thumb_down</i>
-              </li>
+              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}" class="valign"><i class="material-icons">thumb_up</i> {{ note.votes}}</a>
+            {% else %}
+              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ note.votes }}</a>
             {% endif %}
-          {% else %}
-            <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}"><i class="material-icons">thumb_up</i></a></li>
-            <li><a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}"><i class="material-icons">thumb_down</i></a></li>
-          {% endif %}
-          <li><a href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}">Download</a></li>
-        </ul>
-      </tr>
-    {% endfor %}
-  </table>
+          </span>
+          <span class="col s10">
+            <span class="filename_title">{{ note.filename }}</span>
+            <p class="note_description">{{note.description}}</p>
+            <p class="note_date">{{note.year}}</p>
+          </span>
+          <span class="col s1">
+            <a  href="https://s3-us-west-2.amazonaws.com/beatthecurve/notes/{{ note.filename }}"><i class="material-icons left valign ">file_download</i></a>
+          </span>
+        </div>
+      {% endfor %}
+  </div>
+</div>
 {% endblock %}
 {% block js %}
+{{super()}}
   <script>
       $(document).ready(function() {
-          var active = $('.semester-tab > a.active')[0].parentElement;
+          var active = $('.semester-tab.active');
           var year = $(active).attr('year');
           var semester = $(active).attr('semester');
-          $('tr').hide();
-          $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-          $('.semester-tab').click(
-            function (e) {
-              var year = $(this).attr('year');
-              var semester = $(this).attr('semester');
-              $('tr').hide();
-              $('tr[year="' + year + '"][semester="' + semester + '"]').show();
-            }
-          );
+          $('.note-item').hide();
+          $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
+
+          $('.semester-tab').click( function (e) {
+            $('.semester-tab').removeClass('active');
+            var year = $(this).attr('year');
+            var semester = $(this).attr('semester');
+            $(this).addClass('active');
+            $('.note-item').hide();
+            $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
+          });
       });
   </script>
     <script src="{{ static_url }}js/upload_note.js"></script>
-
+<script type="text/javascript">
+$(document).ready(function(){
+  // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+  $('.modal-trigger').leanModal();
+})
+</script>
 {% endblock %}

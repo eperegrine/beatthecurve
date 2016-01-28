@@ -1,0 +1,61 @@
+.class-page-nav {
+  padding-left: 1em;
+  .class-nav-item {
+    margin-top: 1.4em;
+    margin-bottom: 1.4em;
+    color: color("grey", "base");
+    a {
+      color: inherit;
+    }
+    &.active {
+      color: color("blue", "base");
+    }
+  }
+
+  .divider {
+    background-color: $primaryCol;
+  }
+}
+
+.semester-title {
+  @extend .bg-primary;
+  color: white !important;
+  padding: 1em;
+  text-align: center;
+}
+
+.semester-tab {
+  background-color: $bgCol !important;
+
+  color: $greyText !important;
+
+  a {
+    color: inherit !important;
+  }
+
+  &.active {
+    background-color: $lightBlue !important;
+    color: white !important;
+  }
+}
+
+.filename_title {
+  font-size: 1.1em;
+  color: darken($lightBlue,10);
+}
+
+.note_description {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  color: color("grey", "base");
+}
+
+.desc {
+  @extend .note_description;
+}
+
+.note_date {
+  @extend .note_description;
+  font-size: 0.8em;
+  font-style: italic;
+}

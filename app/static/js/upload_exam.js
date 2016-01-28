@@ -70,5 +70,3 @@ function undisableForm() {
     $("#add-exam-form").find('input, textarea, button, select').removeClass("disabled");
     $("form > div .btn").removeClass("disabled")
 }
-
-

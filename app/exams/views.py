@@ -28,7 +28,6 @@ def view(lessonid):
         semesters.add((exam.year, exam.semester))
     print(semesters)
     form = AddExamForm()
-    form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in Lesson.select()]
 
     return render_template('exams/exam_listing.html', lesson=lesson, exams=exams, semesters=sorted(semesters), form=form)
 
@@ -60,22 +59,25 @@ def sign_s3():
     return content
 
 
-@exams_bp.route('/add-exam', methods=("POST", "GET"))
-def add_exam():
+@exams_bp.route('/add-exam/<lessonid>', methods=("POST", "GET"))
+def add_exam(lessonid):
     form = AddExamForm()
-    form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in Lesson.select()]
-
+    try:
+        lesson = Lesson.get(Lesson.id == lessonid)
+    except:
+        flash('Id not found', 'error')
+        return redirect(url_for('auth_bp.profile'))
     if form.validate_on_submit():
         Exam.create(
             average_grade=form.average_grade.data,
             filename=form.file.data.filename,
-            lesson=form.lesson.data,
+            lesson=lesson.id,
             publisher=g.user.user_id,
             number_of_takers=form.number_of_takers.data,
             year=form.year.data,
             semester=form.semester.data
         )
-        return redirect(url_for(".view", lessonid=form.lesson.data))
+        return redirect(url_for(".view", lessonid=lesson.id))
 
     return render_template("exams/add-exam.html", form=form)
 

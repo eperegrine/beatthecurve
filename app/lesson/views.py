@@ -12,8 +12,10 @@ lesson_bp = Blueprint('lesson_bp', __name__, url_prefix='/lessons')
 @login_required
 def add():
     form = AttendLessonsForm()
+    print(g.user.school_id)
     form.lessons.choices = [(str(lesson.id), lesson.lesson_name + " - " + lesson.professor) for lesson in Lesson.get_unattended_lessons(g.user.user_id, g.user.school_id)]
-
+    if len(form.lessons.choices) == 0:
+        form.lessons.choices =[("-1", "No Lessons Available")]
     if form.validate_on_submit():
         lesson_ids = [int(id) for id in form.lessons.data]
         LessonStudent.attend(g.user.user_id, lesson_ids)

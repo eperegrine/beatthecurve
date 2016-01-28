@@ -1,0 +1,24 @@
+.ms-container {
+	width: 100%;
+	margin-bottom: 2em;
+	margin-right: 0;
+}
+
+.ms-selectable {
+	width: 48% !important;
+}
+
+.ms-selection {
+	width: 50% !important;
+}
+
+.ms-list {
+	@extend .collection;
+	overflow-y: scroll !important;
+	.ms-elem-selection, .ms-elem-selectable {
+		@extend .collection-item;
+		&:hover {
+			background-color: $primaryCol !important;
+		}
+	}
+}

@@ -1,5 +1,10 @@
 @import "main_container";
 @import "landing";
+@import "class_dropdown";
+@import "class_layout";
+@import "chat";
+@import "tabs";
+@import "select";
 
 html {
   background-color: $bgCol;
@@ -18,4 +23,8 @@ hr {
 
 .pad_t0 {
   padding-top: 0px !important;
+}
+
+.comment {
+	padding-top: 1em;
 }

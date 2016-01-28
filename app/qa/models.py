@@ -20,6 +20,14 @@ class Question(Model):
         database = DATABASE
         db_table = 'TBL_QUESTION'
 
+    def replies(self):
+        try:
+            return Reply.select().where(Reply.question == self.id)
+        except Exception as e:
+            print(e)
+            return []
+
+
 
 class Reply(Model):
     id = PrimaryKeyField(db_column='ID')

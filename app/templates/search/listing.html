@@ -1,54 +1,53 @@
-{% extends 'layout.html' %}
+{% set active="search" %}
+{% extends 'class_layout.html' %}
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
-{% block main %}
-  {{ render_lesson_tabs('search', lesson.id) }}
+{% block page %}
   {% if semesters|length > 0 %}
+  <div class="col s2">
     {{ render_semester_tabs(semesters, semester_enum) }}
+  </div>
   {% endif %}
-  <ul>
-      {% for message in get_flashed_messages() %}
-        <li>{{ message }}</li>
-      {% endfor %}
-  </ul>
   {% if semesters|length < 1 %}
     <h5 class="no-content-message">No Students Available</h5>
-  {% endif %}
-  <div class="section">
-    <table class="striped">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Willing to provide:</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in users %}
-          <tr  semester="{{ user['semester'] }}" year="{{ user['year'] }}">
-            <td>{{ user['name'] }}</td>
-            <td>{{ user['email'] }}</td>
-            <td>{{ user['options']|join(", ") }}</td>
+  {% else %}
+    <div class="col s10">
+      <table class="highlight">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Willing to provide:</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            <tr class="student" semester="{{ user['semester'] }}" year="{{ user['year'] }}">
+              <td>{{ user['name'] }}</td>
+              <td>{{ user['email'] }}</td>
+              <td>{{ user['options']|join(", ") }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
   </div>
+  {% endif %}
 {% endblock %}
 {% block js %}
+  {{super()}}
   <script>
       $(document).ready(function() {
-          var active = $('.semester-tab > a.active')[0].parentElement;
+          var active = $('.semester-tab.active');
           var year = $(active).attr('year');
           var semester = $(active).attr('semester');
-          $('tr').hide();
-          $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+          $('.student').hide();
+          $('.student[year="' + year + '"][semester="' + semester + '"]').show();
           $('.semester-tab').click(
             function (e) {
               var year = $(this).attr('year');
               var semester = $(this).attr('semester');
-              $('tr').hide();
-              $('tr[year="' + year + '"][semester="' + semester + '"]').show();
+              $('.student').hide();
+              $('.student[year="' + year + '"][semester="' + semester + '"]').show();
             }
           );
       });
