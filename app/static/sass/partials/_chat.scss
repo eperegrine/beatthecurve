@@ -23,13 +23,9 @@
 
 	@extend .left;
 	margin-bottom: 2em;
-	&:last-child {
-		margin-bottom: 0px;
-	}
 }
 
-.chat_box {
-	overflow: scroll; 
+.chat_box { 
 	padding: 0px;
 	#chat_box{
 		padding: 1em;
