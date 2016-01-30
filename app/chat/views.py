@@ -63,7 +63,7 @@ def join(message):
         if data[1] == message['room']:
             active_users[key] = clients[key]
     print(active_users)'''
-    r.set(bytes(current_user.user_id), message['room'])
+    r.set(str(current_user.user_id), message['room'])
     r.rpush(message['room'], current_user.first_name + " " + current_user.last_name)
     emit('clients', {'clients': [str(name)[2:-1] for name in r.lrange(message['room'], 0, -1)]}, room=message['room'])
 
@@ -133,8 +133,14 @@ def test_disconnect():
     for key,data in clients.items():
         if data[1] == room:
             active_users[key] = clients[key]'''
-    room = r.get(bytes(current_user.user_id))
+    room = str(r.get(str(current_user.user_id)))[2:-1]
+    print("Room")
+    print(room)
     r.lrem(room, current_user.first_name + " " + current_user.last_name, 1)
-    emit('clients', {'clients': [str(name) for name in r.lrange(room, 0, -1)]}, room=room)
+    print([str(name)[2:-1] for name in r.lrange(room, 0, -1)])
+    try:
+        emit('clients', {'clients': [str(name)[2:-1] for name in r.lrange(room, 0, -1)]}, room=room)
+    except:
+        print("There was an error")
 
     print('Client disconnected', request.sid)

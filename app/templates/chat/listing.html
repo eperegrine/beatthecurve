@@ -91,6 +91,8 @@
             });
 
             socket.on('clients', function(clients) {
+              console.log("Received clients");
+              sv.users = []
               connected_students = [];
               for (index in clients.clients) {
                 console.log(clients.clients[index]);
