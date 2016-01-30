@@ -96,6 +96,7 @@
                 console.log(clients.clients[index]);
                 sv.users.push(clients.clients[index]);
               }
+              console.log(sv.users);
             });
 
             socket.on('disconnect', function() {
