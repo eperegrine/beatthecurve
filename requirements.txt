@@ -19,6 +19,7 @@ psycopg2==2.6.1
 pycparser==2.14
 python-engineio==0.8.4
 python-socketio==0.8.2
+redis==2.10.5
 requests==2.9.0
 sendgrid==1.5.19
 six==1.10.0

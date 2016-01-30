@@ -92,9 +92,9 @@
 
             socket.on('clients', function(clients) {
               connected_students = [];
-              for (id in clients.clients) {
-                console.log(clients.clients[id]);
-                sv.users.push(clients.clients[id][0]);
+              for (index in clients.clients) {
+                console.log(clients.clients[index]);
+                sv.users.push(clients.clients[index]);
               }
             });
 

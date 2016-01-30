@@ -2,6 +2,7 @@ from peewee import *
 import os
 import urllib.parse
 from enum import Enum
+import redis
 
 if 'LOCAL_DEV' in os.environ:
     database = {
@@ -34,3 +35,5 @@ class Semester(Enum):
     fall = 2
     spring = 3
     summer = 4
+
+r = redis.from_url(os.environ.get("REDIS_URL"))

@@ -6,6 +6,7 @@ from app import app
 from datetime import datetime
 from app.lesson.models import Lesson, LessonStudent
 from .models import Message
+from app.models import r
 
 chat_bp = Blueprint('chat_bp', __name__, url_prefix='/chat')
 socketio = SocketIO(app)
@@ -56,13 +57,15 @@ def join(message):
          {'data': 'In rooms: ' + ', '.join(rooms()),
           'count': session['receive_count'],
           'messages': messages})
-    clients[current_user.user_id][1] = message['room']
+    '''clients[current_user.user_id][1] = message['room']
     active_users = {}
     for key,data in clients.items():
         if data[1] == message['room']:
             active_users[key] = clients[key]
-    print(active_users)
-    emit('clients', {'clients': active_users}, room=message['room'])
+    print(active_users)'''
+    r.set(current_user.user_id, message['room'])
+    r.rpush(message['room'], current_user.first_name + " " + current_user.last_name)
+    emit('clients', {'clients': [str(name)[2:-1] for name in r.lrange(message['room'], 0, -1)]}, room=message['room'])
 
 
 @socketio.on('leave', namespace='/test')
@@ -118,18 +121,20 @@ def disconnect_request():
 @socketio.on('connect', namespace='/test')
 def test_connect():
     # TODO: Add authentication
-    clients[current_user.user_id] = [current_user.first_name + " " + current_user.last_name, '-1']
+    #clients[current_user.user_id] = [current_user.first_name + " " + current_user.last_name, '-1']
     emit('my response', {'data': 'Connected', 'count': 0})
 
 
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
-    room = clients[current_user.user_id][1]
+    '''room = clients[current_user.user_id][1]
     clients.__delitem__(current_user.user_id)
     active_users = {}
     for key,data in clients.items():
         if data[1] == room:
-            active_users[key] = clients[key]
-    emit('clients', {'clients': active_users}, room=room)
+            active_users[key] = clients[key]'''
+    room = r.get(current_user.user_id)
+    r.lrem(room, current_user.first_name + " " + current_user.last_name, 1)
+    emit('clients', {'clients': [str(name) for name in r.lrange(room, 0, -1)]}, room=room)
 
     print('Client disconnected', request.sid)
