@@ -56,6 +56,7 @@ def before_request():
 def after_request(response):
     """Close the database connection after each response"""
     g.db.close()
+    print("Closed")
     return response
 
 # Environment has STATIC_URL='http://my_s3_bucket.aws.amazon.com/'

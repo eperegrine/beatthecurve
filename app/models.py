@@ -36,7 +36,8 @@ DATABASE = PooledPostgresqlDatabase(
     port=database['port'],
     autorollback=True,
     max_connections=16,
-    stale_timeout=60)
+    stale_timeout=60,
+    threadlocals=True)
 
 
 
