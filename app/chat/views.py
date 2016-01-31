@@ -63,9 +63,12 @@ def join(message):
         if data[1] == message['room']:
             active_users[key] = clients[key]
     print(active_users)'''
-    r.set(str(current_user.user_id), message['room'])
-    r.rpush(message['room'], current_user.first_name + " " + current_user.last_name)
-    emit('clients', {'clients': [str(name)[2:-1] for name in r.lrange(message['room'], 0, -1)]}, room=message['room'])
+    room = message['room']+"room"
+    r.set(str(current_user.user_id)+"user", room)
+    print("THE ROOM IS")
+    print(room)
+    r.rpush(room, current_user.first_name + " " + current_user.last_name)
+    emit('clients', {'clients': [str(name)[2:-1] for name in r.lrange(room, 0, -1)]}, room=message['room'])
 
 
 @socketio.on('leave', namespace='/test')
@@ -133,13 +136,13 @@ def test_disconnect():
     for key,data in clients.items():
         if data[1] == room:
             active_users[key] = clients[key]'''
-    room = str(r.get(str(current_user.user_id)))[2:-1]
+    room = str(r.get(str(current_user.user_id)+"user"))[2:-1]
     print("Room")
     print(room)
     r.lrem(room, current_user.first_name + " " + current_user.last_name, 1)
     print([str(name)[2:-1] for name in r.lrange(room, 0, -1)])
     try:
-        emit('clients', {'clients': [str(name)[2:-1] for name in r.lrange(room, 0, -1)]}, room=room)
+        emit('clients', {'clients': [str(name)[2:-1] for name in r.lrange(room, 0, -1)]}, room=room[:-4])
     except:
         print("There was an error")
 
