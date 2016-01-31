@@ -72,3 +72,5 @@ pip-selfcheck.json
 .idea/
 
 uploads/
+
+wsgi.py
