@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch()
+
 from flask import Flask, g, render_template
 from flask.ext.login import LoginManager, current_user
 from peewee import DoesNotExist
@@ -10,6 +13,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config["DEBUG"] = True
+app.config["PRESERVE_CONTEXT_ON_EXCEPTION"] = False
 
 sg = sendgrid.SendGridClient(os.environ['SENDGRID_KEY'])
 
