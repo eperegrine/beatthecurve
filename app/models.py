@@ -1,5 +1,4 @@
 from peewee import *
-from playhouse.pool import PooledPostgresqlDatabase
 import os
 import urllib.parse
 from enum import Enum
@@ -10,7 +9,7 @@ if 'LOCAL_DEV' in os.environ:
         'engine': 'peewee.PostgresqlDatabase',
         'name': 'BEATTHECURVE',
         'user': os.environ['PG_USERNAME'],
-        'password': '',
+        'password': os.environ['PG_PASSWORD'],
         'host': '127.0.0.1',
         'port': '5432',
     }
@@ -28,16 +27,14 @@ else:
     }
 
 
-DATABASE = PooledPostgresqlDatabase(
+DATABASE = PostgresqlDatabase(
     database=database['name'],
     user=database['user'],
     password=database['password'],
     host=database['host'],
     port=database['port'],
     autorollback=True,
-    max_connections=16,
     threadlocals=True)
-
 
 
 class Semester(Enum):
