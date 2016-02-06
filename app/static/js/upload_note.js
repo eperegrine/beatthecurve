@@ -14,7 +14,7 @@ function upload_file(file, signed_request, url){
 
     xhr.onerror = function() {
         alert("Could not upload file.");
-        $("#progress").remove()
+        //$("#progress").remove()
         undisableForm();
     };
     xhr.send(file);
@@ -30,7 +30,7 @@ function get_signed_request(file){
             }
             else{
                 alert("Could not get signed URL.");
-                $("#progress").remove()
+                $("#progress").remove();
                 undisableForm();
             }
         }
@@ -40,6 +40,7 @@ function get_signed_request(file){
 
 $(document).ready(function() {
     $('#submit').on('click', function(e) {
+        alert("Clicked");
         if ($('#add-note-form').attr('ajax-done') === 'true') {
             console.log('called');
             return true;
@@ -52,7 +53,7 @@ $(document).ready(function() {
                 alert("No file selected.");
             }
             else {
-                $("#discussion").parent().parent().append('<div class="progress" id="progress"><div class="indeterminate"></div></div>');
+                //$("#discussion").parent().parent().append('<div class="progress" id="progress"><div class="indeterminate"></div></div>');
                 disableForm();
                 get_signed_request(file);
             }
@@ -62,7 +63,8 @@ $(document).ready(function() {
 
 function disableForm() {
     $("#add-note-form").find('input, textarea, button, select').addClass("disabled");
-    $("form > div .btn").addClass("disabled")
+    $("form > div .btn").addClass("disabled");
+    alert("Disabled");
 }
 
 function undisableForm() {
