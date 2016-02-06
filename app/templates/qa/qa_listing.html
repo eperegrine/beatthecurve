@@ -62,7 +62,7 @@
         <div class="divider bg-primary"></div>
         {% for reply in q.replies() %}
           <div class="comment">
-            <div class="row comment_name primary">{{ reply.user.first_name + " " + q.user.last_name }} <span class="lightBlue right">{{reply.datetime.date()}}</span></div>
+            <div class="row comment_name primary">{{ reply.user.first_name + " " + reply.user.last_name }} <span class="lightBlue right">{{reply.datetime.date()}}</span></div>
             <p class="grey-text">{{ reply.content }}</p>
           </div>
           {% if loop.last %}
