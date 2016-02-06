@@ -29,4 +29,4 @@ class AddQuestionForm(Form):
 
 
 class AddReplyForm(Form):
-    content = StringField('Content', validators=[DataRequired()])
+    content = StringField('Content', validators=[DataRequired()], id='reply-content')
