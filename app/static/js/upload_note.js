@@ -14,7 +14,7 @@ function upload_file(file, signed_request, url){
 
     xhr.onerror = function() {
         alert("Could not upload file.");
-        //$("#progress").remove()
+        $("#progress").remove()
         undisableForm();
     };
     xhr.send(file);
@@ -53,7 +53,7 @@ $(document).ready(function() {
                 alert("No file selected.");
             }
             else {
-                //$("#discussion").parent().parent().append('<div class="progress" id="progress"><div class="indeterminate"></div></div>');
+                $("#description").parent().parent().append('<div class="progress" id="progress"><div class="indeterminate"></div></div>');
                 disableForm();
                 get_signed_request(file);
             }
