@@ -31,8 +31,8 @@
         {% endraw %}
       </div>
     </div>
-  </div> 
-</div>         
+  </div>
+</div>
 {% endblock %}
 {% block js %}
 {{super()}}
@@ -92,11 +92,13 @@
 
             socket.on('clients', function(clients) {
               console.log("Received clients");
-              sv.users = []
+              sv.users = [user_name];
               connected_students = [];
               for (index in clients.clients) {
                 console.log(clients.clients[index]);
-                sv.users.push(clients.clients[index]);
+                if (clients.clients[index] != user_name) {
+                  sv.users.push(clients.clients[index]);
+                }
               }
               console.log(sv.users);
             });
