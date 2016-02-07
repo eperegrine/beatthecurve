@@ -45,6 +45,7 @@ class Semester(Enum):
 
 class KarmaPoints(Enum):
     note_vote = 1
+    upload_note = 10
 
 
 r = redis.from_url(os.environ.get("REDIS_URL"))

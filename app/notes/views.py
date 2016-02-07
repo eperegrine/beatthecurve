@@ -95,6 +95,8 @@ def add_note(lessonid):
             lesson=lessonid,
             semester=semester.value,
             year=datetime.now().year)
+        g.user.karma_points += KarmaPoints.upload_note.value
+        g.user.save()
 
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('notes/add_note.html', form=form)
