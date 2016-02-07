@@ -7,6 +7,7 @@ from .models import Question, Reply
 from collections import OrderedDict
 from app.models import Semester
 from datetime import datetime
+from app.models import KarmaPoints
 
 qa_bp = Blueprint('qa_bp', __name__, url_prefix='/qa')
 
@@ -60,6 +61,10 @@ def add_question(lessonid):
             semester = Semester.fall
 
         Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lesson=lessonid, document=form.document.data, semester=semester.value, year=datetime.now().year)
+
+        g.user.karma_points += KarmaPoints.post_question.value
+        g.user.save()
+
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('qa/add_question.html', form=form)
 
@@ -99,6 +104,9 @@ def add_reply(questionid):
             user=g.user.user_id,
             content=form.content.data
         )
+        g.user.karma_points += KarmaPoints.reply_to_question.value
+        g.user.save()
+
         question.number_of_posts += 1
         question.save()
 

@@ -7,7 +7,7 @@ import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1
 from app.auth.decorators import permission_required
 from datetime import datetime
-from app.models import Semester
+from app.models import Semester, KarmaPoints
 
 
 notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')
@@ -95,6 +95,8 @@ def add_note(lessonid):
             lesson=lessonid,
             semester=semester.value,
             year=datetime.now().year)
+        g.user.karma_points += KarmaPoints.upload_note.value
+        g.user.save()
 
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('notes/add_note.html', form=form)
@@ -178,6 +180,9 @@ def vote(noteid, upvote):
     else:
         success, message = note.vote(g.user, vote)
         if success:
+            if not has_voted:
+                g.user.karma_points += KarmaPoints.note_vote.value
+                g.user.save()
             flash("Success", 'success')
         else:
             flash(message, 'error')

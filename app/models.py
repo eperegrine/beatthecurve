@@ -43,4 +43,14 @@ class Semester(Enum):
     spring = 3
     summer = 4
 
+
+class KarmaPoints(Enum):
+    note_vote = 1
+    exam_vote = 1
+    upload_note = 10
+    upload_exam = 10
+    post_question = 5
+    reply_to_question = 3
+
+
 r = redis.from_url(os.environ.get("REDIS_URL"))

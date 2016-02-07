@@ -9,6 +9,7 @@ import base64
 import hmac
 import json
 from hashlib import sha1
+from app.models import KarmaPoints
 
 exams_bp = Blueprint('exams_bp', __name__, url_prefix='/exams')
 
@@ -77,6 +78,9 @@ def add_exam(lessonid):
             year=form.year.data,
             semester=form.semester.data
         )
+        g.user.karma_points += KarmaPoints.upload_exam.value
+        g.user.save()
+
         return redirect(url_for(".view", lessonid=lesson.id))
 
     return render_template("exams/add-exam.html", form=form)
@@ -87,6 +91,7 @@ def add_exam(lessonid):
 def vote(examid, upvote):
     exam = Exam.get(Exam.id == examid)
     vote = True if upvote == "1" else False
+    has_voted = exam.has_voted(g.user)
     if exam.has_upvoted(g.user) and vote:
         flash("Error! You have already upvoted this exam!", 'error')
     elif not exam.has_upvoted(g.user) and not vote:
@@ -94,10 +99,13 @@ def vote(examid, upvote):
     else:
         sucess, message = exam.vote(g.user, vote)
         if sucess:
+            if not has_voted:
+                g.user.karma_points += KarmaPoints.exam_vote.value
+                g.user.save()
             flash("Success", 'success')
         else:
             flash(message)
-    return redirect(url_for(".detail", examid=examid))
+    return redirect(url_for(".view", lessonid=exam.lesson.id))
 
 
 @exams_bp.route('/detail/<examid>')
