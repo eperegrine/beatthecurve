@@ -9,6 +9,7 @@ import base64
 import hmac
 import json
 from hashlib import sha1
+from app.models import KarmaPoints
 
 exams_bp = Blueprint('exams_bp', __name__, url_prefix='/exams')
 
@@ -77,6 +78,9 @@ def add_exam(lessonid):
             year=form.year.data,
             semester=form.semester.data
         )
+        g.user.karma_points += KarmaPoints.upload_exam.value
+        g.user.save()
+
         return redirect(url_for(".view", lessonid=lesson.id))
 
     return render_template("exams/add-exam.html", form=form)
