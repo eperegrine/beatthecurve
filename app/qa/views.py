@@ -104,6 +104,9 @@ def add_reply(questionid):
             user=g.user.user_id,
             content=form.content.data
         )
+        g.user.karma_points += KarmaPoints.reply_to_question.value
+        g.user.save()
+
         question.number_of_posts += 1
         question.save()
 
