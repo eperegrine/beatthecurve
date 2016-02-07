@@ -178,6 +178,9 @@ def vote(noteid, upvote):
     else:
         success, message = note.vote(g.user, vote)
         if success:
+            if not has_voted:
+                g.user.karma_points += 1
+                g.user.save()
             flash("Success", 'success')
         else:
             flash(message, 'error')
