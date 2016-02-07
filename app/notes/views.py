@@ -7,7 +7,7 @@ import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1
 from app.auth.decorators import permission_required
 from datetime import datetime
-from app.models import Semester
+from app.models import Semester, KarmaPoints
 
 
 notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')
@@ -179,7 +179,7 @@ def vote(noteid, upvote):
         success, message = note.vote(g.user, vote)
         if success:
             if not has_voted:
-                g.user.karma_points += 1
+                g.user.karma_points += KarmaPoints.note_vote.value
                 g.user.save()
             flash("Success", 'success')
         else:
