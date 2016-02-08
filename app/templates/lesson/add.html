@@ -32,6 +32,7 @@
     }
     $("label").hide();
     lessons_select = $("#lessons");
+    $("option[value='-1']").attr("disabled", "");
     lessons_select.show();
     lessons_select.multiSelect({
       selectableHeader: "<div class='select-header'>Available Classes</div> <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>",

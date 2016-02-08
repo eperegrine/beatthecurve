@@ -30,7 +30,8 @@
       <div class="modal-content">
         <div class="container">
           <h3>Upload a note</h3>
-          <form method="post" enctype="multipart/form-data" id="add-note-form" action="{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}">
+          <form method="post" enctype="multipart/form-data" id="add-note-form"
+                action="{% if current_user.has_permission('note_admin') %}{{ url_for("notes_bp.add_admin_note", lessonid=lesson.id) }}{% else %}{{ url_for("notes_bp.add_note", lessonid=lesson.id) }}{% endif %}">
            {% for field in form %}
              {{ render_field(field) }}
            {% endfor %}

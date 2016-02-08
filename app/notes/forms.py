@@ -41,6 +41,11 @@ class AddNoteForm(Form):
     description = StringField('Description', validators=[DataRequired()])
 
 
+class AdminAddNoteForm(AddNoteForm):
+    semester = SelectField('Semester', validators=[DataRequired()], choices=[(str(s.value), s.name.title()) for s in Semester])
+    year = SelectField('Year', choices=[(str(i), str(i)) for i in range(datetime.now().year - 5, datetime.now().year + 5)])
+
+
 class AddDiscussionForm(Form):
     lecture = SelectField('Lecture', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired(), discussion_name_in_use_validator])
