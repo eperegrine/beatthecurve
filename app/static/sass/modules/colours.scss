@@ -17,7 +17,7 @@ $modalBg: rgba(#000000, 0.64);
 }
 
 .primary {
-  color: $primaryCol;
+  color: $primaryCol !important;
 }
 
 .lightBlue {
@@ -27,4 +27,8 @@ $modalBg: rgba(#000000, 0.64);
 .success {
 	@extend .green;
 	@extend .white-text;
+}
+
+.dropdown-content > li > span{
+  @extend .primary;
 }
