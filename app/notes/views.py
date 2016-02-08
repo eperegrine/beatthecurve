@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, jsonify, current_app, request, send_from_directory
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
-from .forms import AddLectureForm, AddNoteForm, AddDiscussionForm
+from .forms import AddLectureForm, AddNoteForm, AddDiscussionForm, AdminAddNoteForm
 from .models import Lecture, Discussion, Note
 import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1
@@ -27,7 +27,11 @@ def view(lessonid):
     semesters = set()
     for note in notes:
         semesters.add((note.year, note.semester))
-    form = AddNoteForm()
+
+    if g.user.has_permission('note_admin'):
+        form = AdminAddNoteForm()
+    else:
+        form = AddNoteForm()
 
     return render_template('notes/notes_listing.html', lesson=lesson, notes=notes, semesters=sorted(semesters), form=form)
 
@@ -187,3 +191,28 @@ def vote(noteid, upvote):
         else:
             flash(message, 'error')
     return redirect(url_for(".view", lessonid=note.lesson.id))
+
+
+@notes_bp.route('/add-admin-note/<lessonid>', methods=('POST', 'GET'))
+@login_required
+@permission_required('note_admin')
+def add_admin_note(lessonid):
+    form = AdminAddNoteForm()
+    if form.validate_on_submit():
+        # TODO: Add error handling
+        # TODO: Improve validation
+        # Upload file
+        filename = form.file.data.filename
+
+        note = Note.create(
+            filename=filename,
+            uploader=g.user.user_id,
+            description=form.description.data,
+            lesson=lessonid,
+            semester=int(form.semester.data),
+            year=form.year.data)
+        g.user.karma_points += KarmaPoints.upload_note.value
+        g.user.save()
+
+        return redirect(url_for(".view", lessonid=lessonid))
+    return render_template('notes/add_note.html', form=form)
