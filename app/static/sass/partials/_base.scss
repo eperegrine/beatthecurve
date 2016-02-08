@@ -28,3 +28,12 @@ hr {
 .comment {
 	padding-top: 1em;
 }
+
+.dropdown-content {
+  z-index: 999999;
+  margin-bottom: 20px;
+}
+
+.dropdown-content > li > span{
+  @extend .primary;
+}
