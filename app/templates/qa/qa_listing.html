@@ -23,29 +23,6 @@
           </div>
         </form>
     </div>
-      {# <table>
-        <thead>
-          <tr>
-            <th>Question</th>
-            <th>Replies</th>
-            <th>Last Post</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for question in questions %}
-            <tr  semester="{{ question.semester }}" year="{{ question.year }}">
-              <td>
-                <h5><a href="{{ url_for('qa_bp.detail', lessonid=lesson.id, qid=question.id) }}">{{ question.name }}</a></h5>
-                <p>{{ question.content[:100] }}</p>
-              </td>
-              <td>{{ question.number_of_posts }}</td>
-              {% if question.name in last_posts.keys() %}
-                <td>{{ last_posts[question.name].datetime }}</td>
-              {% endif %}
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table> #}
     {% for q in questions %}
     <br>
       <div class="card-panel question" semester="{{ q.semester }}" year="{{ q.year }}">
@@ -66,15 +43,13 @@
             <p class="grey-text">{{ reply.content }}</p>
           </div>
           {% if loop.last %}
-            <div class="divider bg-primary"></div>
+            <div class="divider bg-primary"></div><br>
           {% else %}
             <div class="divider light-grey"></div>
           {% endif %}
         {% endfor %}
-        <form method="post" action="{{ url_for("qa_bp.add_reply", questionid=q.id) }}">
-        <br>
-          <span class="lightBlue">Type a reply</span>
-          <br>
+        <form class=""method="post" action="{{ url_for("qa_bp.add_reply", questionid=q.id) }}">
+          <h6 class="primary">Type a reply</h6>
             {{ render_field(comment_form.csrf_token) }}
             <div class="input-field">
               {{ comment_form.content(id="reply-content-" + q.id|string) }}
@@ -86,7 +61,7 @@
           </div>
         </form>
       </div>
-      
+
     {% endfor %}
 </div>
 </div>
