@@ -19,6 +19,7 @@
 		@extend .collection-item;
 		&:hover {
 			background-color: $primaryCol !important;
+			color: white !important;
 		}
 	}
 }
