@@ -140,6 +140,7 @@
             });
             $('form#send_room').submit(function(event) {
                 socket.emit('my room event', {room: $('#room_name').val(), data: $('#room_data').val()});
+                $('#room_data').val("");
                 return false;
             });
             $('form#close').submit(function(event) {
