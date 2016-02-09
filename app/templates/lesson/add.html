@@ -1,7 +1,7 @@
 {% set join_lesson=True %}
 {% extends 'li_layout.html' %}
 {% from 'macros.html' import render_field %}
-{% block title %}Add Lessons{% endblock %}
+{% block title %}Join classes{% endblock %}
 {% block content %}
   <ul class="collection with-header">
     {% for l in get_lessons(current_user) %}
@@ -27,7 +27,7 @@
 <script>
   $(document).ready(function () {
     for (var i = 0; i < $("#lessons").siblings().length; i++) {
-      var item = $("#lessons").siblings()[i]; 
+      var item = $("#lessons").siblings()[i];
       $(item).hide();
     }
     $("label").hide();
@@ -46,7 +46,7 @@
 
           selectableSearch = $("#selectableSearch");
           selectionSearch = $("#selectionSearch");
-          //selectableSearchString 
+          //selectableSearchString
 
 
         that.qs1 = selectableSearch.quicksearch(selectableSearchString)
