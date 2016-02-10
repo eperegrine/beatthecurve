@@ -17,9 +17,13 @@
 	overflow-y: scroll !important;
 	.ms-elem-selection, .ms-elem-selectable {
 		@extend .collection-item;
+		@include transition(0.1s);
 		&:hover {
 			background-color: $primaryCol !important;
 			color: white !important;
+			&.disabled {
+				background-color: $lightBlue !important;
+			}
 		}
 	}
 }
