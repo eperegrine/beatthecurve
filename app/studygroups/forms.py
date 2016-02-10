@@ -3,10 +3,12 @@ from wtforms.fields import (
     StringField,
     SelectField,
     TextAreaField,
-    HiddenField
+    HiddenField,
+    BooleanField
 )
 from wtforms.validators import (
-    DataRequired
+    DataRequired,
+    Optional
 )
 
 from wtforms_components import TimeField, DateField
@@ -20,6 +22,11 @@ class AddStudyGroupForm(Form):
 class AddStudyGroupSessionForm(Form):
     date = DateField('Date', validators=[DataRequired()])
     time = TimeField('Time', validators=[DataRequired()])
+    repeat = BooleanField('Repeat', validators=[Optional()])
+    repeat_frequency = SelectField('Repeat Every', validators=[Optional()], choices=[
+        (str(i), str(i) + ' days') for i in range(1, 15)
+    ])
+    repeat_until = DateField('Repeat Until', validators=[Optional()])
 
 
 class AddComment(Form):

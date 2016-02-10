@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, request
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
-from .forms import AddStudyGroupForm, AddStudyGroupSessionForm, ContactOrganiserForm
+from .forms import AddStudyGroupForm, AddStudyGroupSessionForm, ContactOrganiserForm, AddComment
 from .models import StudyGroup, StudyGroupMembers, StudyGroupSession
-from datetime import datetime
-from .forms import AddComment
+from datetime import datetime, timedelta
 import sendgrid
 from app import sg
 from app.auth.models import User
@@ -31,8 +30,9 @@ def view(lessonid):
         lessons = Lesson.select().where(Lesson.id << lesson_ids)
         form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in lessons]
     contact_form = ContactOrganiserForm()
+    studygroup_session_form = AddStudyGroupSessionForm()
     return render_template('studygroups/study_groups_listing.html', lesson=lesson, study_groups=study_groups,
-                           form=form, contact_form=contact_form)
+                           form=form, contact_form=contact_form, studygroup_session_form=studygroup_session_form)
 
 
 @studygroups_bp.route('/add-studygroup', methods=('POST', 'GET'))
@@ -71,10 +71,21 @@ def add_studygroup_session(studygroupid):
     form = AddStudyGroupSessionForm()
     if form.validate_on_submit():
         dt = datetime.combine(form.date.data, form.time.data)
-        StudyGroupSession.create(
+        s = StudyGroupSession.create(
             study_group=studygroupid,
             datetime=dt
         )
+        print(s)
+        if form.repeat.data is True:
+            dt += timedelta(days=int(form.repeat_frequency.data))
+            until = datetime.combine(form.repeat_until.data, datetime.min.time())
+            while dt < until:
+                s = StudyGroupSession.create(
+                    study_group=studygroupid,
+                    datetime=dt
+                )
+                dt += timedelta(days=int(form.repeat_frequency.data))
+
         flash("Success", 'success')
         return redirect(url_for(".detail",sgid=studygroupid))
 
@@ -87,7 +98,6 @@ def detail(sgid):
     study_group = StudyGroup.get(StudyGroup.id == sgid)
     comment_form = AddComment()
     comments = study_group.get_comments()
-
 
     return render_template('studygroups/detail.html', study_group=study_group, comments=comments, comment_form=comment_form)
 
@@ -105,7 +115,7 @@ def join(sgid):
         flash("Success", 'success')
     else:
         flash("Error", 'error')
-    return redirect(url_for(".detail", sgid=sgid))
+    return redirect(url_for(".view", lessonid=sg.lesson.id))
 
 
 @studygroups_bp.route('/leave/<sgid>')
@@ -121,7 +131,7 @@ def leave(sgid):
         flash("Success", 'success')
     else:
         flash("Error", 'error')
-    return redirect(url_for(".detail", sgid=sgid))
+    return redirect(url_for(".view", lessonid=sg.lesson.id))
 
 
 @studygroups_bp.route('/add-comment/<sgid>', methods=('POST', 'GET'))
@@ -152,7 +162,24 @@ def contact_organiser(lessonid):
         message.set_text(form.message.data)
         message.set_from(g.user.email)
         status, msg = sg.send(message)
-        print(status)
         flash('Success', 'success')
 
     return redirect(url_for(".view", lessonid=lessonid))
+
+
+@studygroups_bp.route('/cancel<sessionid>')
+@login_required
+def cancel(sessionid):
+    try:
+        session = StudyGroupSession.get(StudyGroupSession.id == sessionid)
+    except:
+        flash("error", "Invalid Session")
+        return redirect(url_for("auth_bp.profile"))
+    print(session)
+    if not session.study_group.founder.user_id == g.user.user_id:
+        flash("Error! Invalid Study Group", 'error')
+        return redirect(url_for("auth_bp.profile"))
+
+    session.cancelled = True
+    session.save()
+    return redirect(url_for(".view", lessonid=session.study_group.lesson.id))

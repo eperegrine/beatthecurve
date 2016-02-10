@@ -40,11 +40,21 @@
       <div class="col s7">
         <h5 class="filename_title">Group {{sg.id}}</h5>
         <p class="desc">{{sg.location}}</p>
-        <p class="desc">{% if x %}{{ x }}{% else %}No meetings scheduled{% endif %}</p>
+        {% set sessions = sg.get_all_upcoming_sessions() %}
+        <p class="desc">{% if sessions %}{{ sessions[0].datetime }}{% else %}No meetings scheduled{% endif %}</p>
       </div>
-      
+
         <div class="col s2">
-          <a href="{{ url_for("studygroups_bp.join",sgid=sg.id) }}" class="waves-effect waves-light btn bg-primary col s12">Join Group</a>
+          <a href="#upcoming-sessions-{{sg.id}}" class="waves-effect waves-light btn bg-primary col s12 modal-trigger">View Upcoming Sessions</a>
+        </div>
+        <div class="col s2">
+          {% if sg.founder.user_id == current_user.user_id %}
+            <a href="#add-session-{{sg.id}}" class="waves-effect waves-light btn bg-primary col s12 modal-trigger">Add Session</a>
+          {% elif sg.is_member(current_user) %}
+            <a href="{{ url_for("studygroups_bp.leave",sgid=sg.id) }}" class="waves-effect waves-light btn bg-primary col s12">Leave Group</a>
+          {% else %}
+            <a href="{{ url_for("studygroups_bp.join",sgid=sg.id) }}" class="waves-effect waves-light btn bg-primary col s12">Join Group</a>
+          {% endif %}
         </div>
         <div class="col s2">
           <a href="#{{sg.id}}" class="waves-effect waves-light btn bg-primary col s12 modal-trigger">
@@ -56,6 +66,43 @@
     {% endfor %}
 
     {% for sg in study_groups %}
+      {% if sg.founder.user_id == current_user.user_id %}
+        <div class="modal" id="add-session-{{sg.id}}">
+          <div class="modal-content">
+            <div class="container">
+              <form action="{{ url_for("studygroups_bp.add_studygroup_session", studygroupid=sg.id) }}" method="POST">
+                {% for field in studygroup_session_form %}
+                  {{ render_field(field) }}
+                {% endfor %}
+                <div class="row">
+                  <div class="col s2">&nbsp;</div>
+                  <button type="submit" class="waves-effect waves-light btn-large col s8">Add Session</button>
+                  <div class="col s2">&nbsp;</div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="modal" id="upcoming-sessions-{{sg.id}}">
+        <div class="modal-content">
+          <div class="container">
+            <ul>
+              {% if sg.founder.user_id == current_user.user_id %}
+                {% for session in sg.get_all_upcoming_sessions() %}
+                  <li>{{ session.datetime }}{% if session.cancelled %} - Cancelled{% else %}<a href="{{ url_for("studygroups_bp.cancel", sessionid=session.id) }}">Cancel</a>{% endif %}</li>
+                {% endfor %}
+              {% else %}
+                {% for session in sg.get_all_upcoming_sessions() %}
+                  <li>{{ session.datetime }}{% if session.cancelled %} - Cancelled {% endif %}</li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div class="modal" id="{{sg.id}}">
         <div class="modal-content">
           <div class="container">

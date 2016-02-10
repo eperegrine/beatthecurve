@@ -29,6 +29,7 @@ class StudyGroup(Model):
     def get_all_upcoming_sessions(self):
         try:
             query = StudyGroupSession.select().where((StudyGroupSession.datetime >= datetime.now()) & (StudyGroupSession.study_group == self.id)).order_by(StudyGroupSession.datetime.asc())
+            print([q for q in query])
             return [q for q in query]
         except Exception as e:
             print(e)
