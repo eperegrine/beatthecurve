@@ -8,10 +8,9 @@
       {% endfor %}
     </ul>
     <h5 class="center">Productivity: {{ study_group.productivity }}</h5>
-    <p class="center">
       {% if study_group.founder.user_id == current_user.user_id %}
-        You founded this study group!
         <div class="card-panel">
+          <h5>Add a new session</h5>
           <form action="{{ url_for("studygroups_bp.add_studygroup_session", studygroupid=study_group.id) }}" method="POST">
             {% for field in studygroup_session_form %}
               {{ render_field(field) }}
@@ -28,7 +27,6 @@
       {% else %}
         <a href="{{ url_for("studygroups_bp.join",sgid=study_group.id) }}" class="btn">Join</a>
       {% endif %}
-    </p>
     <h5>Upcoming Sessions</h5>
     <ul class="collection">
       {% if study_group.founder.user_id == current_user.user_id %}

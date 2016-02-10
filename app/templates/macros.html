@@ -18,6 +18,8 @@
       <div class="input-field">
           {% if field.type == "TextAreaField" %}
             {{ field(class_="materialize-textarea") }}
+          {% elif field.type == "DateField" %}
+            {{ field(class_="datepicker") }}
           {% else %}
             {{ field() }}
           {% endif %}
