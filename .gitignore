@@ -76,3 +76,4 @@ uploads/
 wsgi.py
 dump.rdb
 logs.txt
+setup.sh
