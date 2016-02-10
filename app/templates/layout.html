@@ -8,6 +8,8 @@
       <link href="{{ static_url }}css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
       <link rel="stylesheet" href="{{ static_url }}css/main.css">
 
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.9/jquery.timepicker.min.css">
+
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <title>{% block title %}Beat the Curve{% endblock %}</title>
@@ -29,11 +31,14 @@
       <script type="text/javascript" src="{{ static_url }}js/main.js"></script>
       <script src="{{static_url}}js/jquery.multi-select.js" type="text/javascript"></script>
       <script src="{{static_url}}js/jquery.quicksearch.js" type="text/javascript"></script>
+      {#<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.9/jquery.timepicker.min.js"></script>#}
       <script>
         var picker = $('input[type="date"]').pickadate({
           selectMonths: true, // Creates a dropdown to control month
           selectYears: 15 // Creates a dropdown of 15 years to control year
         });
+
+        // $('input[type="time"]').timepicker({timeformat: "HH:mm", show2400: true});
       </script>
       {% block js %}{% endblock %}
     </body>
