@@ -45,7 +45,7 @@
       </div>
 
         <div class="col s2">
-          <a href="{{url_for('studygroups_bp.view', lessonid=lesson.id)}}" class="waves-effect waves-light btn bg-primary col s12">View</a>
+          <a href="{{url_for('studygroups_bp.detail', sgid=sg.id)}}" class="waves-effect waves-light btn bg-primary col s12">View</a>
         </div>
         {% if not sg.founder.user_id == current_user.user_id %}
         <div class="col s2">

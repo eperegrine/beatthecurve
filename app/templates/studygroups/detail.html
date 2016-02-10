@@ -1,8 +1,7 @@
 {% from 'macros.html' import render_field %}
-{% extends 'layout.html' %}
+{% extends 'li_layout.html' %}
 {% block title %}{{ study_group.location }}{% endblock %}
-{% block main %}
-  <div class="container">
+{% block content %}
     <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
@@ -14,6 +13,19 @@
         You founded this study group!
         <br>
         <a href="{{ url_for("studygroups_bp.add_studygroup_session", studygroupid=study_group.id) }}" class="btn">Add Session</a>
+
+        {#<div class="card-panel">
+          <form action="{{ url_for("studygroups_bp.add_studygroup_session", studygroupid=sg.id) }}" method="POST">
+            {% for field in studygroup_session_form %}
+              {{ render_field(field) }}
+            {% endfor %}
+            <div class="row">
+              <div class="col s2">&nbsp;</div>
+              <button type="submit" class="waves-effect waves-light btn-large col s8">Add Session</button>
+              <div class="col s2">&nbsp;</div>
+            </div>
+          </form>
+        </div>#}
       {% elif study_group.is_member(current_user) %}
         <a href="{{ url_for("studygroups_bp.leave", sgid=study_group.id) }}" class="btn">Leave</a>
       {% else %}
@@ -21,12 +33,18 @@
       {% endif %}
     </p>
     <h5>Upcoming Sessions</h5>
-    <ul>
-      {% for session in study_group.get_all_upcoming_sessions() %}
-        <li>{{ session.datetime }}{% if session.cancelled %} - Cancelled {% endif %}</li>
-      {% endfor %}
+    <ul class="collection">
+      {% if study_group.founder.user_id == current_user.user_id %}
+        {% for session in study_group.get_all_upcoming_sessions() %}
+          <li class="collection-item">{{ session.datetime }}{% if session.cancelled %}<span class="red-text right">Cancelled</span>{% else %}<a href="{{ url_for("studygroups_bp.cancel", sessionid=session.id) }}" class="right">Cancel</a>{% endif %}</li>
+        {% endfor %}
+      {% else %}
+        {% for session in study_group.get_all_upcoming_sessions() %}
+          <li class="collection-item">{{ session.datetime }}{% if session.cancelled %} - Cancelled {% endif %}</li>
+        {% endfor %}
+      {% endif %}
     </ul>
-    <h5>Comments</h5>
+    {#<h5>Comments</h5>
     <form method="post" action="{{ url_for("studygroups_bp.add_comment", sgid=study_group.id) }}">
       {% for field in comment_form %}
         {{ render_field(field) }}
@@ -37,6 +55,5 @@
       {% for comment in comments %}
         <li>{{ comment.content }}<br>By {{ comment.user.first_name }} <div class="divider"></div></li>
       {% endfor %}
-    </ul>
-  </div>
+    </ul>#}
 {% endblock %}
