@@ -20,13 +20,13 @@ class AddStudyGroupForm(Form):
 
 
 class AddStudyGroupSessionForm(Form):
-    date = DateField('Date', validators=[DataRequired()])
+    date = DateField('Date', validators=[DataRequired()], format='%d %B, %Y')
     time = TimeField('Time', validators=[DataRequired()])
     repeat = BooleanField('Repeat', validators=[Optional()])
     repeat_frequency = SelectField('Repeat Every', validators=[Optional()], choices=[
         (str(i), str(i) + ' days') for i in range(1, 15)
     ])
-    repeat_until = DateField('Repeat Until', validators=[Optional()])
+    repeat_until = DateField('Repeat Until', validators=[Optional()], format='%d %B, %Y')
 
 
 class AddComment(Form):

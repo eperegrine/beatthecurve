@@ -69,6 +69,9 @@ def add_studygroup_session(studygroupid):
         return redirect(url_for("auth_bp.profile"))
 
     form = AddStudyGroupSessionForm()
+    print('DATE')
+    print(form.date.data)
+
     if form.validate_on_submit():
         dt = datetime.combine(form.date.data, form.time.data)
         s = StudyGroupSession.create(
@@ -87,9 +90,7 @@ def add_studygroup_session(studygroupid):
                 dt += timedelta(days=int(form.repeat_frequency.data))
 
         flash("Success", 'success')
-        return redirect(url_for(".detail",sgid=studygroupid))
-
-    return render_template("studygroups/add_session.html", form=form)
+    return redirect(url_for(".detail",sgid=studygroupid))
 
 
 @studygroups_bp.route('/detail/<sgid>')
@@ -98,8 +99,10 @@ def detail(sgid):
     study_group = StudyGroup.get(StudyGroup.id == sgid)
     comment_form = AddComment()
     comments = study_group.get_comments()
+    studygroup_session_form = AddStudyGroupSessionForm()
 
-    return render_template('studygroups/detail.html', study_group=study_group, comments=comments, comment_form=comment_form)
+    return render_template('studygroups/detail.html', study_group=study_group, comments=comments,
+                           comment_form=comment_form, studygroup_session_form=studygroup_session_form)
 
 
 @studygroups_bp.route('/join/<sgid>')
