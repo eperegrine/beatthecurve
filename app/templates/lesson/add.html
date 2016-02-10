@@ -12,6 +12,7 @@
 
   <h3>Join a new class</h3>
   <form method="post">
+    <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>
     {% for field in form %}
       {{ render_field(field) }}
     {% endfor %}
@@ -35,8 +36,8 @@
     $("option[value='-1']").attr("disabled", "");
     lessons_select.show();
     lessons_select.multiSelect({
-      selectableHeader: "<div class='select-header'>Available Classes</div> <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>",
-      selectionHeader: "<div class='selection-header'>Classes to join</div> <input type='text' autocomplete='off' id='selectionSearch' placeholder='Search for a lesson'>",
+      selectableHeader: "<div class='select-header'>Available Classes</div>",
+      selectionHeader: "<div class='selection-header'>Classes to join</div>",
       afterInit: function(ms){
       var that = this,
           // $selectableSearch = that.$selectableUl.prev(),
