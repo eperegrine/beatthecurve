@@ -370,7 +370,8 @@ form p:last-child {
     height: 25px;
     line-height: 25px;
     font-size: 1rem;
-
+    /* display: block; */
+    margin-bottom: 2em;
     -webkit-user-select: none; /* webkit (safari, chrome) browsers */
     -moz-user-select: none; /* mozilla browsers */
     -khtml-user-select: none; /* webkit (konqueror) browsers */
