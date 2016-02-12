@@ -17,6 +17,7 @@ exams_bp = Blueprint('exams_bp', __name__, url_prefix='/exams')
 @exams_bp.route('/view/<lessonid>')
 @login_required
 def view(lessonid):
+    """Route that lists the exams for a lesson"""
     # TODO: Validate id
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
@@ -35,6 +36,7 @@ def view(lessonid):
 
 @exams_bp.route('/sign_s3/')
 def sign_s3():
+    """Route to sign files for upload to S3. Accessed via AJAX."""
     # TODO: Move to environment variables
     AWS_ACCESS_KEY = 'AKIAJPAM7ZQCRQQ5GP3Q'
     AWS_SECRET_KEY = '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'
@@ -62,6 +64,9 @@ def sign_s3():
 
 @exams_bp.route('/add-exam/<lessonid>', methods=("POST", "GET"))
 def add_exam(lessonid):
+    """Route to either display the form to upload exams or create a new Exam object
+
+    **NOTE: THIS DOES NOT ACTUALLY UPLOAD THE FILE. THAT IS DONE VIA AJAX**"""
     form = AddExamForm()
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
@@ -89,6 +94,8 @@ def add_exam(lessonid):
 @exams_bp.route('/vote/<examid>/<upvote>')
 @login_required
 def vote(examid, upvote):
+    """Route to vote on an exam"""
+    # TODO: Move to POST request
     exam = Exam.get(Exam.id == examid)
     vote = True if upvote == "1" else False
     has_voted = exam.has_voted(g.user)
@@ -111,5 +118,7 @@ def vote(examid, upvote):
 @exams_bp.route('/detail/<examid>')
 @login_required
 def detail(examid):
+    """Route to display the detail page for an exam"""
+    # TODO: Check if this can be removed
     exam = Exam.get(Exam.id == examid)
     return render_template("exams/detail.html", exam=exam)

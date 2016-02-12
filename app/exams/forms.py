@@ -15,6 +15,7 @@ from app.models import Semester
 
 
 class AddExamForm(Form):
+    """Form to allow users to upload an exam"""
     file = FileField('File', validators=[DataRequired()])
     average_grade = DecimalField('Average Grade', validators=[DataRequired()])
     number_of_takers = IntegerField('Number Of Takers', validators=[DataRequired()])
