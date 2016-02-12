@@ -12,6 +12,7 @@ auth_bp = Blueprint('auth_bp', __name__)
 
 @auth_bp.route('/signup', methods=('POST', 'GET'))
 def signup():
+    """Route to sign up users up using data from a POST request else render the sign up form"""
     form = SignUpForm()
 
     if form.validate_on_submit():
@@ -34,6 +35,7 @@ def signup():
 
 @auth_bp.route('/login', methods=('POST', 'GET'))
 def login():
+    """Route to allow users to log on using data from POST request else render the login form"""
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -54,6 +56,7 @@ def login():
 @auth_bp.route('/logout')
 @login_required
 def logout():
+    """Route to logout the currently logged in user"""
     logout_user()
     return redirect(url_for(".login"))
 
@@ -61,6 +64,13 @@ def logout():
 @auth_bp.route('/profile', methods=('POST', 'GET'))
 @login_required
 def profile():
+    """Route to display profile page and allow users to update emails and passwords
+
+    On a POST request, the request variable is checked to see which form has been submitted.
+    Regardless of if it is a POST request or a GET request, the profile.html template is
+    rendered.
+    """
+    # TODO: Remove redirects after form submissions
     change_email_form = ChangeEmailForm()
     change_password_form = ChangePasswordForm()
 
@@ -93,6 +103,8 @@ def profile():
 @login_required
 @either_permission_required(['lecture_admin', 'discussion_admin'])
 def admin(lessonid):
+    """Renders a admin landing page"""
+    # TODO: Check if it can be removed safely
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
@@ -105,6 +117,7 @@ def admin(lessonid):
 @login_required
 @permission_required('super_user')
 def modify_permissions():
+    """Route to allow super users to modify other user's permissions"""
     # Get all users in school
     users = User.select().where(User.school_id == g.user.school_id)
 
@@ -128,6 +141,7 @@ def modify_permissions():
 @login_required
 @permission_required('super_user')
 def get_permissions(userid):
+    """Route to return the permissions a user has as JSON"""
     try:
         user_permissions = [p.permission.id for p in UserPermission.select().where(UserPermission.user == userid)]
         print(user_permissions)
