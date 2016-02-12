@@ -17,8 +17,9 @@ class School(Model):
     @DATABASE.transaction()
     def create_school(cls, name):
         """Class method to create a school with default permissions
-        :param name: the name of the school to be created
-        :type name: str"""
+
+        `name`: name of the school to be created
+        """
         try:
             school = School.create(name=name)
         except IntegrityError:
@@ -59,18 +60,13 @@ class User(UserMixin, Model):
     @classmethod
     def create_user(cls, email, password, school_id, first_name, last_name):
         """
-        :param email: the email for the user to be created that must be unique and have the .edu top level domain.
-        :type email: str
-        :param password: the unhashed password for the user that will be hashed using bcrypt.
-        :type password: str
-        :param school_id: the school_id property of the School object that the user belongs to.
-        :type school_id: int
-        :param first_name: the user's first name
-        :type first_name: str
-        :param last_name: the user's surname
-        :type last_name: str
-        :return the User object if successfully created
-        :rtype User
+        Creates a new user with a hashed password
+
+        `email`: the email for the user to be created that must be unique and have the .edu top level domain.
+        `password`: the unhashed password
+        `school_id`: the school_id attribute of the School object the user is attending
+        `first_name`: the user's first name
+        `last_name`: the user's last name
         """
 
         # Validate email
@@ -113,8 +109,7 @@ class User(UserMixin, Model):
 
         Takes in a raw password and automatically hashes it using and updates the user
 
-        :param password: The user's new password
-        :type password: str
+        `password`: the user's new unhashed password
         """
         try:
             self.password = generate_password_hash(password)
@@ -125,8 +120,8 @@ class User(UserMixin, Model):
     def has_permission(self, name):
         """Check whether a user has a permission with a given name
 
-        :param name: the name of permission to check the user has
-        :type name: str
+        `name`: the name of permission to check the user has
+
         """
         try:
             permission = Permission.get(Permission.name == name, Permission.school == self.school_id)
