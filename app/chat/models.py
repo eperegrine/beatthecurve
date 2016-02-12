@@ -6,6 +6,7 @@ from datetime import datetime
 
 
 class Message(Model):
+    """Model representing a message sent in a lesson's chatroom"""
     id = PrimaryKeyField(db_column='ID')
     text = CharField(db_column='TEXT')
     sender = ForeignKeyField(User, db_column='USER_ID')
