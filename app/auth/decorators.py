@@ -6,8 +6,8 @@ from .models import Permission, UserPermission
 def permission_required(name):
     """Decorator to wrap view functions to restrict their access to users with a given permissions
 
-    :param name: The name of the permission required
-    :type name: str
+    `name`: The name of the permission required
+
     """
     def decorator(view_func):
         @wraps(view_func)
@@ -23,8 +23,8 @@ def permission_required(name):
 def either_permission_required(names):
     """Decorator to wrap view functions to restrict their access to users which have any one of a list of permissions
 
-    :param names: list of permission names which a user is required to have one of
-    :type names: list
+    `names`: list of permission names which a user is required to have at least one of.
+
     """
     def decorator(view_func):
         @wraps(view_func)
