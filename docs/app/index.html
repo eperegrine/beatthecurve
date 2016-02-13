@@ -1092,8 +1092,8 @@ table {
 <span class="kn">import</span> <span class="nn">sendgrid</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;hufenaifneianwdawaffioawnfiohaewifs&#39;</span>
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;UPLOAD_FOLDER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;uploads&#39;</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;hufenaifneianwdawaffioawnfiohaewifs&#39;</span> <span class="c1"># TODO: Move to environment variable</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;UPLOAD_FOLDER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;uploads&#39;</span> <span class="c1"># TODO: Check if can be removed</span>
 <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;PRESERVE_CONTEXT_ON_EXCEPTION&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
 
@@ -1123,6 +1123,7 @@ table {
 
 <span class="nd">@login_manager.user_loader</span>
 <span class="k">def</span> <span class="nf">load_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a User matching the supplied user_id or None for Flask-Login&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">DoesNotExist</span><span class="p">:</span>
@@ -1142,7 +1143,6 @@ table {
 <span class="k">def</span> <span class="nf">after_request</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Close the database connection after each response&quot;&quot;&quot;</span>
     <span class="n">g</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Closed&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span>
 
 <span class="c1"># Environment has STATIC_URL=&#39;http://my_s3_bucket.aws.amazon.com/&#39;</span>
@@ -1165,11 +1165,13 @@ table {
 
 <span class="nd">@app.context_processor</span>
 <span class="k">def</span> <span class="nf">inject_semester_enum</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Inject the app.models.Semester enum into templates&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">semester_enum</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">Semester</span><span class="p">))))</span>
 
 
 <span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Route to display root homepage&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;index.html&#39;</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">app.auth.views</span> <span class="kn">import</span> <span class="n">auth_bp</span>
@@ -1224,7 +1226,6 @@ table {
 <span class="k">def</span> <span class="nf">after_request</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Close the database connection after each response&quot;&quot;&quot;</span>
     <span class="n">g</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Closed&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span>
 </pre></div>
 
@@ -1268,11 +1269,13 @@ table {
 
     
   
+    <div class="desc"><p>Route to display root homepage</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-app.index', this);">Show source &equiv;</a></p>
   <div id="source-app.index" class="source">
     <div class="codehilite"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Route to display root homepage&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;index.html&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -1290,11 +1293,13 @@ table {
 
     
   
+    <div class="desc"><p>Inject the app.models.Semester enum into templates</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-app.inject_semester_enum', this);">Show source &equiv;</a></p>
   <div id="source-app.inject_semester_enum" class="source">
     <div class="codehilite"><pre><span class="nd">@app.context_processor</span>
 <span class="k">def</span> <span class="nf">inject_semester_enum</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Inject the app.models.Semester enum into templates&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">semester_enum</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">Semester</span><span class="p">))))</span>
 </pre></div>
 
@@ -1349,11 +1354,13 @@ the environment variable STATIC_URL, or use the default.</p>
 
     
   
+    <div class="desc"><p>Returns a User matching the supplied user_id or None for Flask-Login</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-app.load_user', this);">Show source &equiv;</a></p>
   <div id="source-app.load_user" class="source">
     <div class="codehilite"><pre><span class="nd">@login_manager.user_loader</span>
 <span class="k">def</span> <span class="nf">load_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a User matching the supplied user_id or None for Flask-Login&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">DoesNotExist</span><span class="p">:</span>
