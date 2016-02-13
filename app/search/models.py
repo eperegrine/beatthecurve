@@ -4,6 +4,7 @@ from app.auth.models import User, School
 
 
 class Option(Model):
+    """Model representing an option a user can subscribe to"""
     id = PrimaryKeyField(db_column='ID')
     name = CharField(db_column='NAME', unique=True)
     description = CharField(db_column='DESCRIPTION')
@@ -15,6 +16,7 @@ class Option(Model):
 
 
 class UserOption(Model):
+    """Model representing a user agreeing or disagreeing to an option"""
     id = PrimaryKeyField(db_column='ID')
     user = ForeignKeyField(User, db_column='USER_ID')
     option = ForeignKeyField(Option, db_column='OPTION_ID')

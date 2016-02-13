@@ -13,6 +13,7 @@ search_bp = Blueprint('search_bp', __name__, url_prefix='/search')
 @search_bp.route('/options', methods=('POST', 'GET'))
 @login_required
 def options():
+    """Route to display the UserOptionsForm and handle its submission"""
     for option in Option.select().where(Option.school == g.user.school_id):
         user_option = UserOption.get_or_create(option=option.id, user=g.user.user_id)[0]
         print(user_option.agreed)
@@ -34,6 +35,7 @@ def options():
 @search_bp.route('/view/<lessonid>')
 @login_required
 def view(lessonid):
+    """Route to display all users and their options"""
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
