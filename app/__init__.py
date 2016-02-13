@@ -10,8 +10,8 @@ import os
 import sendgrid
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs' # TODO: Move to environment variable
+app.config['UPLOAD_FOLDER'] = 'uploads' # TODO: Check if can be removed
 app.config["DEBUG"] = True
 app.config["PRESERVE_CONTEXT_ON_EXCEPTION"] = False
 
@@ -41,6 +41,7 @@ login_manager.login_view = 'auth_bp.login'
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Returns a User matching the supplied user_id or None for Flask-Login"""
     try:
         return User.get(User.user_id == user_id)
     except DoesNotExist:
@@ -60,7 +61,6 @@ def before_request():
 def after_request(response):
     """Close the database connection after each response"""
     g.db.close()
-    print("Closed")
     return response
 
 # Environment has STATIC_URL='http://my_s3_bucket.aws.amazon.com/'
@@ -83,11 +83,13 @@ def inject_static_url():
 
 @app.context_processor
 def inject_semester_enum():
+    """Inject the app.models.Semester enum into templates"""
     return dict(semester_enum=dict(list(map(lambda x: [x.value, x.name], Semester))))
 
 
 @app.route('/')
 def index():
+    """Route to display root homepage"""
     return render_template('index.html')
 
 from app.auth.views import auth_bp

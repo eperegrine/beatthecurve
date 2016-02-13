@@ -38,6 +38,7 @@ DATABASE = PostgresqlDatabase(
 
 
 class Semester(Enum):
+    """Enum matching semester names to their integer values"""
     winter = 1
     fall = 2
     spring = 3
@@ -45,6 +46,7 @@ class Semester(Enum):
 
 
 class KarmaPoints(Enum):
+    """Enum linking actions to the amount of KarmaPoints that should be recieved."""
     note_vote = 1
     exam_vote = 1
     upload_note = 10
