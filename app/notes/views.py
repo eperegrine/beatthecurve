@@ -16,7 +16,7 @@ notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')
 @notes_bp.route('/view/<lessonid>')
 @login_required
 def view(lessonid):
-    # TODO: Validate id
+    """Route to display the notes listing for a particular lesson"""
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
@@ -40,7 +40,7 @@ def view(lessonid):
 @login_required
 @permission_required('lecture_admin')
 def add_lecture():
-    # TODO: Validate user is attending lesson
+    # TODO: REMOVE
     form = AddLectureForm()
     form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in
                            LessonStudent.get_attended_lessons(g.user.user_id)]
@@ -67,7 +67,7 @@ def add_lecture():
 @notes_bp.route('/get-discussions/<lectureid>')
 @login_required
 def get_discussions(lectureid):
-    # TODO: Validate lectureid
+    # TODO: REMOVE! :)
     discussion = [(str(discussion.id), discussion.name) for discussion in Discussion.select().where(Discussion.lecture_id == lectureid)]
     json = jsonify(discussion)
     return json
@@ -76,11 +76,15 @@ def get_discussions(lectureid):
 @notes_bp.route('/add-note/<lessonid>', methods=('POST', 'GET'))
 @login_required
 def add_note(lessonid):
+    """Route to render AddNoteForm or process AddNoteForm to create a Note
+
+    **NOTE: This does not actually upload the file to S3. That is done via AJAX.**
+
+    """
     form = AddNoteForm()
     if form.validate_on_submit():
         # TODO: Add error handling
         # TODO: Improve validation
-        # Upload file
         filename = form.file.data.filename
         month = datetime.now().month
         if month < 3 or month == 12:
@@ -108,6 +112,7 @@ def add_note(lessonid):
 
 @notes_bp.route('/uploads/<lessonid>/<lectureid>/<noteid>', methods=['GET', 'POST'])
 def download(lessonid, lectureid, noteid):
+    # TODO: REMOVE
     filename = Note.get(Note.id == noteid).filename
     uploads = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'], "notes", lessonid, lectureid)
     print(uploads)
@@ -118,6 +123,7 @@ def download(lessonid, lectureid, noteid):
 @login_required
 @permission_required('discussion_admin')
 def add_discussion(lessonid):
+    # TODO: Remove
     form = AddDiscussionForm()
     form.lecture.choices = [(str(lecture.id), lecture.name) for lecture in
                             Lecture.select().where(Lecture.lesson_id == int(lessonid))]
@@ -135,6 +141,7 @@ def add_discussion(lessonid):
 
 @notes_bp.route('/sign_s3/')
 def sign_s3():
+    """Route to sign a note for upload to S3. Accessed via AJAX"""
     AWS_ACCESS_KEY = 'AKIAJPAM7ZQCRQQ5GP3Q'
     AWS_SECRET_KEY = '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'
     S3_BUCKET = 'beatthecurve'
@@ -162,6 +169,8 @@ def sign_s3():
 @notes_bp.route('/detail/<noteid>')
 @login_required
 def detail(noteid):
+    """Route to display a detail page for a note"""
+    # TODO: Check if it can be removed
     try:
         note = Note.get(Note.id == noteid)
     except:
@@ -173,6 +182,8 @@ def detail(noteid):
 @notes_bp.route("/vote/<noteid>/<upvote>")
 @login_required
 def vote(noteid, upvote):
+    """Route to allow a user to vote on a note"""
+    # TODO: Move to POST request
     note = Note.get(Note.id == noteid)
     has_upvoted = note.has_upvoted(g.user)
     has_voted = note.has_voted(g.user)
@@ -197,11 +208,11 @@ def vote(noteid, upvote):
 @login_required
 @permission_required('note_admin')
 def add_admin_note(lessonid):
+    """Route to allow users with the note_admin permission to upload notes with specific years and semesters"""
     form = AdminAddNoteForm()
     if form.validate_on_submit():
         # TODO: Add error handling
         # TODO: Improve validation
-        # Upload file
         filename = form.file.data.filename
 
         note = Note.create(
