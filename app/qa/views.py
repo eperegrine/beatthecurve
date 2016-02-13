@@ -15,7 +15,7 @@ qa_bp = Blueprint('qa_bp', __name__, url_prefix='/qa')
 @qa_bp.route('/view/<lessonid>')
 @login_required
 def view(lessonid):
-    # TODO: Validate id
+    """Route to display the listing of Questions for a lesson"""
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
@@ -46,6 +46,7 @@ def view(lessonid):
 @qa_bp.route('/add-question/<lessonid>', methods=('POST', 'GET'))
 @login_required
 def add_question(lessonid):
+    """Route to handle a POST request to create a Question"""
     form = AddQuestionForm()
 
     if form.validate_on_submit():
@@ -72,6 +73,8 @@ def add_question(lessonid):
 @qa_bp.route('/detail/<lessonid>/<qid>', methods=('POST', 'GET'))
 @login_required
 def detail(lessonid, qid):
+    """Route to display the detail page for a question"""
+    # TODO: Check if it can be removed
     lesson = Lesson.get(Lesson.id == lessonid)
     try:
         question = Question.get(Question.id == qid)
@@ -89,6 +92,7 @@ def detail(lessonid, qid):
 @qa_bp.route('/add-reply/<questionid>', methods=('POST', 'GET'))
 @login_required
 def add_reply(questionid):
+    """Route to handle a POST request to add a reply to a Question"""
     form = AddReplyForm()
 
     try:
