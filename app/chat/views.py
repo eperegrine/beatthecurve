@@ -13,10 +13,12 @@ socketio = SocketIO(app)
 
 clients = {}
 
+# TODO: Check which websocket route can be removed
 
 @chat_bp.route('/<lessonid>')
 @login_required
 def index(lessonid):
+    """Route to render the chat template for a given lesson"""
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
@@ -42,6 +44,7 @@ def test_broadcast_message(message):
 
 @socketio.on('join', namespace='/test')
 def join(message):
+    """Websocket route to allow users to join the room for their lesson's chat"""
     # TODO: Validate room
     join_room(message['room'])
     session['receive_count'] = session.get('receive_count', 0) + 1
@@ -92,6 +95,7 @@ def close(message):
 
 @socketio.on('my room event', namespace='/test')
 def send_room_message(message):
+    """Websocket route which data is sent to in order to send a message"""
     session['receive_count'] = session.get('receive_count', 0) + 1
     messages = []
     try:
@@ -123,19 +127,14 @@ def disconnect_request():
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
+    """Websocket route to allow users to connect"""
     # TODO: Add authentication
-    #clients[current_user.user_id] = [current_user.first_name + " " + current_user.last_name, '-1']
     emit('my response', {'data': 'Connected', 'count': 0})
 
 
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
-    '''room = clients[current_user.user_id][1]
-    clients.__delitem__(current_user.user_id)
-    active_users = {}
-    for key,data in clients.items():
-        if data[1] == room:
-            active_users[key] = clients[key]'''
+    """Websocket route accessed when user disconnects"""
     room = str(r.get(str(current_user.user_id)+"user"))[2:-1]
     print("Room")
     print(room)
