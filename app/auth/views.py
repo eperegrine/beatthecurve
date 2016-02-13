@@ -70,16 +70,18 @@ def profile():
     Regardless of if it is a POST request or a GET request, the profile.html template is
     rendered.
     """
-    # TODO: Remove redirects after form submissions
     change_email_form = ChangeEmailForm()
     change_password_form = ChangePasswordForm()
 
     if 'change_email' in request.form:
         if change_email_form.validate_on_submit():
-            # TODO: Add Error handling
-            g.user.email = change_email_form.email.data
-            g.user.save()
-            flash('Email Updated!', 'success')
+            try:
+                g.user.email = change_email_form.email.data
+                g.user.save()
+                flash('Email Updated!', 'success')
+            except:
+                flash('Error updating email!', 'error')
+
             return redirect(url_for('.profile'))
 
     elif 'change_password' in request.form:
@@ -88,12 +90,12 @@ def profile():
                 try:
                     g.user.update_password(change_password_form.new_password.data)
                     flash('Updated Password!', 'success')
-                    return redirect(url_for('.profile'))
-                # TODO: improve error handling
                 except:
                     flash('There was an error!', 'error')
         else:
             flash('Incorrect Password', 'error')
+
+        return redirect(url_for('.profile'))
 
     return render_template('auth/profile.html', change_email_form=change_email_form,
                            change_password_form=change_password_form)
