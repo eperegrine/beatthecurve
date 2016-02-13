@@ -112,12 +112,3 @@ def vote(examid, upvote):
         else:
             flash(message)
     return redirect(url_for(".view", lessonid=exam.lesson.id))
-
-
-@exams_bp.route('/detail/<examid>')
-@login_required
-def detail(examid):
-    """Route to display the detail page for an exam"""
-    # TODO: Check if this can be removed
-    exam = Exam.get(Exam.id == examid)
-    return render_template("exams/detail.html", exam=exam)
