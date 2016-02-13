@@ -8,6 +8,7 @@ import time
 import base64
 import hmac
 import json
+import os
 from hashlib import sha1
 from app.models import KarmaPoints
 
@@ -18,7 +19,6 @@ exams_bp = Blueprint('exams_bp', __name__, url_prefix='/exams')
 @login_required
 def view(lessonid):
     """Route that lists the exams for a lesson"""
-    # TODO: Validate id
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
@@ -37,10 +37,9 @@ def view(lessonid):
 @exams_bp.route('/sign_s3/')
 def sign_s3():
     """Route to sign files for upload to S3. Accessed via AJAX."""
-    # TODO: Move to environment variables
-    AWS_ACCESS_KEY = 'AKIAJPAM7ZQCRQQ5GP3Q'
-    AWS_SECRET_KEY = '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'
-    S3_BUCKET = 'beatthecurve'
+    AWS_ACCESS_KEY = os.environ['AWS_ACCESS_KEY']
+    AWS_SECRET_KEY = os.environ['AWS_SECRET_KEY']
+    S3_BUCKET = os.environ['S3_BUCKET']
 
     object_name = urllib.parse.quote_plus(request.args.get('file_name'))
     mime_type = request.args.get('file_type')
