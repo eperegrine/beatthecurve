@@ -10,9 +10,6 @@
         <li class="class-nav-item {% if active == "studygroups" %}active{% endif %}"><a href="{{ url_for('studygroups_bp.view', lessonid=lesson.id) }}">Study Groups</a></li>
         <li class="class-nav-item {% if active == "chat" %}active{% endif %}"><a href="{{ url_for('chat_bp.index', lessonid=lesson.id) }}">Chat</a></li>
         <li class="class-nav-item {% if active == "search" %}active{% endif %}"><a href="{{ url_for('search_bp.view', lessonid=lesson.id) }}">Students</a></li>
-        {% if g.user.has_any_permission(['lecture_admin', 'discussion_admin']) %}
-        <li class="class-nav-item {% if active == "admin" %}active{% endif %}"><a href="{{ url_for('auth_bp.admin', lessonid=lesson.id) }}">Admin</a></li>
-        {% endif %}
         <li class="divider"></li>
         <li class="class-nav-item"><a href="/profile">Your profile</a></li>
       </ul>

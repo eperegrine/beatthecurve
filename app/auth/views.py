@@ -101,20 +101,6 @@ def profile():
                            change_password_form=change_password_form)
 
 
-@auth_bp.route('/admin/<lessonid>')
-@login_required
-@either_permission_required(['lecture_admin', 'discussion_admin'])
-def admin(lessonid):
-    """Renders a admin landing page"""
-    # TODO: Check if it can be removed safely
-    try:
-        lesson = Lesson.get(Lesson.id == lessonid)
-    except:
-        flash('Id not found', 'error')
-        return redirect(url_for('auth_bp.profile'))
-    return render_template('auth/admin.html',lesson=lesson)
-
-
 @auth_bp.route('/modify-permissions', methods=('POST', 'GET'))
 @login_required
 @permission_required('super_user')
