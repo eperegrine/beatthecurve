@@ -7,28 +7,30 @@ from datetime import datetime
 class Lesson(Model):
     """Model representing a lesson a user can attend.
 
-    They are specific to a school and must have unique names.
+    They are specific to a school and must have unique names
+    within a school.
     """
-    # TODO: Update keys
     id = PrimaryKeyField(db_column='ID')
-    lesson_name = CharField(db_column='NAME', unique=True)
+    lesson_name = CharField(db_column='NAME')
     professor = CharField(db_column='PROFESSOR')
     school_id = ForeignKeyField(School, db_column='SCHOOL')
 
     class Meta:
         database = DATABASE
         db_table = 'TBL_LESSON'
+        indexes = (
+            (('NAME', 'SCHOOL'), True),
+        )
 
     @classmethod
-    def get_unattended_lessons(cls, user_id, school_id):
-        """Class method to get the lessons a user is not currently enrolled in"""
-        # TODO: Remove need for school_id
-        # TODO: Update to factor in Semesters and Year
-        schools_lessons = cls.select().where(cls.school_id == school_id)
-        users_lessons = [ls.lesson_id.id for ls in LessonStudent.select().where(LessonStudent.student_id == user_id)]
-        print(users_lessons)
+    def get_unattended_lessons(cls, user):
+        """Class method to get the lessons a user is not currently enrolled in
+
+        `user` is an instance of `app.auth.models.User`
+        """
+        schools_lessons = cls.select().where(cls.school_id == user.school_id)
+        users_lessons = [ls.lesson_id.id for ls in LessonStudent.select().where(LessonStudent.student_id == user.user_id)]
         lessons = []
-        print([lesson.id for lesson in schools_lessons])
         for lesson in schools_lessons:
             if lesson.id not in users_lessons:
                 lessons.append(lesson)
@@ -51,7 +53,6 @@ class LessonStudent(Model):
     @classmethod
     def get_attended_lessons(cls, user_id):
         """Class method to get all the Lessons a user is currently attending"""
-        # TODO: Factor in semester and year
         users_lessons = cls.select().where(LessonStudent.student_id == user_id)
         lessons = [Lesson.get(Lesson.id == lesson.lesson_id) for lesson in users_lessons]
         return lessons
