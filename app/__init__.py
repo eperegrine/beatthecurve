@@ -12,7 +12,6 @@ import peewee
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs' # TODO: Move to environment variable
-app.config['UPLOAD_FOLDER'] = 'uploads' # TODO: Check if can be removed
 app.config["DEBUG"] = True
 app.config["PRESERVE_CONTEXT_ON_EXCEPTION"] = False
 
