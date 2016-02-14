@@ -27,9 +27,12 @@ from app.studygroups.models import StudyGroup, StudyGroupComment, StudyGroupMemb
 from app.search.models import Option, UserOption
 from app.chat.models import Message
 
-DATABASE.create_tables([School, User, Permission, UserPermission, Lesson, LessonStudent, Lecture, Discussion, Note,
+tables = [School, User, Permission, UserPermission, Lesson, LessonStudent, Lecture, Discussion, Note,
                         NoteVote, Question, Reply, Exam, ExamVote, StudyGroup, StudyGroupComment, StudyGroupMembers,
-                        StudyGroupSession, Option, UserOption, Message], safe=True)
+                        StudyGroupSession, Option, UserOption, Message]
+for table in tables:
+    print(table)
+    DATABASE.create_table(table, safe=True)
 
 # Set up login manager
 login_manager = LoginManager()
