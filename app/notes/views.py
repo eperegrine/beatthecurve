@@ -100,19 +100,6 @@ def sign_s3():
     return content
 
 
-@notes_bp.route('/detail/<noteid>')
-@login_required
-def detail(noteid):
-    """Route to display a detail page for a note"""
-    # TODO: Check if it can be removed
-    try:
-        note = Note.get(Note.id == noteid)
-    except:
-        flash("Invalid note", 'error')
-        return redirect(url_for("auth_bp.profile"))
-    return render_template("notes/detail.html", note=note)
-
-
 @notes_bp.route("/vote/<noteid>/<upvote>")
 @login_required
 def vote(noteid, upvote):
