@@ -73,15 +73,6 @@ def add_note(lessonid):
     return render_template('notes/add_note.html', form=form)
 
 
-@notes_bp.route('/uploads/<lessonid>/<lectureid>/<noteid>', methods=['GET', 'POST'])
-def download(lessonid, lectureid, noteid):
-    # TODO: REMOVE
-    filename = Note.get(Note.id == noteid).filename
-    uploads = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'], "notes", lessonid, lectureid)
-    print(uploads)
-    return send_from_directory(uploads, filename)
-
-
 @notes_bp.route('/sign_s3/')
 def sign_s3():
     """Route to sign a note for upload to S3. Accessed via AJAX"""
