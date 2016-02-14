@@ -62,17 +62,13 @@ class LessonStudent(Model):
     @classmethod
     def attend(cls, user_id, lesson_ids):
         """Class method to create LessonStudent objects for every lesson a user wants to attend"""
-        # TODO: Validate user_id and lesson_ids so they are in the same school
+        users_school = User.get(User.user_id == user_id).school_id
+        for lesson_id in lesson_ids:
+            lesson = Lesson.get(Lesson.id == lesson_id)
+            if lesson.school_id != users_school:
+                raise ValueError("Lesson id {} does not corrospond to the same school as the user".format(lesson.school_id))
         # TODO: Update semesters
         for lesson_id in lesson_ids:
-            month = datetime.now().month
-            if month < 3 or month == 12:
-                semester = Semester.winter
-            elif month < 6:
-                semester = Semester.spring
-            elif month < 9:
-                semester = Semester.summer
-            else:
-                semester = Semester.fall
+            semester = Semester.current_semester()
             LessonStudent.create(student_id=user_id, lesson_id=lesson_id, semester=semester.value,
                                  year=datetime.now().year)
