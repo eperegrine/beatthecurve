@@ -1,10 +1,8 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, request
 from flask.ext.login import login_required
 from app.lesson.models import Lesson
-from app.notes.models import Lecture, Discussion
 from .forms import AddQuestionForm, AddReplyForm
 from .models import Question, Reply
-from collections import OrderedDict
 from app.models import Semester
 from datetime import datetime
 from app.models import KarmaPoints
@@ -69,6 +67,7 @@ def add_question(lessonid):
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('qa/add_question.html', form=form)
 
+
 @qa_bp.route('/add-reply/<questionid>', methods=('POST', 'GET'))
 @login_required
 def add_reply(questionid):
@@ -79,7 +78,6 @@ def add_reply(questionid):
         question = Question.get(Question.id == questionid)
     except:
         flash('Id not found', 'error')
-        # TODO: Add 404
         return redirect(url_for('auth_bp.profile'))
 
     if form.validate_on_submit():

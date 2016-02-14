@@ -7,38 +7,6 @@ from datetime import datetime
 from app.models import Semester
 
 
-class Lecture(Model):
-    # TODO: Check if I can remove
-    id = PrimaryKeyField(db_column='ID')
-    lesson_id = ForeignKeyField(Lesson, db_column='LESSON_ID')
-    name = CharField(db_column='NAME')
-    number_of_files = IntegerField(db_column='NUMBER_OF_FILES', default=0)
-    semester = IntegerField(db_column='SEMESTER', default=Semester.winter.value)
-    year = IntegerField(db_column='YEAR', default=2015)
-
-    class Meta:
-        database = DATABASE
-        db_table = 'TBL_LECTURE'
-        indexes = (
-            (('name', 'year', 'lesson_id'), True),
-        )
-
-
-class Discussion(Model):
-    # TODO: Check if I can remove
-    id = PrimaryKeyField(db_column='ID')
-    lecture_id = ForeignKeyField(Lecture, db_column='LECTURE_ID')
-    name = CharField(db_column='NAME')
-
-    class Meta:
-        database = DATABASE
-        db_table = 'TBL_DISCUSSION'
-        indexes = (
-            # create a unique on from/to/date
-            (('lecture_id', 'name'), True),
-        )
-
-
 class Note(Model):
     """Model representing a note a user can upload"""
     # TODO: Remove unique filename

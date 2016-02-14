@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, jsonify, current_app, request, send_from_directory
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
-from .forms import AddLectureForm, AddNoteForm, AddDiscussionForm, AdminAddNoteForm
-from .models import Lecture, Discussion, Note
+from .forms import AddNoteForm, AdminAddNoteForm
+from .models import Note
 import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1
 from app.auth.decorators import permission_required
@@ -34,43 +34,6 @@ def view(lessonid):
         form = AddNoteForm()
 
     return render_template('notes/notes_listing.html', lesson=lesson, notes=notes, semesters=sorted(semesters), form=form)
-
-
-@notes_bp.route('/add-lecture', methods=('POST', 'GET'))
-@login_required
-@permission_required('lecture_admin')
-def add_lecture():
-    # TODO: REMOVE
-    form = AddLectureForm()
-    form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in
-                           LessonStudent.get_attended_lessons(g.user.user_id)]
-    print(form.year.choices)
-    print(form.year.data)
-    if form.validate_on_submit():
-        try:
-            lecture = Lecture.create(
-                lesson_id=int(form.lesson.data),
-                name=form.name.data,
-                year=form.year.data,
-                semester=form.semester.data
-            )
-            flash('Success', 'success')
-            return redirect(url_for('auth_bp.profile'))
-        except Exception as e:
-            print(e)
-            # TODO: Improve exception handling
-            flash('There was an error', 'error')
-
-    return render_template('notes/add_lecture.html', form=form)
-
-
-@notes_bp.route('/get-discussions/<lectureid>')
-@login_required
-def get_discussions(lectureid):
-    # TODO: REMOVE! :)
-    discussion = [(str(discussion.id), discussion.name) for discussion in Discussion.select().where(Discussion.lecture_id == lectureid)]
-    json = jsonify(discussion)
-    return json
 
 
 @notes_bp.route('/add-note/<lessonid>', methods=('POST', 'GET'))
@@ -117,26 +80,6 @@ def download(lessonid, lectureid, noteid):
     uploads = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'], "notes", lessonid, lectureid)
     print(uploads)
     return send_from_directory(uploads, filename)
-
-
-@notes_bp.route('/add-discussion/<lessonid>', methods=('POST', 'GET'))
-@login_required
-@permission_required('discussion_admin')
-def add_discussion(lessonid):
-    # TODO: Remove
-    form = AddDiscussionForm()
-    form.lecture.choices = [(str(lecture.id), lecture.name) for lecture in
-                            Lecture.select().where(Lecture.lesson_id == int(lessonid))]
-
-    if form.validate_on_submit():
-        Discussion.create(
-            lecture_id=form.lecture.data,
-            name=form.name.data
-        )
-        flash('Success', 'success')
-        return redirect(url_for(".view", lessonid=lessonid))
-
-    return render_template('notes/add_discussion.html', form=form)
 
 
 @notes_bp.route('/sign_s3/')

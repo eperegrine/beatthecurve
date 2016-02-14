@@ -1,6 +1,6 @@
 from peewee import *
 from app.auth.models import User
-from app.notes.models import Lecture, Discussion, Lesson
+from app.notes.models import Lesson
 from app.models import DATABASE, Semester
 from datetime import datetime
 
