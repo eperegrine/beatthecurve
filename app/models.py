@@ -3,6 +3,7 @@ import os
 import urllib.parse
 from enum import Enum
 import redis
+from datetime import datetime
 
 if 'LOCAL_DEV' in os.environ:
     database = {
@@ -43,6 +44,19 @@ class Semester(Enum):
     fall = 2
     spring = 3
     summer = 4
+
+    @classmethod
+    def current_semester(cls):
+        month = datetime.now().month
+        if month < 3 or month == 12:
+            semester = cls.winter
+        elif month < 6:
+            semester = cls.spring
+        elif month < 9:
+            semester = cls.summer
+        else:
+            semester = cls.fall
+        return semester
 
 
 class KarmaPoints(Enum):
