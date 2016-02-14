@@ -25,10 +25,11 @@ class School(Model):
         except IntegrityError:
             raise ValueError("Name is use.")
 
+        # TODO: Remove unused permissions
         Permission.create(name='lecture_admin', description="Can create lectures", school=school.school_id)
         Permission.create(name='discussion_admin', description="Can create discussions", school=school.school_id)
         Permission.create(name='super_user', description="Is a superuser", school=school.school_id)
-        Permission.create(name='lesson_admin', description="Can crate lessons", school=school.school_id)
+        Permission.create(name='lesson_admin', description="Can create lessons", school=school.school_id)
         Permission.create(name='note_admin', description="Can upload notes with non default semester", school=school.school_id)
 
     class Meta:
@@ -161,7 +162,7 @@ class Permission(Model):
         database = DATABASE
         db_table = 'TBL_PERMISSION'
         indexes = (
-            (('name', 'school'), True)
+            (('name', 'school'), True),
         )
 
 

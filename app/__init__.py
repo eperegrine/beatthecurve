@@ -8,6 +8,7 @@ from .models import DATABASE, Semester
 from .auth.models import User
 import os
 import sendgrid
+import peewee
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs' # TODO: Move to environment variable
@@ -27,12 +28,21 @@ from app.studygroups.models import StudyGroup, StudyGroupComment, StudyGroupMemb
 from app.search.models import Option, UserOption
 from app.chat.models import Message
 
+# Print all queries to stderr.
+import logging
+logger = logging.getLogger('peewee')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+
 tables = [School, User, Permission, UserPermission, Lesson, LessonStudent, Lecture, Discussion, Note,
                         NoteVote, Question, Reply, Exam, ExamVote, StudyGroup, StudyGroupComment, StudyGroupMembers,
                         StudyGroupSession, Option, UserOption, Message]
 for table in tables:
     print(table)
-    DATABASE.create_table(table, safe=True)
+    try:
+        table.create_table()
+    except peewee.ProgrammingError:
+        continue
 
 # Set up login manager
 login_manager = LoginManager()

@@ -20,7 +20,7 @@ class Lecture(Model):
         database = DATABASE
         db_table = 'TBL_LECTURE'
         indexes = (
-            (('NAME', 'YEAR', 'LESSON_ID'), True)
+            (('name', 'year', 'lesson_id'), True),
         )
 
 
@@ -103,3 +103,6 @@ class NoteVote(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_NOTE_VOTE'
+        indexes = (
+            (('user', 'note'), True),
+        )

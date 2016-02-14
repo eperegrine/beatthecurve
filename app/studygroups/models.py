@@ -91,12 +91,16 @@ class StudyGroup(Model):
 
 class StudyGroupMembers(Model):
     """Model that represents a User in a StudyGroup"""
+    id = PrimaryKeyField(db_column='ID')
     user = ForeignKeyField(User, db_column='USER_ID')
     study_group = ForeignKeyField(StudyGroup, db_column='STUDY_GROUP_ID')
 
     class Meta:
         database = DATABASE
         db_table = 'TBL_STUDY_GROUP_MEMBER'
+        indexes = (
+            (('user', 'study_group'), True),
+        )
 
 
 class StudyGroupSession(Model):

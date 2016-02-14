@@ -9,6 +9,7 @@ class Exam(Model):
 
     An exam has a unique id and filename.
     """
+    # TODO: Have public and s3 filename fields seperately
     id = PrimaryKeyField(db_column='ID')
     average_grade = DecimalField(db_column='AVERAGE_GRADE')
     filename = CharField(unique=True, db_column='FILENAME')
@@ -80,3 +81,6 @@ class ExamVote(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_EXAM_VOTE'
+        indexes = (
+            (('user', 'exam'), True),
+        )

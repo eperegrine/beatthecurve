@@ -19,7 +19,7 @@ class Lesson(Model):
         database = DATABASE
         db_table = 'TBL_LESSON'
         indexes = (
-            (('NAME', 'SCHOOL'), True),
+            (('lesson_name', 'school_id'), True),
         )
 
     @classmethod
@@ -39,6 +39,7 @@ class Lesson(Model):
 
 class LessonStudent(Model):
     """Model representing a user attending a lesson in a specific year and semester"""
+    id = PrimaryKeyField(db_column='ID')
     student_id = ForeignKeyField(User, db_column='STUDENT_ID')
     lesson_id = ForeignKeyField(Lesson, db_column='LESSON_ID')
     semester = IntegerField(db_column='SEMESTER')
@@ -47,8 +48,9 @@ class LessonStudent(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_LESSON_STUDENT'
-        #primary_key = CompositeKey('student_id', 'lesson_id')
-        # TODO: Add composite key
+        indexes = (
+            (('student_id', 'lesson_id'), True),
+        )
 
     @classmethod
     def get_attended_lessons(cls, user_id):
