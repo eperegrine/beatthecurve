@@ -13,7 +13,7 @@ class Question(Model):
     document = CharField(db_column='DOCUMENT')
     name = CharField(db_column='NAME', unique=True)
     content = CharField(db_column='CONTENT')
-    semester = IntegerField(db_column='SEMESTER', default=Semester.winter.value) # TODO: Remove default
+    semester = IntegerField(db_column='SEMESTER')
     year = IntegerField(db_column='YEAR', default=2016)
     lesson = ForeignKeyField(Lesson, db_column='LESSON_ID')
 
