@@ -69,26 +69,6 @@ def add_question(lessonid):
         return redirect(url_for(".view", lessonid=lessonid))
     return render_template('qa/add_question.html', form=form)
 
-
-@qa_bp.route('/detail/<lessonid>/<qid>', methods=('POST', 'GET'))
-@login_required
-def detail(lessonid, qid):
-    """Route to display the detail page for a question"""
-    # TODO: Check if it can be removed
-    lesson = Lesson.get(Lesson.id == lessonid)
-    try:
-        question = Question.get(Question.id == qid)
-    except:
-        flash('Id not found', 'error')
-        return redirect(url_for('.view', lessonid=lessonid))
-
-    replies = Reply.select().where(Reply.question == qid)
-
-    form = AddReplyForm()
-
-    return render_template('qa/detail.html', question=question, detail=detail, lesson=lesson, form=form, replies=replies)
-
-
 @qa_bp.route('/add-reply/<questionid>', methods=('POST', 'GET'))
 @login_required
 def add_reply(questionid):
