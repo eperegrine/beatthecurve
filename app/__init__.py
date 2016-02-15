@@ -11,7 +11,7 @@ import sendgrid
 import peewee
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs' # TODO: Move to environment variable
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config["DEBUG"] = True
 app.config["PRESERVE_CONTEXT_ON_EXCEPTION"] = False
 
