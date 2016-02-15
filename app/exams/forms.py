@@ -3,7 +3,8 @@ from wtforms.fields import (
     DecimalField,
     SelectField,
     FileField,
-    IntegerField
+    IntegerField,
+    HiddenField,
 )
 from wtforms.validators import (
     DataRequired
@@ -16,6 +17,7 @@ from app.models import Semester
 
 class AddExamForm(Form):
     """Form to allow users to upload an exam"""
+    file_hash = HiddenField()
     file = FileField('File', validators=[DataRequired()])
     average_grade = DecimalField('Average Grade', validators=[DataRequired()])
     number_of_takers = IntegerField('Number Of Takers', validators=[DataRequired()])

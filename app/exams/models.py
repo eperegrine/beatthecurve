@@ -9,10 +9,10 @@ class Exam(Model):
 
     An exam has a unique id and filename.
     """
-    # TODO: Have public and s3 filename fields seperately
     id = PrimaryKeyField(db_column='ID')
     average_grade = DecimalField(db_column='AVERAGE_GRADE')
-    filename = CharField(unique=True, db_column='FILENAME')
+    filename = CharField(db_column='FILENAME')
+    s3_filename = CharField(db_column='S3_FILENAME')
     lesson = ForeignKeyField(Lesson, db_column='LESSON')
     number_of_takers = IntegerField(default=0, db_column='NUMBER_OF_TAKERS')
     publisher = ForeignKeyField(User, db_column='PUBLISHER')
