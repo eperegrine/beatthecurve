@@ -67,7 +67,6 @@ class LessonStudent(Model):
             lesson = Lesson.get(Lesson.id == lesson_id)
             if lesson.school_id != users_school:
                 raise ValueError("Lesson id {} does not corrospond to the same school as the user".format(lesson.school_id))
-        # TODO: Update semesters
         for lesson_id in lesson_ids:
             semester = Semester.current_semester()
             LessonStudent.create(student_id=user_id, lesson_id=lesson_id, semester=semester.value,

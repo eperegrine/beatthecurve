@@ -47,17 +47,9 @@ def add_note(lessonid):
     form = AddNoteForm()
     if form.validate_on_submit():
         # TODO: Add error handling
-        # TODO: Improve validation
         filename = form.file.data.filename
         month = datetime.now().month
-        if month < 3 or month == 12:
-            semester = Semester.winter
-        elif month < 6:
-            semester = Semester.spring
-        elif month < 9:
-            semester = Semester.summer
-        else:
-            semester = Semester.fall
+        semester = Semester.current_semester()
 
         note = Note.create(
             filename=filename,
@@ -133,7 +125,6 @@ def add_admin_note(lessonid):
     form = AdminAddNoteForm()
     if form.validate_on_submit():
         # TODO: Add error handling
-        # TODO: Improve validation
         filename = form.file.data.filename
 
         note = Note.create(
