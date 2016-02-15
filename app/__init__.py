@@ -98,6 +98,15 @@ def inject_semester_enum():
     """Inject the app.models.Semester enum into templates"""
     return dict(semester_enum=dict(list(map(lambda x: [x.value, x.name], Semester))))
 
+@app.context_processor
+def inject_uploads_url():
+    """Inject the url for notes and exams into templates"""
+    uploads_url = os.environ.get('UPLOADS_URL')
+    if not uploads_url.endswith('/'):
+        uploads_url += '/'
+    return dict(
+        uploads_url=uploads_url
+    )
 
 @app.route('/')
 def index():
