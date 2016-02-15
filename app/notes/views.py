@@ -4,7 +4,7 @@ from app.lesson.models import Lesson, LessonStudent
 from .forms import AddNoteForm, AdminAddNoteForm
 from .models import Note
 import time, os, json, base64, hmac, urllib.parse
-from hashlib import sha1
+from hashlib import sha1, md5
 from app.auth.decorators import permission_required
 from datetime import datetime
 from app.models import Semester, KarmaPoints
@@ -53,6 +53,7 @@ def add_note(lessonid):
 
         note = Note.create(
             filename=filename,
+            s3_filename=form.file_hash.data,
             uploader=g.user.user_id,
             description=form.description.data,
             lesson=lessonid,
@@ -68,11 +69,18 @@ def add_note(lessonid):
 @notes_bp.route('/sign_s3/')
 def sign_s3():
     """Route to sign a note for upload to S3. Accessed via AJAX"""
-    AWS_ACCESS_KEY = 'AKIAJPAM7ZQCRQQ5GP3Q'
-    AWS_SECRET_KEY = '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'
-    S3_BUCKET = 'beatthecurve'
+    AWS_ACCESS_KEY = os.environ['AWS_ACCESS_KEY']
+    AWS_SECRET_KEY = os.environ['AWS_SECRET_KEY']
+    S3_BUCKET = os.environ['S3_BUCKET']
 
-    object_name = urllib.parse.quote_plus(request.args.get('file_name'))
+    filename = request.args.get('file_name')
+    filename_hash = md5(bytes(g.user.email + filename, 'utf-8')).hexdigest()
+    i = 0
+    while Note.select().where(Note.s3_filename == filename_hash).exists():
+        filename_hash = md5(bytes(g.user.email + filename + str(i), 'utf-8')).hexdigest()
+        i += 1
+
+    object_name = urllib.parse.quote_plus(filename_hash)
     mime_type = request.args.get('file_type')
 
     expires = int(time.time()+60*60*24)
@@ -88,6 +96,7 @@ def sign_s3():
     content = json.dumps({
         'signed_request': '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
         'url': url,
+        'file_hash': filename_hash
     })
     return content
 

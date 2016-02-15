@@ -26,6 +26,7 @@ function get_signed_request(file){
         if(xhr.readyState === 4){
             if(xhr.status === 200){
                 var response = JSON.parse(xhr.responseText);
+                $("#file_hash").val(response.file_hash);
                 upload_file(file, response.signed_request, response.url);
             }
             else{

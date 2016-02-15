@@ -9,10 +9,10 @@ from app.models import Semester
 
 class Note(Model):
     """Model representing a note a user can upload"""
-    # TODO: Remove unique filename
     id = PrimaryKeyField(db_column='ID')
     votes = IntegerField(db_column='VOTES', default=0)
-    filename = CharField(db_column='FILENAME', unique=True)
+    filename = CharField(db_column='FILENAME')
+    s3_filename = CharField(db_column='S3_FILENAME', unique=True)
     uploader = ForeignKeyField(User, db_column='UPLOADER')
     description = CharField(db_column='DESCRIPTION')
     lesson = ForeignKeyField(Lesson, db_column='LESSON_ID')
