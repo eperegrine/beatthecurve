@@ -68,8 +68,6 @@ def join(message):
     print(active_users)'''
     room = message['room']+"room"
     r.set(str(current_user.user_id)+"user", room)
-    print("THE ROOM IS")
-    print(room)
     r.rpush(room, current_user.first_name + " " + current_user.last_name)
     emit('clients', {'clients': [str(name)[2:-1] for name in r.lrange(room, 0, -1)]}, room=message['room'])
 
@@ -128,8 +126,10 @@ def disconnect_request():
 @socketio.on('connect', namespace='/test')
 def test_connect():
     """Websocket route to allow users to connect"""
-    # TODO: Add authentication
-    emit('my response', {'data': 'Connected', 'count': 0})
+    if current_user.is_authenticated:
+        emit('my response', {'data': 'Connected', 'count': 0})
+    else:
+        return False
 
 
 @socketio.on('disconnect', namespace='/test')
