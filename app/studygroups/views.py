@@ -14,7 +14,7 @@ studygroups_bp = Blueprint('studygroups_bp', __name__, url_prefix='/studygroups'
 @studygroups_bp.route('/view/<lessonid>')
 @login_required
 def view(lessonid):
-    # TODO: Validate id
+    """Route to display all the studygroups for a Lesson"""
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
@@ -38,6 +38,7 @@ def view(lessonid):
 @studygroups_bp.route('/add-studygroup', methods=('POST', 'GET'))
 @login_required
 def add_studygroup():
+    """Route to either render the AddStudyGroupForm or to process it and create a new StudyGroup"""
     form = AddStudyGroupForm()
     lesson_ids = [ls.lesson_id for ls in LessonStudent.select().where(LessonStudent.student_id == g.user.user_id)]
     if len(lesson_ids) < 1:
@@ -64,6 +65,7 @@ def add_studygroup():
 @studygroups_bp.route('/add-session/<studygroupid>', methods=('POST', 'GET'))
 @login_required
 def add_studygroup_session(studygroupid):
+    """Process the AddStudyGroupSessionForm and create a new StudyGroupSession via a POST request"""
     if not StudyGroup.select().where((StudyGroup.id == studygroupid) & (StudyGroup.founder == g.user.user_id)).exists():
         flash("Error! Invalid Study Group", 'error')
         return redirect(url_for("auth_bp.profile"))
@@ -96,6 +98,7 @@ def add_studygroup_session(studygroupid):
 @studygroups_bp.route('/detail/<sgid>')
 @login_required
 def detail(sgid):
+    """Route to display the detail page for a StudyGroup"""
     study_group = StudyGroup.get(StudyGroup.id == sgid)
     comment_form = AddComment()
     comments = study_group.get_comments()
@@ -108,6 +111,9 @@ def detail(sgid):
 @studygroups_bp.route('/join/<sgid>')
 @login_required
 def join(sgid):
+    """Route to allow a user to join a StudyGroup"""
+    # TODO: Move to POST request
+    # TODO: Check if user already in StudyGroup
     try:
         sg = StudyGroup.get(StudyGroup.id == sgid)
     except:
@@ -124,6 +130,10 @@ def join(sgid):
 @studygroups_bp.route('/leave/<sgid>')
 @login_required
 def leave(sgid):
+    """Route to allow a user to leave a StudyGroup"""
+    # TODO: Move to POST request
+    # TODO: Check if user notalready in StudyGroup
+
     try:
         sg = StudyGroup.get(StudyGroup.id == sgid)
     except:
@@ -140,6 +150,7 @@ def leave(sgid):
 @studygroups_bp.route('/add-comment/<sgid>', methods=('POST', 'GET'))
 @login_required
 def add_comment(sgid):
+    """Route to process submission of the AddComment form via a POST request"""
     comment_form = AddComment()
     study_group = StudyGroup.get(StudyGroup.id == sgid)
 
@@ -154,6 +165,8 @@ def add_comment(sgid):
 @studygroups_bp.route('/contact-organiser/<lessonid>', methods=('POST', 'GET'))
 @login_required
 def contact_organiser(lessonid):
+    """Route to process the ContactOrganiserForm and send an email using the Sendgrid API"""
+    # TODO: Check status of sent email
     form = ContactOrganiserForm(request.form)
 
     if form.validate_on_submit():
@@ -173,6 +186,7 @@ def contact_organiser(lessonid):
 @studygroups_bp.route('/cancel<sessionid>')
 @login_required
 def cancel(sessionid):
+    """Route to cancel a StudyGroupSession"""
     try:
         session = StudyGroupSession.get(StudyGroupSession.id == sessionid)
     except:

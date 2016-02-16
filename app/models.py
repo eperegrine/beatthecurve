@@ -3,6 +3,7 @@ import os
 import urllib.parse
 from enum import Enum
 import redis
+from datetime import datetime
 
 if 'LOCAL_DEV' in os.environ:
     database = {
@@ -38,19 +39,34 @@ DATABASE = PostgresqlDatabase(
 
 
 class Semester(Enum):
+    """Enum matching semester names to their integer values"""
     winter = 1
     fall = 2
     spring = 3
     summer = 4
 
+    @classmethod
+    def current_semester(cls):
+        month = datetime.now().month
+        if month < 3 or month == 12:
+            semester = cls.winter
+        elif month < 6:
+            semester = cls.spring
+        elif month < 9:
+            semester = cls.summer
+        else:
+            semester = cls.fall
+        return semester
+
 
 class KarmaPoints(Enum):
+    """Enum linking actions to the amount of KarmaPoints that should be recieved."""
     note_vote = 1
     exam_vote = 1
     upload_note = 10
     upload_exam = 10
-    post_question = 5
-    reply_to_question = 3
+    post_question = 3
+    reply_to_question = 5
 
 
 r = redis.from_url(os.environ.get("REDIS_URL"))

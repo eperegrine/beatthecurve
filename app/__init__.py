@@ -8,10 +8,10 @@ from .models import DATABASE, Semester
 from .auth.models import User
 import os
 import sendgrid
+import peewee
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'hufenaifneianwdawaffioawnfiohaewifs'
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config["DEBUG"] = True
 app.config["PRESERVE_CONTEXT_ON_EXCEPTION"] = False
 
@@ -20,16 +20,28 @@ sg = sendgrid.SendGridClient(os.environ['SENDGRID_KEY'])
 from app.models import DATABASE
 from app.auth.models import School, User, Permission, UserPermission
 from app.lesson.models import Lesson, LessonStudent
-from app.notes.models import Lecture, Discussion, Note, NoteVote
+from app.notes.models import Note, NoteVote
 from app.qa.models import Question, Reply
 from app.exams.models import Exam, ExamVote
 from app.studygroups.models import StudyGroup, StudyGroupComment, StudyGroupMembers, StudyGroupSession
 from app.search.models import Option, UserOption
 from app.chat.models import Message
 
-DATABASE.create_tables([School, User, Permission, UserPermission, Lesson, LessonStudent, Lecture, Discussion, Note,
+# Print all queries to stderr.
+import logging
+logger = logging.getLogger('peewee')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+
+tables = [School, User, Permission, UserPermission, Lesson, LessonStudent, Note,
                         NoteVote, Question, Reply, Exam, ExamVote, StudyGroup, StudyGroupComment, StudyGroupMembers,
-                        StudyGroupSession, Option, UserOption, Message], safe=True)
+                        StudyGroupSession, Option, UserOption, Message]
+for table in tables:
+    print(table)
+    try:
+        table.create_table()
+    except peewee.ProgrammingError:
+        continue
 
 # Set up login manager
 login_manager = LoginManager()
@@ -41,6 +53,7 @@ login_manager.login_view = 'auth_bp.login'
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Returns a User matching the supplied user_id or None for Flask-Login"""
     try:
         return User.get(User.user_id == user_id)
     except DoesNotExist:
@@ -60,7 +73,6 @@ def before_request():
 def after_request(response):
     """Close the database connection after each response"""
     g.db.close()
-    print("Closed")
     return response
 
 # Environment has STATIC_URL='http://my_s3_bucket.aws.amazon.com/'
@@ -83,11 +95,22 @@ def inject_static_url():
 
 @app.context_processor
 def inject_semester_enum():
+    """Inject the app.models.Semester enum into templates"""
     return dict(semester_enum=dict(list(map(lambda x: [x.value, x.name], Semester))))
 
+@app.context_processor
+def inject_uploads_url():
+    """Inject the url for notes and exams into templates"""
+    uploads_url = os.environ.get('UPLOADS_URL')
+    if not uploads_url.endswith('/'):
+        uploads_url += '/'
+    return dict(
+        uploads_url=uploads_url
+    )
 
 @app.route('/')
 def index():
+    """Route to display root homepage"""
     return render_template('index.html')
 
 from app.auth.views import auth_bp

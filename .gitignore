@@ -70,6 +70,7 @@ pyvenv.cfg
 pip-selfcheck.json
 
 .idea/
+venv/
 
 uploads/
 
@@ -77,3 +78,5 @@ wsgi.py
 dump.rdb
 logs.txt
 setup.sh
+
+.DS_Store

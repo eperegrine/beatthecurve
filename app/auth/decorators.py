@@ -4,6 +4,11 @@ from .models import Permission, UserPermission
 
 
 def permission_required(name):
+    """Decorator to wrap view functions to restrict their access to users with a given permissions
+
+    `name`: The name of the permission required
+
+    """
     def decorator(view_func):
         @wraps(view_func)
         def wrapper(*args, **kwargs):
@@ -16,6 +21,11 @@ def permission_required(name):
 
 
 def either_permission_required(names):
+    """Decorator to wrap view functions to restrict their access to users which have any one of a list of permissions
+
+    `names`: list of permission names which a user is required to have at least one of.
+
+    """
     def decorator(view_func):
         @wraps(view_func)
         def wrapper(*args, **kwargs):

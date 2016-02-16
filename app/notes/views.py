@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, jsonify, current_app, request, send_from_directory
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
-from .forms import AddLectureForm, AddNoteForm, AddDiscussionForm, AdminAddNoteForm
-from .models import Lecture, Discussion, Note
+from .forms import AddNoteForm, AdminAddNoteForm
+from .models import Note
 import time, os, json, base64, hmac, urllib.parse
-from hashlib import sha1
+from hashlib import sha1, md5
 from app.auth.decorators import permission_required
 from datetime import datetime
 from app.models import Semester, KarmaPoints
@@ -16,7 +16,7 @@ notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')
 @notes_bp.route('/view/<lessonid>')
 @login_required
 def view(lessonid):
-    # TODO: Validate id
+    """Route to display the notes listing for a particular lesson"""
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
@@ -36,64 +36,24 @@ def view(lessonid):
     return render_template('notes/notes_listing.html', lesson=lesson, notes=notes, semesters=sorted(semesters), form=form)
 
 
-@notes_bp.route('/add-lecture', methods=('POST', 'GET'))
-@login_required
-@permission_required('lecture_admin')
-def add_lecture():
-    # TODO: Validate user is attending lesson
-    form = AddLectureForm()
-    form.lesson.choices = [(str(lesson.id), lesson.lesson_name) for lesson in
-                           LessonStudent.get_attended_lessons(g.user.user_id)]
-    print(form.year.choices)
-    print(form.year.data)
-    if form.validate_on_submit():
-        try:
-            lecture = Lecture.create(
-                lesson_id=int(form.lesson.data),
-                name=form.name.data,
-                year=form.year.data,
-                semester=form.semester.data
-            )
-            flash('Success', 'success')
-            return redirect(url_for('auth_bp.profile'))
-        except Exception as e:
-            print(e)
-            # TODO: Improve exception handling
-            flash('There was an error', 'error')
-
-    return render_template('notes/add_lecture.html', form=form)
-
-
-@notes_bp.route('/get-discussions/<lectureid>')
-@login_required
-def get_discussions(lectureid):
-    # TODO: Validate lectureid
-    discussion = [(str(discussion.id), discussion.name) for discussion in Discussion.select().where(Discussion.lecture_id == lectureid)]
-    json = jsonify(discussion)
-    return json
-
-
 @notes_bp.route('/add-note/<lessonid>', methods=('POST', 'GET'))
 @login_required
 def add_note(lessonid):
+    """Route to render AddNoteForm or process AddNoteForm to create a Note
+
+    **NOTE: This does not actually upload the file to S3. That is done via AJAX.**
+
+    """
     form = AddNoteForm()
     if form.validate_on_submit():
         # TODO: Add error handling
-        # TODO: Improve validation
-        # Upload file
         filename = form.file.data.filename
         month = datetime.now().month
-        if month < 3 or month == 12:
-            semester = Semester.winter
-        elif month < 6:
-            semester = Semester.spring
-        elif month < 9:
-            semester = Semester.summer
-        else:
-            semester = Semester.fall
+        semester = Semester.current_semester()
 
         note = Note.create(
             filename=filename,
+            s3_filename=form.file_hash.data,
             uploader=g.user.user_id,
             description=form.description.data,
             lesson=lessonid,
@@ -106,40 +66,21 @@ def add_note(lessonid):
     return render_template('notes/add_note.html', form=form)
 
 
-@notes_bp.route('/uploads/<lessonid>/<lectureid>/<noteid>', methods=['GET', 'POST'])
-def download(lessonid, lectureid, noteid):
-    filename = Note.get(Note.id == noteid).filename
-    uploads = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'], "notes", lessonid, lectureid)
-    print(uploads)
-    return send_from_directory(uploads, filename)
-
-
-@notes_bp.route('/add-discussion/<lessonid>', methods=('POST', 'GET'))
-@login_required
-@permission_required('discussion_admin')
-def add_discussion(lessonid):
-    form = AddDiscussionForm()
-    form.lecture.choices = [(str(lecture.id), lecture.name) for lecture in
-                            Lecture.select().where(Lecture.lesson_id == int(lessonid))]
-
-    if form.validate_on_submit():
-        Discussion.create(
-            lecture_id=form.lecture.data,
-            name=form.name.data
-        )
-        flash('Success', 'success')
-        return redirect(url_for(".view", lessonid=lessonid))
-
-    return render_template('notes/add_discussion.html', form=form)
-
-
 @notes_bp.route('/sign_s3/')
 def sign_s3():
-    AWS_ACCESS_KEY = 'AKIAJPAM7ZQCRQQ5GP3Q'
-    AWS_SECRET_KEY = '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'
-    S3_BUCKET = 'beatthecurve'
+    """Route to sign a note for upload to S3. Accessed via AJAX"""
+    AWS_ACCESS_KEY = os.environ['AWS_ACCESS_KEY']
+    AWS_SECRET_KEY = os.environ['AWS_SECRET_KEY']
+    S3_BUCKET = os.environ['S3_BUCKET']
 
-    object_name = urllib.parse.quote_plus(request.args.get('file_name'))
+    filename = request.args.get('file_name')
+    filename_hash = md5(bytes(g.user.email + filename, 'utf-8')).hexdigest()
+    i = 0
+    while Note.select().where(Note.s3_filename == filename_hash).exists():
+        filename_hash = md5(bytes(g.user.email + filename + str(i), 'utf-8')).hexdigest()
+        i += 1
+
+    object_name = urllib.parse.quote_plus(filename_hash)
     mime_type = request.args.get('file_type')
 
     expires = int(time.time()+60*60*24)
@@ -155,24 +96,16 @@ def sign_s3():
     content = json.dumps({
         'signed_request': '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
         'url': url,
+        'file_hash': filename_hash
     })
     return content
-
-
-@notes_bp.route('/detail/<noteid>')
-@login_required
-def detail(noteid):
-    try:
-        note = Note.get(Note.id == noteid)
-    except:
-        flash("Invalid note", 'error')
-        return redirect(url_for("auth_bp.profile"))
-    return render_template("notes/detail.html", note=note)
 
 
 @notes_bp.route("/vote/<noteid>/<upvote>")
 @login_required
 def vote(noteid, upvote):
+    """Route to allow a user to vote on a note"""
+    # TODO: Move to POST request
     note = Note.get(Note.id == noteid)
     has_upvoted = note.has_upvoted(g.user)
     has_voted = note.has_voted(g.user)
@@ -197,11 +130,10 @@ def vote(noteid, upvote):
 @login_required
 @permission_required('note_admin')
 def add_admin_note(lessonid):
+    """Route to allow users with the note_admin permission to upload notes with specific years and semesters"""
     form = AdminAddNoteForm()
     if form.validate_on_submit():
         # TODO: Add error handling
-        # TODO: Improve validation
-        # Upload file
         filename = form.file.data.filename
 
         note = Note.create(

@@ -8,7 +8,8 @@ import time
 import base64
 import hmac
 import json
-from hashlib import sha1
+import os
+from hashlib import sha1, md5
 from app.models import KarmaPoints
 
 exams_bp = Blueprint('exams_bp', __name__, url_prefix='/exams')
@@ -17,7 +18,7 @@ exams_bp = Blueprint('exams_bp', __name__, url_prefix='/exams')
 @exams_bp.route('/view/<lessonid>')
 @login_required
 def view(lessonid):
-    # TODO: Validate id
+    """Route that lists the exams for a lesson"""
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
@@ -35,12 +36,19 @@ def view(lessonid):
 
 @exams_bp.route('/sign_s3/')
 def sign_s3():
-    # TODO: Move to environment variables
-    AWS_ACCESS_KEY = 'AKIAJPAM7ZQCRQQ5GP3Q'
-    AWS_SECRET_KEY = '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'
-    S3_BUCKET = 'beatthecurve'
+    """Route to sign files for upload to S3. Accessed via AJAX."""
+    AWS_ACCESS_KEY = os.environ['AWS_ACCESS_KEY']
+    AWS_SECRET_KEY = os.environ['AWS_SECRET_KEY']
+    S3_BUCKET = os.environ['S3_BUCKET']
 
-    object_name = urllib.parse.quote_plus(request.args.get('file_name'))
+    filename = request.args.get('file_name')
+    filename_hash = md5(bytes(g.user.email + filename, 'utf-8')).hexdigest()
+    i = 0
+    while Exam.select().where(Exam.s3_filename == filename_hash).exists():
+        filename_hash = md5(bytes(g.user.email + filename + str(i), 'utf-8')).hexdigest()
+        i += 1
+
+    object_name = urllib.parse.quote_plus(filename_hash)
     mime_type = request.args.get('file_type')
 
     expires = int(time.time()+60*60*24)
@@ -56,12 +64,16 @@ def sign_s3():
     content = json.dumps({
         'signed_request': '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
         'url': url,
+        'file_hash': filename_hash
     })
     return content
 
 
 @exams_bp.route('/add-exam/<lessonid>', methods=("POST", "GET"))
 def add_exam(lessonid):
+    """Route to either display the form to upload exams or create a new Exam object
+
+    **NOTE: THIS DOES NOT ACTUALLY UPLOAD THE FILE. THAT IS DONE VIA AJAX**"""
     form = AddExamForm()
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
@@ -72,6 +84,7 @@ def add_exam(lessonid):
         Exam.create(
             average_grade=form.average_grade.data,
             filename=form.file.data.filename,
+            s3_filename=form.file_hash.data,
             lesson=lesson.id,
             publisher=g.user.user_id,
             number_of_takers=form.number_of_takers.data,
@@ -89,6 +102,8 @@ def add_exam(lessonid):
 @exams_bp.route('/vote/<examid>/<upvote>')
 @login_required
 def vote(examid, upvote):
+    """Route to vote on an exam"""
+    # TODO: Move to POST request
     exam = Exam.get(Exam.id == examid)
     vote = True if upvote == "1" else False
     has_voted = exam.has_voted(g.user)
@@ -106,10 +121,3 @@ def vote(examid, upvote):
         else:
             flash(message)
     return redirect(url_for(".view", lessonid=exam.lesson.id))
-
-
-@exams_bp.route('/detail/<examid>')
-@login_required
-def detail(examid):
-    exam = Exam.get(Exam.id == examid)
-    return render_template("exams/detail.html", exam=exam)

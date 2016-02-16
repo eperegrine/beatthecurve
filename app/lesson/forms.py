@@ -13,15 +13,18 @@ from .models import Lesson
 
 
 def lesson_name_in_use_validators(form, field):
+    """Raises a ValidationError if the name for a lesson is already in use"""
     if Lesson.select().where((Lesson.lesson_name == field.data) & (Lesson.school_id == form.school.data)).exists():
         raise ValidationError("Name already in use.")
 
 
 class AttendLessonsForm(Form):
+    """Form to allow a user to start to attend lessons"""
     lessons = SelectMultipleField('Lessons', validators=[DataRequired()])
 
 
 class CreateLessonForm(Form):
+    """Form to allow a user to create a lesson"""
     school = HiddenField('School')
     name = StringField('Name', validators=[DataRequired(), lesson_name_in_use_validators])
     professor = StringField('Professor', validators=[DataRequired()])

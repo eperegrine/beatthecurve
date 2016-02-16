@@ -1,10 +1,8 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, request
 from flask.ext.login import login_required
 from app.lesson.models import Lesson
-from app.notes.models import Lecture, Discussion
 from .forms import AddQuestionForm, AddReplyForm
 from .models import Question, Reply
-from collections import OrderedDict
 from app.models import Semester
 from datetime import datetime
 from app.models import KarmaPoints
@@ -15,7 +13,7 @@ qa_bp = Blueprint('qa_bp', __name__, url_prefix='/qa')
 @qa_bp.route('/view/<lessonid>')
 @login_required
 def view(lessonid):
-    # TODO: Validate id
+    """Route to display the listing of Questions for a lesson"""
     try:
         lesson = Lesson.get(Lesson.id == lessonid)
     except:
@@ -46,6 +44,7 @@ def view(lessonid):
 @qa_bp.route('/add-question/<lessonid>', methods=('POST', 'GET'))
 @login_required
 def add_question(lessonid):
+    """Route to handle a POST request to create a Question"""
     form = AddQuestionForm()
 
     if form.validate_on_submit():
@@ -69,33 +68,16 @@ def add_question(lessonid):
     return render_template('qa/add_question.html', form=form)
 
 
-@qa_bp.route('/detail/<lessonid>/<qid>', methods=('POST', 'GET'))
-@login_required
-def detail(lessonid, qid):
-    lesson = Lesson.get(Lesson.id == lessonid)
-    try:
-        question = Question.get(Question.id == qid)
-    except:
-        flash('Id not found', 'error')
-        return redirect(url_for('.view', lessonid=lessonid))
-
-    replies = Reply.select().where(Reply.question == qid)
-
-    form = AddReplyForm()
-
-    return render_template('qa/detail.html', question=question, detail=detail, lesson=lesson, form=form, replies=replies)
-
-
 @qa_bp.route('/add-reply/<questionid>', methods=('POST', 'GET'))
 @login_required
 def add_reply(questionid):
+    """Route to handle a POST request to add a reply to a Question"""
     form = AddReplyForm()
 
     try:
         question = Question.get(Question.id == questionid)
     except:
         flash('Id not found', 'error')
-        # TODO: Add 404
         return redirect(url_for('auth_bp.profile'))
 
     if form.validate_on_submit():
