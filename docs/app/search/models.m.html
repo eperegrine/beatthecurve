@@ -1144,13 +1144,16 @@ table {
 <span class="k">class</span> <span class="nc">Option</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Model representing an option a user can subscribe to&quot;&quot;&quot;</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NAME&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NAME&#39;</span><span class="p">)</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;DESCRIPTION&#39;</span><span class="p">)</span>
     <span class="n">school</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">School</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;SCHOOL_ID&#39;</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s2">&quot;TBL_OPTION&quot;</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;school&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">UserOption</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
@@ -1210,13 +1213,16 @@ table {
     <div class="codehilite"><pre><span class="k">class</span> <span class="nc">Option</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Model representing an option a user can subscribe to&quot;&quot;&quot;</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NAME&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NAME&#39;</span><span class="p">)</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;DESCRIPTION&#39;</span><span class="p">)</span>
     <span class="n">school</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">School</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;SCHOOL_ID&#39;</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s2">&quot;TBL_OPTION&quot;</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;school&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 </pre></div>
 
   </div>

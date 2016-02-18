@@ -1082,7 +1082,8 @@ table {
     <span class="n">DecimalField</span><span class="p">,</span>
     <span class="n">SelectField</span><span class="p">,</span>
     <span class="n">FileField</span><span class="p">,</span>
-    <span class="n">IntegerField</span>
+    <span class="n">IntegerField</span><span class="p">,</span>
+    <span class="n">HiddenField</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">wtforms.validators</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">DataRequired</span>
@@ -1095,6 +1096,7 @@ table {
 
 <span class="k">class</span> <span class="nc">AddExamForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Form to allow users to upload an exam&quot;&quot;&quot;</span>
+    <span class="n">file_hash</span> <span class="o">=</span> <span class="n">HiddenField</span><span class="p">()</span>
     <span class="nb">file</span> <span class="o">=</span> <span class="n">FileField</span><span class="p">(</span><span class="s1">&#39;File&#39;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
     <span class="n">average_grade</span> <span class="o">=</span> <span class="n">DecimalField</span><span class="p">(</span><span class="s1">&#39;Average Grade&#39;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
     <span class="n">number_of_takers</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="s1">&#39;Number Of Takers&#39;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
@@ -1121,6 +1123,7 @@ table {
   <div id="source-app.exams.forms.AddExamForm" class="source">
     <div class="codehilite"><pre><span class="k">class</span> <span class="nc">AddExamForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Form to allow users to upload an exam&quot;&quot;&quot;</span>
+    <span class="n">file_hash</span> <span class="o">=</span> <span class="n">HiddenField</span><span class="p">()</span>
     <span class="nb">file</span> <span class="o">=</span> <span class="n">FileField</span><span class="p">(</span><span class="s1">&#39;File&#39;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
     <span class="n">average_grade</span> <span class="o">=</span> <span class="n">DecimalField</span><span class="p">(</span><span class="s1">&#39;Average Grade&#39;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
     <span class="n">number_of_takers</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="s1">&#39;Number Of Takers&#39;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
@@ -1196,6 +1199,16 @@ table {
             </div>
             <div class="item">
             <p id="app.exams.forms.AddExamForm.file" class="name">var <span class="ident">file</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="app.exams.forms.AddExamForm.file_hash" class="name">var <span class="ident">file_hash</span></p>
             
 
             

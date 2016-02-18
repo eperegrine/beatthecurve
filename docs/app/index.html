@@ -1036,6 +1036,13 @@ table {
   <div id="sidebar">
     <h1>Index</h1>
     <ul id="index">
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#app.tables">tables</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
@@ -1045,6 +1052,7 @@ table {
     <li class="mono"><a href="#app.index">index</a></li>
     <li class="mono"><a href="#app.inject_semester_enum">inject_semester_enum</a></li>
     <li class="mono"><a href="#app.inject_static_url">inject_static_url</a></li>
+    <li class="mono"><a href="#app.inject_uploads_url">inject_uploads_url</a></li>
     <li class="mono"><a href="#app.load_user">load_user</a></li>
   </ul>
 
@@ -1090,10 +1098,10 @@ table {
 <span class="kn">from</span> <span class="nn">.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sendgrid</span>
+<span class="kn">import</span> <span class="nn">peewee</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;hufenaifneianwdawaffioawnfiohaewifs&#39;</span> <span class="c1"># TODO: Move to environment variable</span>
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;UPLOAD_FOLDER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;uploads&#39;</span> <span class="c1"># TODO: Check if can be removed</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">]</span>
 <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;PRESERVE_CONTEXT_ON_EXCEPTION&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
 
@@ -1102,16 +1110,28 @@ table {
 <span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">DATABASE</span>
 <span class="kn">from</span> <span class="nn">app.auth.models</span> <span class="kn">import</span> <span class="n">School</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">Permission</span><span class="p">,</span> <span class="n">UserPermission</span>
 <span class="kn">from</span> <span class="nn">app.lesson.models</span> <span class="kn">import</span> <span class="n">Lesson</span><span class="p">,</span> <span class="n">LessonStudent</span>
-<span class="kn">from</span> <span class="nn">app.notes.models</span> <span class="kn">import</span> <span class="n">Lecture</span><span class="p">,</span> <span class="n">Discussion</span><span class="p">,</span> <span class="n">Note</span><span class="p">,</span> <span class="n">NoteVote</span>
+<span class="kn">from</span> <span class="nn">app.notes.models</span> <span class="kn">import</span> <span class="n">Note</span><span class="p">,</span> <span class="n">NoteVote</span>
 <span class="kn">from</span> <span class="nn">app.qa.models</span> <span class="kn">import</span> <span class="n">Question</span><span class="p">,</span> <span class="n">Reply</span>
 <span class="kn">from</span> <span class="nn">app.exams.models</span> <span class="kn">import</span> <span class="n">Exam</span><span class="p">,</span> <span class="n">ExamVote</span>
 <span class="kn">from</span> <span class="nn">app.studygroups.models</span> <span class="kn">import</span> <span class="n">StudyGroup</span><span class="p">,</span> <span class="n">StudyGroupComment</span><span class="p">,</span> <span class="n">StudyGroupMembers</span><span class="p">,</span> <span class="n">StudyGroupSession</span>
 <span class="kn">from</span> <span class="nn">app.search.models</span> <span class="kn">import</span> <span class="n">Option</span><span class="p">,</span> <span class="n">UserOption</span>
 <span class="kn">from</span> <span class="nn">app.chat.models</span> <span class="kn">import</span> <span class="n">Message</span>
 
-<span class="n">DATABASE</span><span class="o">.</span><span class="n">create_tables</span><span class="p">([</span><span class="n">School</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">Permission</span><span class="p">,</span> <span class="n">UserPermission</span><span class="p">,</span> <span class="n">Lesson</span><span class="p">,</span> <span class="n">LessonStudent</span><span class="p">,</span> <span class="n">Lecture</span><span class="p">,</span> <span class="n">Discussion</span><span class="p">,</span> <span class="n">Note</span><span class="p">,</span>
+<span class="c1"># Print all queries to stderr.</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;peewee&#39;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
+
+<span class="n">tables</span> <span class="o">=</span> <span class="p">[</span><span class="n">School</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">Permission</span><span class="p">,</span> <span class="n">UserPermission</span><span class="p">,</span> <span class="n">Lesson</span><span class="p">,</span> <span class="n">LessonStudent</span><span class="p">,</span> <span class="n">Note</span><span class="p">,</span>
                         <span class="n">NoteVote</span><span class="p">,</span> <span class="n">Question</span><span class="p">,</span> <span class="n">Reply</span><span class="p">,</span> <span class="n">Exam</span><span class="p">,</span> <span class="n">ExamVote</span><span class="p">,</span> <span class="n">StudyGroup</span><span class="p">,</span> <span class="n">StudyGroupComment</span><span class="p">,</span> <span class="n">StudyGroupMembers</span><span class="p">,</span>
-                        <span class="n">StudyGroupSession</span><span class="p">,</span> <span class="n">Option</span><span class="p">,</span> <span class="n">UserOption</span><span class="p">,</span> <span class="n">Message</span><span class="p">],</span> <span class="n">safe</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                        <span class="n">StudyGroupSession</span><span class="p">,</span> <span class="n">Option</span><span class="p">,</span> <span class="n">UserOption</span><span class="p">,</span> <span class="n">Message</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">tables</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">peewee</span><span class="o">.</span><span class="n">ProgrammingError</span><span class="p">:</span>
+        <span class="k">continue</span>
 
 <span class="c1"># Set up login manager</span>
 <span class="n">login_manager</span> <span class="o">=</span> <span class="n">LoginManager</span><span class="p">()</span>
@@ -1168,6 +1188,15 @@ table {
     <span class="sd">&quot;&quot;&quot;Inject the app.models.Semester enum into templates&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">semester_enum</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">Semester</span><span class="p">))))</span>
 
+<span class="nd">@app.context_processor</span>
+<span class="k">def</span> <span class="nf">inject_uploads_url</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Inject the url for notes and exams into templates&quot;&quot;&quot;</span>
+    <span class="n">uploads_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;UPLOADS_URL&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">uploads_url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+        <span class="n">uploads_url</span> <span class="o">+=</span> <span class="s1">&#39;/&#39;</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">uploads_url</span><span class="o">=</span><span class="n">uploads_url</span>
+    <span class="p">)</span>
 
 <span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
@@ -1207,6 +1236,15 @@ table {
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="app.tables" class="name">var <span class="ident">tables</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
@@ -1337,6 +1375,35 @@ the environment variable STATIC_URL, or use the default.</p>
         <span class="n">static_url</span> <span class="o">+=</span> <span class="s1">&#39;/&#39;</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">static_url</span><span class="o">=</span><span class="n">static_url</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="app.inject_uploads_url">
+    <p>def <span class="ident">inject_uploads_url</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Inject the url for notes and exams into templates</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-app.inject_uploads_url', this);">Show source &equiv;</a></p>
+  <div id="source-app.inject_uploads_url" class="source">
+    <div class="codehilite"><pre><span class="nd">@app.context_processor</span>
+<span class="k">def</span> <span class="nf">inject_uploads_url</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Inject the url for notes and exams into templates&quot;&quot;&quot;</span>
+    <span class="n">uploads_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;UPLOADS_URL&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">uploads_url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+        <span class="n">uploads_url</span> <span class="o">+=</span> <span class="s1">&#39;/&#39;</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">uploads_url</span><span class="o">=</span><span class="n">uploads_url</span>
     <span class="p">)</span>
 </pre></div>
 

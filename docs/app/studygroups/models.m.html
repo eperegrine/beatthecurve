@@ -1304,12 +1304,16 @@ table {
 
 <span class="k">class</span> <span class="nc">StudyGroupMembers</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Model that represents a User in a StudyGroup&quot;&quot;&quot;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;USER_ID&#39;</span><span class="p">)</span>
     <span class="n">study_group</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">StudyGroup</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;STUDY_GROUP_ID&#39;</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;TBL_STUDY_GROUP_MEMBER&#39;</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;study_group&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">StudyGroupSession</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
@@ -3302,12 +3306,16 @@ table {
   <div id="source-app.studygroups.models.StudyGroupMembers" class="source">
     <div class="codehilite"><pre><span class="k">class</span> <span class="nc">StudyGroupMembers</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Model that represents a User in a StudyGroup&quot;&quot;&quot;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;USER_ID&#39;</span><span class="p">)</span>
     <span class="n">study_group</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">StudyGroup</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;STUDY_GROUP_ID&#39;</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;TBL_STUDY_GROUP_MEMBER&#39;</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;study_group&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 </pre></div>
 
   </div>

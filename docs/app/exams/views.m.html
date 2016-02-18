@@ -1041,7 +1041,6 @@ table {
       
   <ul>
     <li class="mono"><a href="#app.exams.views.add_exam">add_exam</a></li>
-    <li class="mono"><a href="#app.exams.views.detail">detail</a></li>
     <li class="mono"><a href="#app.exams.views.sign_s3">sign_s3</a></li>
     <li class="mono"><a href="#app.exams.views.view">view</a></li>
     <li class="mono"><a href="#app.exams.views.vote">vote</a></li>
@@ -1076,7 +1075,8 @@ table {
 <span class="kn">import</span> <span class="nn">base64</span>
 <span class="kn">import</span> <span class="nn">hmac</span>
 <span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha1</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha1</span><span class="p">,</span> <span class="n">md5</span>
 <span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">KarmaPoints</span>
 
 <span class="n">exams_bp</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">&#39;exams_bp&#39;</span><span class="p">,</span> <span class="n">__name__</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s1">&#39;/exams&#39;</span><span class="p">)</span>
@@ -1086,7 +1086,6 @@ table {
 <span class="nd">@login_required</span>
 <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="n">lessonid</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Route that lists the exams for a lesson&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Validate id</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lessonid</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
@@ -1105,12 +1104,18 @@ table {
 <span class="nd">@exams_bp.route</span><span class="p">(</span><span class="s1">&#39;/sign_s3/&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">sign_s3</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Route to sign files for upload to S3. Accessed via AJAX.&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Move to environment variables</span>
-    <span class="n">AWS_ACCESS_KEY</span> <span class="o">=</span> <span class="s1">&#39;AKIAJPAM7ZQCRQQ5GP3Q&#39;</span>
-    <span class="n">AWS_SECRET_KEY</span> <span class="o">=</span> <span class="s1">&#39;TUy7eZPWClYwkRm7Qg/rBJKJ9VZB8U9cU3rOXkb3&#39;</span>
-    <span class="n">S3_BUCKET</span> <span class="o">=</span> <span class="s1">&#39;beatthecurve&#39;</span>
+    <span class="n">AWS_ACCESS_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;AWS_ACCESS_KEY&#39;</span><span class="p">]</span>
+    <span class="n">AWS_SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;AWS_SECRET_KEY&#39;</span><span class="p">]</span>
+    <span class="n">S3_BUCKET</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;S3_BUCKET&#39;</span><span class="p">]</span>
 
-    <span class="n">object_name</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote_plus</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;file_name&#39;</span><span class="p">))</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;file_name&#39;</span><span class="p">)</span>
+    <span class="n">filename_hash</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">+</span> <span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">Exam</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Exam</span><span class="o">.</span><span class="n">s3_filename</span> <span class="o">==</span> <span class="n">filename_hash</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">filename_hash</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">object_name</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote_plus</span><span class="p">(</span><span class="n">filename_hash</span><span class="p">)</span>
     <span class="n">mime_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;file_type&#39;</span><span class="p">)</span>
 
     <span class="n">expires</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">+</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">24</span><span class="p">)</span>
@@ -1126,6 +1131,7 @@ table {
     <span class="n">content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
         <span class="s1">&#39;signed_request&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">?AWSAccessKeyId=</span><span class="si">%s</span><span class="s1">&amp;Expires=</span><span class="si">%s</span><span class="s1">&amp;Signature=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">AWS_ACCESS_KEY</span><span class="p">,</span> <span class="n">expires</span><span class="p">,</span> <span class="n">signature</span><span class="p">),</span>
         <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+        <span class="s1">&#39;file_hash&#39;</span><span class="p">:</span> <span class="n">filename_hash</span>
     <span class="p">})</span>
     <span class="k">return</span> <span class="n">content</span>
 
@@ -1145,6 +1151,7 @@ table {
         <span class="n">Exam</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
             <span class="n">average_grade</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">average_grade</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
             <span class="n">filename</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+            <span class="n">s3_filename</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">file_hash</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
             <span class="n">lesson</span><span class="o">=</span><span class="n">lesson</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="n">publisher</span><span class="o">=</span><span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span>
             <span class="n">number_of_takers</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">number_of_takers</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
@@ -1181,15 +1188,6 @@ table {
         <span class="k">else</span><span class="p">:</span>
             <span class="n">flash</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;.view&quot;</span><span class="p">,</span> <span class="n">lessonid</span><span class="o">=</span><span class="n">exam</span><span class="o">.</span><span class="n">lesson</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
-
-
-<span class="nd">@exams_bp.route</span><span class="p">(</span><span class="s1">&#39;/detail/&lt;examid&gt;&#39;</span><span class="p">)</span>
-<span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">examid</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Route to display the detail page for an exam&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Check if this can be removed</span>
-    <span class="n">exam</span> <span class="o">=</span> <span class="n">Exam</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Exam</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">examid</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;exams/detail.html&quot;</span><span class="p">,</span> <span class="n">exam</span><span class="o">=</span><span class="n">exam</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1228,6 +1226,7 @@ table {
         <span class="n">Exam</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
             <span class="n">average_grade</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">average_grade</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
             <span class="n">filename</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+            <span class="n">s3_filename</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">file_hash</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
             <span class="n">lesson</span><span class="o">=</span><span class="n">lesson</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="n">publisher</span><span class="o">=</span><span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span>
             <span class="n">number_of_takers</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">number_of_takers</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
@@ -1240,33 +1239,6 @@ table {
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;.view&quot;</span><span class="p">,</span> <span class="n">lessonid</span><span class="o">=</span><span class="n">lesson</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;exams/add-exam.html&quot;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="app.exams.views.detail">
-    <p>def <span class="ident">detail</span>(</p><p>*args, **kwargs)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Route to display the detail page for an exam</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-app.exams.views.detail', this);">Show source &equiv;</a></p>
-  <div id="source-app.exams.views.detail" class="source">
-    <div class="codehilite"><pre><span class="nd">@exams_bp.route</span><span class="p">(</span><span class="s1">&#39;/detail/&lt;examid&gt;&#39;</span><span class="p">)</span>
-<span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">examid</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Route to display the detail page for an exam&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Check if this can be removed</span>
-    <span class="n">exam</span> <span class="o">=</span> <span class="n">Exam</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Exam</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">examid</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;exams/detail.html&quot;</span><span class="p">,</span> <span class="n">exam</span><span class="o">=</span><span class="n">exam</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1290,12 +1262,18 @@ table {
     <div class="codehilite"><pre><span class="nd">@exams_bp.route</span><span class="p">(</span><span class="s1">&#39;/sign_s3/&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">sign_s3</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Route to sign files for upload to S3. Accessed via AJAX.&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Move to environment variables</span>
-    <span class="n">AWS_ACCESS_KEY</span> <span class="o">=</span> <span class="s1">&#39;AKIAJPAM7ZQCRQQ5GP3Q&#39;</span>
-    <span class="n">AWS_SECRET_KEY</span> <span class="o">=</span> <span class="s1">&#39;TUy7eZPWClYwkRm7Qg/rBJKJ9VZB8U9cU3rOXkb3&#39;</span>
-    <span class="n">S3_BUCKET</span> <span class="o">=</span> <span class="s1">&#39;beatthecurve&#39;</span>
+    <span class="n">AWS_ACCESS_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;AWS_ACCESS_KEY&#39;</span><span class="p">]</span>
+    <span class="n">AWS_SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;AWS_SECRET_KEY&#39;</span><span class="p">]</span>
+    <span class="n">S3_BUCKET</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;S3_BUCKET&#39;</span><span class="p">]</span>
 
-    <span class="n">object_name</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote_plus</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;file_name&#39;</span><span class="p">))</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;file_name&#39;</span><span class="p">)</span>
+    <span class="n">filename_hash</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">+</span> <span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">Exam</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Exam</span><span class="o">.</span><span class="n">s3_filename</span> <span class="o">==</span> <span class="n">filename_hash</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">filename_hash</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">object_name</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote_plus</span><span class="p">(</span><span class="n">filename_hash</span><span class="p">)</span>
     <span class="n">mime_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;file_type&#39;</span><span class="p">)</span>
 
     <span class="n">expires</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">+</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">24</span><span class="p">)</span>
@@ -1311,6 +1289,7 @@ table {
     <span class="n">content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
         <span class="s1">&#39;signed_request&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">?AWSAccessKeyId=</span><span class="si">%s</span><span class="s1">&amp;Expires=</span><span class="si">%s</span><span class="s1">&amp;Signature=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">AWS_ACCESS_KEY</span><span class="p">,</span> <span class="n">expires</span><span class="p">,</span> <span class="n">signature</span><span class="p">),</span>
         <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+        <span class="s1">&#39;file_hash&#39;</span><span class="p">:</span> <span class="n">filename_hash</span>
     <span class="p">})</span>
     <span class="k">return</span> <span class="n">content</span>
 </pre></div>
@@ -1337,7 +1316,6 @@ table {
 <span class="nd">@login_required</span>
 <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="n">lessonid</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Route that lists the exams for a lesson&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Validate id</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lessonid</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>

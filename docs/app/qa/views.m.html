@@ -1042,7 +1042,6 @@ table {
   <ul>
     <li class="mono"><a href="#app.qa.views.add_question">add_question</a></li>
     <li class="mono"><a href="#app.qa.views.add_reply">add_reply</a></li>
-    <li class="mono"><a href="#app.qa.views.detail">detail</a></li>
     <li class="mono"><a href="#app.qa.views.view">view</a></li>
   </ul>
 
@@ -1068,10 +1067,8 @@ table {
     <div class="codehilite"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Blueprint</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">flash</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">request</span>
 <span class="kn">from</span> <span class="nn">flask.ext.login</span> <span class="kn">import</span> <span class="n">login_required</span>
 <span class="kn">from</span> <span class="nn">app.lesson.models</span> <span class="kn">import</span> <span class="n">Lesson</span>
-<span class="kn">from</span> <span class="nn">app.notes.models</span> <span class="kn">import</span> <span class="n">Lecture</span><span class="p">,</span> <span class="n">Discussion</span>
 <span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">AddQuestionForm</span><span class="p">,</span> <span class="n">AddReplyForm</span>
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span><span class="p">,</span> <span class="n">Reply</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">Semester</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">KarmaPoints</span>
@@ -1137,25 +1134,6 @@ table {
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;qa/add_question.html&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span>
 
 
-<span class="nd">@qa_bp.route</span><span class="p">(</span><span class="s1">&#39;/detail/&lt;lessonid&gt;/&lt;qid&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;GET&#39;</span><span class="p">))</span>
-<span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">lessonid</span><span class="p">,</span> <span class="n">qid</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Route to display the detail page for a question&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Check if it can be removed</span>
-    <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lessonid</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Question</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">qid</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Id not found&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;.view&#39;</span><span class="p">,</span> <span class="n">lessonid</span><span class="o">=</span><span class="n">lessonid</span><span class="p">))</span>
-
-    <span class="n">replies</span> <span class="o">=</span> <span class="n">Reply</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Reply</span><span class="o">.</span><span class="n">question</span> <span class="o">==</span> <span class="n">qid</span><span class="p">)</span>
-
-    <span class="n">form</span> <span class="o">=</span> <span class="n">AddReplyForm</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;qa/detail.html&#39;</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">,</span> <span class="n">lesson</span><span class="o">=</span><span class="n">lesson</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span> <span class="n">replies</span><span class="o">=</span><span class="n">replies</span><span class="p">)</span>
-
-
 <span class="nd">@qa_bp.route</span><span class="p">(</span><span class="s1">&#39;/add-reply/&lt;questionid&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;GET&#39;</span><span class="p">))</span>
 <span class="nd">@login_required</span>
 <span class="k">def</span> <span class="nf">add_reply</span><span class="p">(</span><span class="n">questionid</span><span class="p">):</span>
@@ -1166,7 +1144,6 @@ table {
         <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Question</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">questionid</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Id not found&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
-        <span class="c1"># TODO: Add 404</span>
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;auth_bp.profile&#39;</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
@@ -1259,7 +1236,6 @@ table {
         <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Question</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">questionid</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Id not found&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
-        <span class="c1"># TODO: Add 404</span>
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;auth_bp.profile&#39;</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
@@ -1275,43 +1251,6 @@ table {
         <span class="n">question</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;.view&quot;</span><span class="p">,</span> <span class="n">lessonid</span><span class="o">=</span><span class="n">question</span><span class="o">.</span><span class="n">lesson</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="app.qa.views.detail">
-    <p>def <span class="ident">detail</span>(</p><p>*args, **kwargs)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Route to display the detail page for a question</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-app.qa.views.detail', this);">Show source &equiv;</a></p>
-  <div id="source-app.qa.views.detail" class="source">
-    <div class="codehilite"><pre><span class="nd">@qa_bp.route</span><span class="p">(</span><span class="s1">&#39;/detail/&lt;lessonid&gt;/&lt;qid&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;GET&#39;</span><span class="p">))</span>
-<span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">lessonid</span><span class="p">,</span> <span class="n">qid</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Route to display the detail page for a question&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Check if it can be removed</span>
-    <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lessonid</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Question</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">qid</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Id not found&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;.view&#39;</span><span class="p">,</span> <span class="n">lessonid</span><span class="o">=</span><span class="n">lessonid</span><span class="p">))</span>
-
-    <span class="n">replies</span> <span class="o">=</span> <span class="n">Reply</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Reply</span><span class="o">.</span><span class="n">question</span> <span class="o">==</span> <span class="n">qid</span><span class="p">)</span>
-
-    <span class="n">form</span> <span class="o">=</span> <span class="n">AddReplyForm</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;qa/detail.html&#39;</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">,</span> <span class="n">lesson</span><span class="o">=</span><span class="n">lesson</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span> <span class="n">replies</span><span class="o">=</span><span class="n">replies</span><span class="p">)</span>
 </pre></div>
 
   </div>

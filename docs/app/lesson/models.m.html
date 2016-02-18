@@ -1148,28 +1148,30 @@ table {
 <span class="k">class</span> <span class="nc">Lesson</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Model representing a lesson a user can attend.</span>
 
-<span class="sd">    They are specific to a school and must have unique names.</span>
+<span class="sd">    They are specific to a school and must have unique names</span>
+<span class="sd">    within a school.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Update keys</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
-    <span class="n">lesson_name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NAME&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">lesson_name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NAME&#39;</span><span class="p">)</span>
     <span class="n">professor</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;PROFESSOR&#39;</span><span class="p">)</span>
     <span class="n">school_id</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">School</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;SCHOOL&#39;</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;TBL_LESSON&#39;</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;lesson_name&#39;</span><span class="p">,</span> <span class="s1">&#39;school_id&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_unattended_lessons</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">school_id</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Class method to get the lessons a user is not currently enrolled in&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: Remove need for school_id</span>
-        <span class="c1"># TODO: Update to factor in Semesters and Year</span>
-        <span class="n">schools_lessons</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">school_id</span> <span class="o">==</span> <span class="n">school_id</span><span class="p">)</span>
-        <span class="n">users_lessons</span> <span class="o">=</span> <span class="p">[</span><span class="n">ls</span><span class="o">.</span><span class="n">lesson_id</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="n">LessonStudent</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">LessonStudent</span><span class="o">.</span><span class="n">student_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)]</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">users_lessons</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_unattended_lessons</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Class method to get the lessons a user is not currently enrolled in</span>
+
+<span class="sd">        `user` is an instance of `app.auth.models.User`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">schools_lessons</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">school_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">school_id</span><span class="p">)</span>
+        <span class="n">users_lessons</span> <span class="o">=</span> <span class="p">[</span><span class="n">ls</span><span class="o">.</span><span class="n">lesson_id</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="n">LessonStudent</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">LessonStudent</span><span class="o">.</span><span class="n">student_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">user_id</span><span class="p">)]</span>
         <span class="n">lessons</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">print</span><span class="p">([</span><span class="n">lesson</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">schools_lessons</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">schools_lessons</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">lesson</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">users_lessons</span><span class="p">:</span>
                 <span class="n">lessons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lesson</span><span class="p">)</span>
@@ -1178,6 +1180,7 @@ table {
 
 <span class="k">class</span> <span class="nc">LessonStudent</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Model representing a user attending a lesson in a specific year and semester&quot;&quot;&quot;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
     <span class="n">student_id</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;STUDENT_ID&#39;</span><span class="p">)</span>
     <span class="n">lesson_id</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">Lesson</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;LESSON_ID&#39;</span><span class="p">)</span>
     <span class="n">semester</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;SEMESTER&#39;</span><span class="p">)</span>
@@ -1186,13 +1189,13 @@ table {
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;TBL_LESSON_STUDENT&#39;</span>
-        <span class="c1">#primary_key = CompositeKey(&#39;student_id&#39;, &#39;lesson_id&#39;)</span>
-        <span class="c1"># TODO: Add composite key</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;student_id&#39;</span><span class="p">,</span> <span class="s1">&#39;lesson_id&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_attended_lessons</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Class method to get all the Lessons a user is currently attending&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: Factor in semester and year</span>
         <span class="n">users_lessons</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">LessonStudent</span><span class="o">.</span><span class="n">student_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
         <span class="n">lessons</span> <span class="o">=</span> <span class="p">[</span><span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lesson</span><span class="o">.</span><span class="n">lesson_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">users_lessons</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">lessons</span>
@@ -1200,18 +1203,13 @@ table {
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">attend</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">lesson_ids</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Class method to create LessonStudent objects for every lesson a user wants to attend&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: Validate user_id and lesson_ids so they are in the same school</span>
-        <span class="c1"># TODO: Update semesters</span>
+        <span class="n">users_school</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">school_id</span>
         <span class="k">for</span> <span class="n">lesson_id</span> <span class="ow">in</span> <span class="n">lesson_ids</span><span class="p">:</span>
-            <span class="n">month</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">month</span>
-            <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
-                <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">winter</span>
-            <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-                <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">spring</span>
-            <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">:</span>
-                <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">summer</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">fall</span>
+            <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lesson_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">lesson</span><span class="o">.</span><span class="n">school_id</span> <span class="o">!=</span> <span class="n">users_school</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Lesson id {} does not corrospond to the same school as the user&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lesson</span><span class="o">.</span><span class="n">school_id</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">lesson_id</span> <span class="ow">in</span> <span class="n">lesson_ids</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">current_semester</span><span class="p">()</span>
             <span class="n">LessonStudent</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">student_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">lesson_id</span><span class="o">=</span><span class="n">lesson_id</span><span class="p">,</span> <span class="n">semester</span><span class="o">=</span><span class="n">semester</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
                                  <span class="n">year</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
 </pre></div>
@@ -1255,35 +1253,38 @@ table {
       
   
     <div class="desc"><p>Model representing a lesson a user can attend.</p>
-<p>They are specific to a school and must have unique names.</p></div>
+<p>They are specific to a school and must have unique names
+within a school.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-app.lesson.models.Lesson', this);">Show source &equiv;</a></p>
   <div id="source-app.lesson.models.Lesson" class="source">
     <div class="codehilite"><pre><span class="k">class</span> <span class="nc">Lesson</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Model representing a lesson a user can attend.</span>
 
-<span class="sd">    They are specific to a school and must have unique names.</span>
+<span class="sd">    They are specific to a school and must have unique names</span>
+<span class="sd">    within a school.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Update keys</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
-    <span class="n">lesson_name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NAME&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">lesson_name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NAME&#39;</span><span class="p">)</span>
     <span class="n">professor</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;PROFESSOR&#39;</span><span class="p">)</span>
     <span class="n">school_id</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">School</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;SCHOOL&#39;</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;TBL_LESSON&#39;</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;lesson_name&#39;</span><span class="p">,</span> <span class="s1">&#39;school_id&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_unattended_lessons</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">school_id</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Class method to get the lessons a user is not currently enrolled in&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: Remove need for school_id</span>
-        <span class="c1"># TODO: Update to factor in Semesters and Year</span>
-        <span class="n">schools_lessons</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">school_id</span> <span class="o">==</span> <span class="n">school_id</span><span class="p">)</span>
-        <span class="n">users_lessons</span> <span class="o">=</span> <span class="p">[</span><span class="n">ls</span><span class="o">.</span><span class="n">lesson_id</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="n">LessonStudent</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">LessonStudent</span><span class="o">.</span><span class="n">student_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)]</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">users_lessons</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_unattended_lessons</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Class method to get the lessons a user is not currently enrolled in</span>
+
+<span class="sd">        `user` is an instance of `app.auth.models.User`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">schools_lessons</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">school_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">school_id</span><span class="p">)</span>
+        <span class="n">users_lessons</span> <span class="o">=</span> <span class="p">[</span><span class="n">ls</span><span class="o">.</span><span class="n">lesson_id</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="n">LessonStudent</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">LessonStudent</span><span class="o">.</span><span class="n">student_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">user_id</span><span class="p">)]</span>
         <span class="n">lessons</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">print</span><span class="p">([</span><span class="n">lesson</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">schools_lessons</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">schools_lessons</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">lesson</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">users_lessons</span><span class="p">:</span>
                 <span class="n">lessons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lesson</span><span class="p">)</span>
@@ -1875,26 +1876,25 @@ table {
             
   <div class="item">
     <div class="name def" id="app.lesson.models.Lesson.get_unattended_lessons">
-    <p>def <span class="ident">get_unattended_lessons</span>(</p><p>cls, user_id, school_id)</p>
+    <p>def <span class="ident">get_unattended_lessons</span>(</p><p>cls, user)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Class method to get the lessons a user is not currently enrolled in</p></div>
+    <div class="desc"><p>Class method to get the lessons a user is not currently enrolled in</p>
+<p><code>user</code> is an instance of <code>app.auth.models.User</code></p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-app.lesson.models.Lesson.get_unattended_lessons', this);">Show source &equiv;</a></p>
   <div id="source-app.lesson.models.Lesson.get_unattended_lessons" class="source">
     <div class="codehilite"><pre><span class="nd">@classmethod</span>
-<span class="k">def</span> <span class="nf">get_unattended_lessons</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">school_id</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Class method to get the lessons a user is not currently enrolled in&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Remove need for school_id</span>
-    <span class="c1"># TODO: Update to factor in Semesters and Year</span>
-    <span class="n">schools_lessons</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">school_id</span> <span class="o">==</span> <span class="n">school_id</span><span class="p">)</span>
-    <span class="n">users_lessons</span> <span class="o">=</span> <span class="p">[</span><span class="n">ls</span><span class="o">.</span><span class="n">lesson_id</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="n">LessonStudent</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">LessonStudent</span><span class="o">.</span><span class="n">student_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)]</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">users_lessons</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_unattended_lessons</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class method to get the lessons a user is not currently enrolled in</span>
+<span class="sd">    `user` is an instance of `app.auth.models.User`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">schools_lessons</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">school_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">school_id</span><span class="p">)</span>
+    <span class="n">users_lessons</span> <span class="o">=</span> <span class="p">[</span><span class="n">ls</span><span class="o">.</span><span class="n">lesson_id</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="n">LessonStudent</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">LessonStudent</span><span class="o">.</span><span class="n">student_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">user_id</span><span class="p">)]</span>
     <span class="n">lessons</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">print</span><span class="p">([</span><span class="n">lesson</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">schools_lessons</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">schools_lessons</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">lesson</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">users_lessons</span><span class="p">:</span>
             <span class="n">lessons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lesson</span><span class="p">)</span>
@@ -2117,6 +2117,7 @@ table {
   <div id="source-app.lesson.models.LessonStudent" class="source">
     <div class="codehilite"><pre><span class="k">class</span> <span class="nc">LessonStudent</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Model representing a user attending a lesson in a specific year and semester&quot;&quot;&quot;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
     <span class="n">student_id</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;STUDENT_ID&#39;</span><span class="p">)</span>
     <span class="n">lesson_id</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">Lesson</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;LESSON_ID&#39;</span><span class="p">)</span>
     <span class="n">semester</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;SEMESTER&#39;</span><span class="p">)</span>
@@ -2125,13 +2126,13 @@ table {
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;TBL_LESSON_STUDENT&#39;</span>
-        <span class="c1">#primary_key = CompositeKey(&#39;student_id&#39;, &#39;lesson_id&#39;)</span>
-        <span class="c1"># TODO: Add composite key</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;student_id&#39;</span><span class="p">,</span> <span class="s1">&#39;lesson_id&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_attended_lessons</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Class method to get all the Lessons a user is currently attending&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: Factor in semester and year</span>
         <span class="n">users_lessons</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">LessonStudent</span><span class="o">.</span><span class="n">student_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
         <span class="n">lessons</span> <span class="o">=</span> <span class="p">[</span><span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lesson</span><span class="o">.</span><span class="n">lesson_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">users_lessons</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">lessons</span>
@@ -2139,18 +2140,13 @@ table {
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">attend</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">lesson_ids</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Class method to create LessonStudent objects for every lesson a user wants to attend&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: Validate user_id and lesson_ids so they are in the same school</span>
-        <span class="c1"># TODO: Update semesters</span>
+        <span class="n">users_school</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">school_id</span>
         <span class="k">for</span> <span class="n">lesson_id</span> <span class="ow">in</span> <span class="n">lesson_ids</span><span class="p">:</span>
-            <span class="n">month</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">month</span>
-            <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
-                <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">winter</span>
-            <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-                <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">spring</span>
-            <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">:</span>
-                <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">summer</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">fall</span>
+            <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lesson_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">lesson</span><span class="o">.</span><span class="n">school_id</span> <span class="o">!=</span> <span class="n">users_school</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Lesson id {} does not corrospond to the same school as the user&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lesson</span><span class="o">.</span><span class="n">school_id</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">lesson_id</span> <span class="ow">in</span> <span class="n">lesson_ids</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">current_semester</span><span class="p">()</span>
             <span class="n">LessonStudent</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">student_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">lesson_id</span><span class="o">=</span><span class="n">lesson_id</span><span class="p">,</span> <span class="n">semester</span><span class="o">=</span><span class="n">semester</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
                                  <span class="n">year</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
 </pre></div>
@@ -2557,18 +2553,13 @@ table {
     <div class="codehilite"><pre><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">attend</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">lesson_ids</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class method to create LessonStudent objects for every lesson a user wants to attend&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Validate user_id and lesson_ids so they are in the same school</span>
-    <span class="c1"># TODO: Update semesters</span>
+    <span class="n">users_school</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">school_id</span>
     <span class="k">for</span> <span class="n">lesson_id</span> <span class="ow">in</span> <span class="n">lesson_ids</span><span class="p">:</span>
-        <span class="n">month</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">month</span>
-        <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
-            <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">winter</span>
-        <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">spring</span>
-        <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">:</span>
-            <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">summer</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">fall</span>
+        <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lesson_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">lesson</span><span class="o">.</span><span class="n">school_id</span> <span class="o">!=</span> <span class="n">users_school</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Lesson id {} does not corrospond to the same school as the user&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lesson</span><span class="o">.</span><span class="n">school_id</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">lesson_id</span> <span class="ow">in</span> <span class="n">lesson_ids</span><span class="p">:</span>
+        <span class="n">semester</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">current_semester</span><span class="p">()</span>
         <span class="n">LessonStudent</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">student_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">lesson_id</span><span class="o">=</span><span class="n">lesson_id</span><span class="p">,</span> <span class="n">semester</span><span class="o">=</span><span class="n">semester</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
                              <span class="n">year</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
 </pre></div>
@@ -2773,7 +2764,6 @@ table {
     <div class="codehilite"><pre><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">get_attended_lessons</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">user_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class method to get all the Lessons a user is currently attending&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Factor in semester and year</span>
     <span class="n">users_lessons</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">LessonStudent</span><span class="o">.</span><span class="n">student_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
     <span class="n">lessons</span> <span class="o">=</span> <span class="p">[</span><span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lesson</span><span class="o">.</span><span class="n">lesson_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">users_lessons</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">lessons</span>

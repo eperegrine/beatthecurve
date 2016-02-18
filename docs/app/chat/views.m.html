@@ -1139,8 +1139,6 @@ table {
 <span class="sd">    print(active_users)&#39;&#39;&#39;</span>
     <span class="n">room</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;room&quot;</span>
     <span class="n">r</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">current_user</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">room</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;THE ROOM IS&quot;</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">room</span><span class="p">)</span>
     <span class="n">r</span><span class="o">.</span><span class="n">rpush</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="n">current_user</span><span class="o">.</span><span class="n">first_name</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">current_user</span><span class="o">.</span><span class="n">last_name</span><span class="p">)</span>
     <span class="n">emit</span><span class="p">(</span><span class="s1">&#39;clients&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;clients&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">lrange</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]},</span> <span class="n">room</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">])</span>
 
@@ -1199,8 +1197,10 @@ table {
 <span class="nd">@socketio.on</span><span class="p">(</span><span class="s1">&#39;connect&#39;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s1">&#39;/test&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">test_connect</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Websocket route to allow users to connect&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Add authentication</span>
-    <span class="n">emit</span><span class="p">(</span><span class="s1">&#39;my response&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="s1">&#39;Connected&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="n">emit</span><span class="p">(</span><span class="s1">&#39;my response&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="s1">&#39;Connected&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
 
 
 <span class="nd">@socketio.on</span><span class="p">(</span><span class="s1">&#39;disconnect&#39;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s1">&#39;/test&#39;</span><span class="p">)</span>

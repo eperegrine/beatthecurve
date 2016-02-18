@@ -1152,7 +1152,8 @@ table {
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
     <span class="n">average_grade</span> <span class="o">=</span> <span class="n">DecimalField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;AVERAGE_GRADE&#39;</span><span class="p">)</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;FILENAME&#39;</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;FILENAME&#39;</span><span class="p">)</span>
+    <span class="n">s3_filename</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;S3_FILENAME&#39;</span><span class="p">)</span>
     <span class="n">lesson</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">Lesson</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;LESSON&#39;</span><span class="p">)</span>
     <span class="n">number_of_takers</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NUMBER_OF_TAKERS&#39;</span><span class="p">)</span>
     <span class="n">publisher</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;PUBLISHER&#39;</span><span class="p">)</span>
@@ -1221,6 +1222,9 @@ table {
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;TBL_EXAM_VOTE&#39;</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;exam&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1273,7 +1277,8 @@ table {
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
     <span class="n">average_grade</span> <span class="o">=</span> <span class="n">DecimalField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;AVERAGE_GRADE&#39;</span><span class="p">)</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;FILENAME&#39;</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;FILENAME&#39;</span><span class="p">)</span>
+    <span class="n">s3_filename</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;S3_FILENAME&#39;</span><span class="p">)</span>
     <span class="n">lesson</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">Lesson</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;LESSON&#39;</span><span class="p">)</span>
     <span class="n">number_of_takers</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;NUMBER_OF_TAKERS&#39;</span><span class="p">)</span>
     <span class="n">publisher</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;PUBLISHER&#39;</span><span class="p">)</span>
@@ -1427,6 +1432,16 @@ table {
             </div>
             <div class="item">
             <p id="app.exams.models.Exam.publisher_id" class="name">var <span class="ident">publisher_id</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="app.exams.models.Exam.s3_filename" class="name">var <span class="ident">s3_filename</span></p>
             
 
             
@@ -2295,6 +2310,9 @@ table {
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">DATABASE</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;TBL_EXAM_VOTE&#39;</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;exam&#39;</span><span class="p">),</span> <span class="bp">True</span><span class="p">),</span>
+        <span class="p">)</span>
 </pre></div>
 
   </div>

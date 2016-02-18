@@ -1040,7 +1040,6 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#app.auth.views.admin">admin</a></li>
     <li class="mono"><a href="#app.auth.views.get_permissions">get_permissions</a></li>
     <li class="mono"><a href="#app.auth.views.login">login</a></li>
     <li class="mono"><a href="#app.auth.views.logout">logout</a></li>
@@ -1140,16 +1139,18 @@ table {
 <span class="sd">    Regardless of if it is a POST request or a GET request, the profile.html template is</span>
 <span class="sd">    rendered.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Remove redirects after form submissions</span>
     <span class="n">change_email_form</span> <span class="o">=</span> <span class="n">ChangeEmailForm</span><span class="p">()</span>
     <span class="n">change_password_form</span> <span class="o">=</span> <span class="n">ChangePasswordForm</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="s1">&#39;change_email&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">change_email_form</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
-            <span class="c1"># TODO: Add Error handling</span>
-            <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">change_email_form</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">data</span>
-            <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Email Updated!&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">change_email_form</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">data</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Email Updated!&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Error updating email!&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
+
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;.profile&#39;</span><span class="p">))</span>
 
     <span class="k">elif</span> <span class="s1">&#39;change_password&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
@@ -1158,29 +1159,15 @@ table {
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">update_password</span><span class="p">(</span><span class="n">change_password_form</span><span class="o">.</span><span class="n">new_password</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
                     <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Updated Password!&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;.profile&#39;</span><span class="p">))</span>
-                <span class="c1"># TODO: improve error handling</span>
                 <span class="k">except</span><span class="p">:</span>
                     <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;There was an error!&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Incorrect Password&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
 
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;.profile&#39;</span><span class="p">))</span>
+
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;auth/profile.html&#39;</span><span class="p">,</span> <span class="n">change_email_form</span><span class="o">=</span><span class="n">change_email_form</span><span class="p">,</span>
                            <span class="n">change_password_form</span><span class="o">=</span><span class="n">change_password_form</span><span class="p">)</span>
-
-
-<span class="nd">@auth_bp.route</span><span class="p">(</span><span class="s1">&#39;/admin/&lt;lessonid&gt;&#39;</span><span class="p">)</span>
-<span class="nd">@login_required</span>
-<span class="nd">@either_permission_required</span><span class="p">([</span><span class="s1">&#39;lecture_admin&#39;</span><span class="p">,</span> <span class="s1">&#39;discussion_admin&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">admin</span><span class="p">(</span><span class="n">lessonid</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Renders a admin landing page&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Check if it can be removed safely</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lessonid</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Id not found&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;auth_bp.profile&#39;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;auth/admin.html&#39;</span><span class="p">,</span><span class="n">lesson</span><span class="o">=</span><span class="n">lesson</span><span class="p">)</span>
 
 
 <span class="nd">@auth_bp.route</span><span class="p">(</span><span class="s1">&#39;/modify-permissions&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;GET&#39;</span><span class="p">))</span>
@@ -1236,38 +1223,6 @@ table {
   <section id="section-items">
 
     <h2 class="section-title" id="header-functions">Functions</h2>
-      
-  <div class="item">
-    <div class="name def" id="app.auth.views.admin">
-    <p>def <span class="ident">admin</span>(</p><p>*args, **kwargs)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Renders a admin landing page</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-app.auth.views.admin', this);">Show source &equiv;</a></p>
-  <div id="source-app.auth.views.admin" class="source">
-    <div class="codehilite"><pre><span class="nd">@auth_bp.route</span><span class="p">(</span><span class="s1">&#39;/admin/&lt;lessonid&gt;&#39;</span><span class="p">)</span>
-<span class="nd">@login_required</span>
-<span class="nd">@either_permission_required</span><span class="p">([</span><span class="s1">&#39;lecture_admin&#39;</span><span class="p">,</span> <span class="s1">&#39;discussion_admin&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">admin</span><span class="p">(</span><span class="n">lessonid</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Renders a admin landing page&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Check if it can be removed safely</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Lesson</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">lessonid</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Id not found&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;auth_bp.profile&#39;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;auth/admin.html&#39;</span><span class="p">,</span><span class="n">lesson</span><span class="o">=</span><span class="n">lesson</span><span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
       
   <div class="item">
     <div class="name def" id="app.auth.views.get_permissions">
@@ -1439,16 +1394,18 @@ rendered.</p></div>
 <span class="sd">    Regardless of if it is a POST request or a GET request, the profile.html template is</span>
 <span class="sd">    rendered.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Remove redirects after form submissions</span>
     <span class="n">change_email_form</span> <span class="o">=</span> <span class="n">ChangeEmailForm</span><span class="p">()</span>
     <span class="n">change_password_form</span> <span class="o">=</span> <span class="n">ChangePasswordForm</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="s1">&#39;change_email&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">change_email_form</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
-            <span class="c1"># TODO: Add Error handling</span>
-            <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">change_email_form</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">data</span>
-            <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Email Updated!&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">change_email_form</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">data</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Email Updated!&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Error updating email!&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
+
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;.profile&#39;</span><span class="p">))</span>
 
     <span class="k">elif</span> <span class="s1">&#39;change_password&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
@@ -1457,12 +1414,12 @@ rendered.</p></div>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">g</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">update_password</span><span class="p">(</span><span class="n">change_password_form</span><span class="o">.</span><span class="n">new_password</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
                     <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Updated Password!&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;.profile&#39;</span><span class="p">))</span>
-                <span class="c1"># TODO: improve error handling</span>
                 <span class="k">except</span><span class="p">:</span>
                     <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;There was an error!&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Incorrect Password&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;.profile&#39;</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;auth/profile.html&#39;</span><span class="p">,</span> <span class="n">change_email_form</span><span class="o">=</span><span class="n">change_email_form</span><span class="p">,</span>
                            <span class="n">change_password_form</span><span class="o">=</span><span class="n">change_password_form</span><span class="p">)</span>

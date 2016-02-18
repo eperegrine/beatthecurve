@@ -1082,6 +1082,7 @@ table {
 <span class="kn">import</span> <span class="nn">urllib.parse</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="k">if</span> <span class="s1">&#39;LOCAL_DEV&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
     <span class="n">database</span> <span class="o">=</span> <span class="p">{</span>
@@ -1122,6 +1123,19 @@ table {
     <span class="n">fall</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">spring</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">summer</span> <span class="o">=</span> <span class="mi">4</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">current_semester</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">month</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">winter</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">spring</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">summer</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">fall</span>
+        <span class="k">return</span> <span class="n">semester</span>
 
 
 <span class="k">class</span> <span class="nc">KarmaPoints</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -1306,6 +1320,19 @@ table {
     <span class="n">fall</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">spring</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">summer</span> <span class="o">=</span> <span class="mi">4</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">current_semester</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">month</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">winter</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">spring</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">summer</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">semester</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">fall</span>
+        <span class="k">return</span> <span class="n">semester</span>
 </pre></div>
 
   </div>
