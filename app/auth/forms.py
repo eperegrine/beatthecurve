@@ -34,12 +34,12 @@ class SignUpForm(Form):
     """Form to allow users to sign up"""
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
+    school = SelectField('School', choices=[("-1", "Choose a university")] + get_schools())
     email = StringField('.edu Email',
                         validators=[DataRequired(),
                                     Email(),
                                     edu_email_validator,
                                     email_in_use_validator])
-    school = SelectField('School', choices=[("-1", "Choose a university")] + get_schools())
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password',
                                                                                       message='Passwords must match')])
