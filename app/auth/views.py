@@ -24,7 +24,6 @@ def signup():
                 first_name=form.first_name.data,
                 last_name=form.last_name.data
             )
-            flash('Successfully created an account!', 'success')
             login_user(user)
             return redirect(url_for('lesson_bp.add'))
         except Exception as e:
@@ -46,7 +45,6 @@ def login():
         else:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
-                flash('You have been logged in.', 'success')
                 return redirect(url_for('auth_bp.profile'))
             else:
                 flash('Your email or password does not exist.', 'error')
