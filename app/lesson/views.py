@@ -34,7 +34,7 @@ def add():
             return redirect(url_for('auth_bp.profile'))
         # Else redirect them to show them the page to agree to options
         else:
-            return redirect(url_for("search_bp.options"))
+            return redirect(url_for("qa_bp.view", lessonid=form.lessons.data[0]))
 
     return render_template('lesson/add.html', form=form)
 

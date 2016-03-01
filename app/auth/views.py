@@ -5,7 +5,7 @@ from peewee import DoesNotExist
 from .forms import SignUpForm, LoginForm, ChangeEmailForm, ChangePasswordForm, UpdatePermissions
 from .models import User, UserPermission, Permission
 from .decorators import either_permission_required, permission_required
-from app.lesson.models import Lesson
+from app.lesson.models import Lesson, LessonStudent
 
 auth_bp = Blueprint('auth_bp', __name__)
 
@@ -45,7 +45,8 @@ def login():
         else:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return redirect(url_for('auth_bp.profile'))
+                return redirect(url_for('qa_bp.view', lessonid=LessonStudent.get(
+                    LessonStudent.student_id == user.user_id).lesson_id.id))
             else:
                 flash('Your email or password does not exist.', 'error')
     return render_template('auth/login.html', form=form)
