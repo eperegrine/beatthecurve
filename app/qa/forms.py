@@ -23,9 +23,9 @@ def question_name_in_use(form, field):
 
 class AddQuestionForm(Form):
     """Form to allow a user to ask a question"""
-    document = StringField('Document', validators=[DataRequired()])
-    name = StringField('Name', validators=[DataRequired(), question_name_in_use])
-    content = TextAreaField('Content', validators=[DataRequired()])
+    document = StringField('subject', validators=[DataRequired()])
+    name = StringField('question', validators=[DataRequired(), question_name_in_use])
+    content = TextAreaField('description', validators=[DataRequired()])
 
 
 class AddReplyForm(Form):
