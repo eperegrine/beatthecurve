@@ -1,4 +1,4 @@
-{% macro render_field(field) %}
+{% macro render_field(field, useLabel=false) %}
         {% if field.errors %}
             {%  for error in field.errors %}
                 <div class="">{{ error }}</div>
@@ -21,9 +21,13 @@
           {% elif field.type == "DateField" %}
             {{ field(class_="datepicker") }}
           {% else %}
-            {{ field() }}
+              {% if useLabel %}
+                {{ field() }}
+              {% else %}
+                {{ field(placeholder=field.label.text) }}
+              {% endif %}
           {% endif %}
-          {% if field.type not in ["CSRFTokenField", "SubmitField", "TimeField",  "HiddenField"] %}
+          {% if field.type not in ["CSRFTokenField", "SubmitField", "TimeField",  "HiddenField"] and useLabel %}
               <label for="{{ field.id }}">{{ field.label.text }}</label>
           {% endif %}
       </div>
