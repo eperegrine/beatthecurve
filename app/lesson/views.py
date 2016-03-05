@@ -59,7 +59,7 @@ def attend_class():
         LessonStudent.attend(g.user.user_id, lesson_ids)
 
         return jsonify({'success': True})
-    return jsonify({'success': False, 'errs': form.errors})
+    return jsonify({'success': False, 'errors': form.errors})
 
 
 @lesson_bp.route('/create', methods=('POST', 'GET'))
