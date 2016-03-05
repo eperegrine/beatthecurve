@@ -1,4 +1,4 @@
-from flask import Blueprint, g, render_template, flash, redirect, url_for
+from flask import Blueprint, g, render_template, flash, redirect, url_for,  jsonify
 from flask.ext.login import login_required
 from .forms import AttendLessonsForm, CreateLessonForm
 from .models import Lesson, LessonStudent
@@ -37,6 +37,29 @@ def add():
             return redirect(url_for("qa_bp.view", lessonid=form.lessons.data[0]))
 
     return render_template('lesson/add.html', form=form)
+
+
+@lesson_bp.route('/attend-class', methods=['POST'])
+@login_required
+def attend_class():
+    form = AttendLessonsForm()
+
+    # Setup choices for form
+    form.lessons.choices = [(str(lesson.id), lesson.lesson_name + " - " + lesson.professor) for lesson in
+                            Lesson.get_unattended_lessons(g.user)]
+
+    # If there are no lessons available display that
+    if len(form.lessons.choices) == 0:
+        form.lessons.choices =[("-1", "No Lessons Available")]
+
+    # Check if form is valid
+    if form.validate_on_submit():
+        # TODO: Add exception handling
+        lesson_ids = [int(id) for id in form.lessons.data]
+        LessonStudent.attend(g.user.user_id, lesson_ids)
+
+        return jsonify({'success': True})
+    return jsonify({'success': False, 'errs': form.errors})
 
 
 @lesson_bp.route('/create', methods=('POST', 'GET'))
