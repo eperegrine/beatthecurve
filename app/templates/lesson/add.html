@@ -11,7 +11,7 @@
   </ul>
 
   <h3>Join a new class</h3>
-  <form method="post">
+  <form method="post" id="add-lesson-form">
     <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>
     {% for field in form %}
       {{ render_field(field) }}
