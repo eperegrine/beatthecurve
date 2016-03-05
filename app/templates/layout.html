@@ -1,45 +1,46 @@
- <!DOCTYPE html>
-  <html>
-    <head>
-      <!--Import Google Icon Font-->
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <!--Import materialize.css-->
-      <!-- <link type="text/css" rel="stylesheet" href="{{ static_url }}css/materialize.min.css"  media="screen,projection"/> -->
-      <link href="{{ static_url }}css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
-      <link rel="stylesheet" href="{{ static_url }}css/main.css">
+{% set applicationName = "Curvus" %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <!-- <link type="text/css" rel="stylesheet" href="{{ static_url }}css/materialize.min.css"  media="screen,projection"/> -->
+    <link href="{{ static_url }}css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ static_url }}css/main.css">
 
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.9/jquery.timepicker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.9/jquery.timepicker.min.css">
 
-      <!--Let browser know website is optimized for mobile-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <title>{% block title %}Beat the Curve{% endblock %}</title>
-    </head>
-    <body>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}{{ applicationName }}{% endblock %}</title>
+  </head>
+  <body>
 
-      {% block page_title %}
-      <h1 class="page_title">Beat The Curve</h1>
+    {% block page_title %}
+      <h1 class="page_title">{{ applicationName }}</h1>
+    {% endblock %}
+
+    <main class="pad_t0">
+      {% block main %}
       {% endblock %}
+    </main>
 
-      <main class="pad_t0">
-        {% block main %}
-        {% endblock %}
-      </main>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="{{ static_url }}js/materialize.min.js"></script>
+    <script type="text/javascript" src="{{ static_url }}js/main.js"></script>
+    <script src="{{static_url}}js/jquery.multi-select.js" type="text/javascript"></script>
+    <script src="{{static_url}}js/jquery.quicksearch.js" type="text/javascript"></script>
+    {#<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.9/jquery.timepicker.min.js"></script>#}
+    <script>
+      var picker = $('input[type="date"]').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15 // Creates a dropdown of 15 years to control year
+      });
 
-      <!--Import jQuery before materialize.js-->
-      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      <script type="text/javascript" src="{{ static_url }}js/materialize.min.js"></script>
-      <script type="text/javascript" src="{{ static_url }}js/main.js"></script>
-      <script src="{{static_url}}js/jquery.multi-select.js" type="text/javascript"></script>
-      <script src="{{static_url}}js/jquery.quicksearch.js" type="text/javascript"></script>
-      {#<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.9/jquery.timepicker.min.js"></script>#}
-      <script>
-        var picker = $('input[type="date"]').pickadate({
-          selectMonths: true, // Creates a dropdown to control month
-          selectYears: 15 // Creates a dropdown of 15 years to control year
-        });
-
-        // $('input[type="time"]').timepicker({timeformat: "HH:mm", show2400: true});
-      </script>
-      {% block js %}{% endblock %}
-    </body>
-  </html>
+      // $('input[type="time"]').timepicker({timeformat: "HH:mm", show2400: true});
+    </script>
+    {% block js %}{% endblock %}
+  </body>
+</html>
