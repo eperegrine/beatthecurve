@@ -118,9 +118,9 @@ def question_vote():
 @qa_bp.route('/reply-vote', methods=['POST'])
 @login_required
 def reply_vote():
-    # Get question id
+    # Get reply id
     reply_id = request.form['reply_id']
-    # Validate question id
+    # Validate reply id
     try:
         reply = Reply.get(Reply.id == reply_id)
     except:
@@ -133,3 +133,40 @@ def reply_vote():
         vote.voted = not vote.voted
         vote.save()
     return jsonify({'success': True})
+
+
+@qa_bp.route('/get-questions', methods=['POST'])
+@login_required
+def get_questions():
+    lesson_id = request.form['lesson_id']
+    question_ids = request.form['question_ids'].split(",")
+    try:
+        question_ids = [int(i) for i in question_ids]
+    except:
+        return jsonify({'success': False, 'message': 'Invalid question id'})
+
+    questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id))
+
+    questions_data = {}
+
+    for question in questions:
+        questions_data[question.id] = {
+            'user': question.user.first_name + " " + question.user.last_name,
+            'number_of_posts': question.number_of_posts,
+            'document': question.document,
+            'question': question.name,
+            'details': question.content,
+            'semester': question.semester,
+            'year': question.year,
+            'replies': [
+                {
+                    'user': reply.user.first_name + " " + reply.user.last_name,
+                    'content': reply.content,
+                    'datetime': reply.datetime
+                } for reply in question.replies()
+            ]
+        }
+
+    return jsonify({'success': True, 'questions': questions_data})
+
+
