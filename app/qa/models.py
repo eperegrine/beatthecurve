@@ -29,6 +29,13 @@ class Question(Model):
             print(e)
             return []
 
+    def has_voted(self, user_id):
+        try:
+            vote = QuestionVote.get(QuestionVote.question == self, QuestionVote.user == user_id)
+            return vote.voted
+        except:
+            return False
+
 
 class Reply(Model):
     """Model representing a reply to a question"""
@@ -41,6 +48,13 @@ class Reply(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_REPLY'
+
+    def has_voted(self, user_id):
+        try:
+            vote = ReplyVote.get(ReplyVote.reply == self, ReplyVote.user == user_id)
+            return vote.voted
+        except:
+            return False
 
 
 class QuestionVote(Model):
