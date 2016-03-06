@@ -2,12 +2,10 @@
 
 Curvus is a project to allow students to share notes and study tips
 
----
 ## Setup
 
-_ __Todo:__ Write setup instructions _
+_Todo:_ Write setup instructions
 
----
 ## How to run
 
 Once setup here is how to run the site/server
@@ -21,7 +19,8 @@ postgres;
 **Start server**
 ```sh
 source venv/bin/activate #Or another way to start the virtual env
-export SECRET_KEY=;
+export UPLOADS_URL="https://s3-us-west-2.amazonaws.com/beatthecurve/";
+export SECRET_KEY=a_secret;
 export PG_PASSWORD=;
 export REDIS_URL=;
 gunicorn --worker-class eventlet app:app --log-file=- -w 1;

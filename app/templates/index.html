@@ -1,8 +1,9 @@
+{% set applicationName = "curvit" %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Beat The Curve</title>
+    <title>{{ applicationName }}</title>
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
@@ -15,7 +16,7 @@
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
       <br><br>
-      <h1 class="header center primary">Beat The Curve</h1>
+      <h1 class="header center primary">{{ applicationName }}</h1>
       <div class="row center">
         <h5 class="header col s12 grey-text">Connecting students to a database of crowd-sourced information to help success.</h5>
       </div>
@@ -103,7 +104,7 @@
     </div>
     <div class="footer-copyright">
       <div class="container center">
-      &copy; Beat The Curve 2016
+      &copy; {{ applicationName }} 2016
       </div>
     </div>
   </footer>

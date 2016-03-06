@@ -8,6 +8,11 @@ main {
   padding: 0px;
   padding-top: 30px;
 
+  &.small {
+    margin-left: 30%;
+    margin-right: 30%;
+  }
+
   .container.pad {
       padding-bottom: 5em;
   }

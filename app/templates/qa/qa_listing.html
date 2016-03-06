@@ -4,14 +4,14 @@
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
 <div class="row">
-  <div class="col s2">
+  <div class="col s3">
     {% if semesters|length > 0 %}
       {{ render_semester_tabs(semesters, semester_enum) }}
     {% else %}
       <h5>No Questions Found</h5>
     {% endif %}
   </div>
-  <div class="col s10">
+  <div class="col s9">
     <div class="card-panel">
         <h3 class="content_title">Add a Question</h3>
         <form method="post" action="{{ url_for("qa_bp.add_question", lessonid=lesson.id) }}">

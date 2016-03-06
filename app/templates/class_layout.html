@@ -4,14 +4,15 @@
     <div class="col s2">
       <ul class="class-page-nav">
 
-        <li class="class-nav-item {% if active == "forum" %}active{% endif %}"><a href="{{ url_for('qa_bp.view', lessonid=lesson.id) }}">Forum</a></li>
-        <li class="class-nav-item {% if active == "notes" %}active{% endif %}"><a href="{{ url_for('notes_bp.view', lessonid=lesson.id) }}">Notes</a></li>
-        <li class="class-nav-item {% if active == "exams" %}active{% endif %}"><a href="{{ url_for('exams_bp.view', lessonid=lesson.id) }}">Exams</a></li>
-        <li class="class-nav-item {% if active == "studygroups" %}active{% endif %}"><a href="{{ url_for('studygroups_bp.view', lessonid=lesson.id) }}">Study Groups</a></li>
-        <li class="class-nav-item {% if active == "chat" %}active{% endif %}"><a href="{{ url_for('chat_bp.index', lessonid=lesson.id) }}">Chat</a></li>
-        <li class="class-nav-item {% if active == "search" %}active{% endif %}"><a href="{{ url_for('search_bp.view', lessonid=lesson.id) }}">Students</a></li>
+        <li class="class-nav-item {% if active == "forum" %}active{% endif %}"><a href="{{ url_for('qa_bp.view', lessonid=lesson.id) }}">forum</a></li>
+        <li class="class-nav-item {% if active == "notes" %}active{% endif %}"><a href="{{ url_for('notes_bp.view', lessonid=lesson.id) }}">notes</a></li>
+        <li class="class-nav-item {% if active == "exams" %}active{% endif %}"><a href="{{ url_for('exams_bp.view', lessonid=lesson.id) }}">exams</a></li>
+        <li class="class-nav-item {% if active == "studygroups" %}active{% endif %}"><a href="{{ url_for('studygroups_bp.view', lessonid=lesson.id) }}">study groups</a></li>
+        <li class="class-nav-item {% if active == "chat" %}active{% endif %}"><a href="{{ url_for('chat_bp.index', lessonid=lesson.id) }}">chat</a></li>
+        <li class="class-nav-item {% if active == "search" %}active{% endif %}"><a href="{{ url_for('search_bp.view', lessonid=lesson.id) }}">students</a></li>
         <li class="divider"></li>
-        <li class="class-nav-item"><a href="/profile">Your profile</a></li>
+        <li class="class-nav-item"><a href="/profile">your profile</a></li>
+      <li class="class-nav-item"><a href="/logout">logout</a></li>
       </ul>
     </div>
     <div class="col s10">
