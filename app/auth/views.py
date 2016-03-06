@@ -45,8 +45,12 @@ def login():
         else:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return redirect(url_for('qa_bp.view', lessonid=LessonStudent.get(
-                    LessonStudent.student_id == user.user_id).lesson_id.id))
+                try:
+                    return redirect(url_for('qa_bp.view', lessonid=LessonStudent.get(
+                        LessonStudent.student_id == user.user_id).lesson_id.id))
+                except:
+                    return redirect(url_for('auth_bp.profile'))
+
             else:
                 flash('Your email or password does not exist.', 'error')
     return render_template('auth/login.html', form=form)
