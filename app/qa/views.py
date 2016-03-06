@@ -20,7 +20,7 @@ def view(lessonid):
         flash('Id not found', 'error')
         return redirect(url_for('auth_bp.profile'))
 
-    questions = Question.select().where(Question.lesson == lessonid)
+    questions = Question.select().where(Question.lesson == lessonid).limit(10)
     last_posts = {}
     semesters = set()
 
