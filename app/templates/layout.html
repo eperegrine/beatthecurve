@@ -21,7 +21,7 @@
       <h1 class="page_title">{{ applicationName }}</h1>
     {% endblock %}
 
-    <main class="pad_t0">
+    <main class="pad_t0 {% if small %}small{% endif %}">
       {% block main %}
       {% endblock %}
     </main>
