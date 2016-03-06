@@ -41,3 +41,25 @@ class Reply(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_REPLY'
+
+
+class QuestionVote(Model):
+    """Model representing a vote on a question"""
+    id = PrimaryKeyField(db_column='ID')
+    question = ForeignKeyField(Question, db_column='QUESTION_ID')
+    voted = BooleanField(default=True, db_column='VOTED')
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_QUESTION_VOTE'
+
+
+class ReplyVote(Model):
+    """Model representing a vote on a reply"""
+    id = PrimaryKeyField(db_column='ID')
+    reply = ForeignKeyField(Reply, db_column='REPLY_ID')
+    voted = BooleanField(default=True, db_column='VOTED')
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_REPLY_VOTE'
