@@ -58,7 +58,6 @@ class QuestionVote(Model):
         )
 
 
-
 class ReplyVote(Model):
     """Model representing a vote on a reply"""
     id = PrimaryKeyField(db_column='ID')

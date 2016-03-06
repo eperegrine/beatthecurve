@@ -113,3 +113,23 @@ def question_vote():
         vote.voted = not vote.voted
         vote.save()
     return jsonify({'success': True})
+
+
+@qa_bp.route('/reply-vote', methods=['POST'])
+@login_required
+def reply_vote():
+    # Get question id
+    reply_id = request.form['reply_id']
+    # Validate question id
+    try:
+        reply = Reply.get(Reply.id == reply_id)
+    except:
+        return jsonify({'success': False, 'message': 'Invalid id for Reply: {}'.format(reply_id)})
+
+
+    # Check if user has already voted
+    vote, created = ReplyVote.create_or_get(reply=reply, user=g.user.user_id)
+    if not created:
+        vote.voted = not vote.voted
+        vote.save()
+    return jsonify({'success': True})
