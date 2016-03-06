@@ -14,7 +14,7 @@ class Note(Model):
     filename = CharField(db_column='FILENAME')
     s3_filename = CharField(db_column='S3_FILENAME', unique=True)
     uploader = ForeignKeyField(User, db_column='UPLOADER')
-    description = CharField(db_column='DESCRIPTION')
+    description = CharField(db_column='DESCRIPTION', null=True)
     lesson = ForeignKeyField(Lesson, db_column='LESSON_ID')
     semester = IntegerField(db_column='SEMESTER')
     year = IntegerField(db_column='YEAR')

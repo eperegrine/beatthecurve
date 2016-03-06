@@ -7,6 +7,7 @@ from wtforms.fields import (
 )
 from wtforms.validators import (
     DataRequired,
+    Optional,
 )
 
 from app.models import Semester
@@ -17,7 +18,7 @@ class AddNoteForm(Form):
     """Form to allow a user to upload a note"""
     file_hash = HiddenField()
     file = FileField('File', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
+    description = StringField('Description', validators=[Optional()])
 
 
 class AdminAddNoteForm(AddNoteForm):
