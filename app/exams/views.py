@@ -83,7 +83,7 @@ def add_exam(lessonid):
     if form.validate_on_submit():
         Exam.create(
             average_grade=form.average_grade.data,
-            filename=form.file.data.filename,
+            filename=form.filename.data,
             s3_filename=form.file_hash.data,
             lesson=lesson.id,
             publisher=g.user.user_id,

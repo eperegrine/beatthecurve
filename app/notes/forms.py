@@ -18,6 +18,7 @@ class AddNoteForm(Form):
     """Form to allow a user to upload a note"""
     file_hash = HiddenField()
     file = FileField('File', validators=[DataRequired()])
+    filename = StringField('Filename', validators=[DataRequired()])
     description = StringField('Description', validators=[Optional()])
 
 

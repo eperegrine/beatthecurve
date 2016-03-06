@@ -5,6 +5,7 @@ from wtforms.fields import (
     FileField,
     IntegerField,
     HiddenField,
+    StringField
 )
 from wtforms.validators import (
     DataRequired
@@ -19,6 +20,7 @@ class AddExamForm(Form):
     """Form to allow users to upload an exam"""
     file_hash = HiddenField()
     file = FileField('File', validators=[DataRequired()])
+    filename = StringField('Filename', validators=[DataRequired()])
     average_grade = DecimalField('Average Grade', validators=[DataRequired()])
     number_of_takers = IntegerField('Number Of Takers', validators=[DataRequired()])
     semester = SelectField('Semester', validators=[DataRequired()], choices=[(str(s.value), s.name.title()) for s in Semester])

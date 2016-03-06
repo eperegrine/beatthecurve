@@ -47,7 +47,7 @@ def add_note(lessonid):
     form = AddNoteForm()
     if form.validate_on_submit():
         # TODO: Add error handling
-        filename = form.file.data.filename
+        filename = form.filename.data
         month = datetime.now().month
         semester = Semester.current_semester()
 
