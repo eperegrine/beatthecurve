@@ -47,19 +47,29 @@ class QuestionVote(Model):
     """Model representing a vote on a question"""
     id = PrimaryKeyField(db_column='ID')
     question = ForeignKeyField(Question, db_column='QUESTION_ID')
+    user = ForeignKeyField(User, db_column='USER_ID')
     voted = BooleanField(default=True, db_column='VOTED')
 
     class Meta:
         database = DATABASE
         db_table = 'TBL_QUESTION_VOTE'
+        indexes = (
+            (('user', 'question'), True),
+        )
+
 
 
 class ReplyVote(Model):
     """Model representing a vote on a reply"""
     id = PrimaryKeyField(db_column='ID')
     reply = ForeignKeyField(Reply, db_column='REPLY_ID')
+    user = ForeignKeyField(User, db_column='USER_ID')
     voted = BooleanField(default=True, db_column='VOTED')
 
     class Meta:
         database = DATABASE
         db_table = 'TBL_REPLY_VOTE'
+        indexes = (
+            (('user', 'reply'), True),
+        )
+

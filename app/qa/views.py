@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, g, request
+from flask import Blueprint, render_template, flash, redirect, url_for, g, request, jsonify
 from flask.ext.login import login_required
 from app.lesson.models import Lesson
 from .forms import AddQuestionForm, AddReplyForm
-from .models import Question, Reply
+from .models import Question, Reply, QuestionVote, ReplyVote
 from app.models import Semester
 from datetime import datetime
 from app.models import KarmaPoints
@@ -93,3 +93,23 @@ def add_reply(questionid):
         question.save()
 
     return redirect(url_for(".view", lessonid=question.lesson.id))
+
+
+@qa_bp.route('/question-vote', methods=['POST'])
+@login_required
+def question_vote():
+    # Get question id
+    question_id = request.form['question_id']
+    # Validate question id
+    try:
+        question = Question.get(Question.id == question_id)
+    except:
+        return jsonify({'success': False, 'message': 'Invalid id for Question: {}'.format(question_id)})
+
+
+    # Check if user has already voted
+    vote, created = QuestionVote.create_or_get(question=question, user=g.user.user_id)
+    if not created:
+        vote.voted = not vote.voted
+        vote.save()
+    return jsonify({'success': True})
