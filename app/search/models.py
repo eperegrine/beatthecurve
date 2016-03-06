@@ -1,6 +1,7 @@
 from app.models import DATABASE
 from peewee import *
 from app.auth.models import User, School
+from app.lesson.models import Lesson
 
 
 class Option(Model):
@@ -8,7 +9,7 @@ class Option(Model):
     id = PrimaryKeyField(db_column='ID')
     name = CharField(db_column='NAME')
     description = CharField(db_column='DESCRIPTION')
-    school = ForeignKeyField(School, db_column='SCHOOL_ID')
+    lesson = ForeignKeyField(Lesson, db_column='LESSON_ID')
 
     class Meta:
         database = DATABASE

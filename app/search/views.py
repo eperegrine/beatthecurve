@@ -10,11 +10,17 @@ from app.lesson.models import LessonStudent
 search_bp = Blueprint('search_bp', __name__, url_prefix='/search')
 
 
-@search_bp.route('/options', methods=('POST', 'GET'))
+@search_bp.route('/options/<lessonid>', methods=('POST', 'GET'))
 @login_required
-def options():
+def options(lessonid):
     """Route to display the UserOptionsForm and handle its submission"""
-    for option in Option.select().where(Option.school == g.user.school_id):
+    try:
+        lesson = Lesson.get(Lesson.id == lessonid)
+    except:
+        flash('Id not found', 'error')
+        return redirect(url_for('auth_bp.profile'))
+
+    for option in Option.select().where(Option.lesson == lesson.id):
         user_option = UserOption.get_or_create(option=option.id, user=g.user.user_id)[0]
         print(user_option.agreed)
         setattr(UserOptionsForm, option.name, BooleanField(option.description, default=user_option.agreed))
@@ -41,10 +47,6 @@ def view(lessonid):
     except:
         flash('Id not found', 'error')
         return redirect(url_for('auth_bp.profile'))
-
-    options = {}
-    for option in Option.select().where(Option.school == g.user.school_id):
-        options[option.id] = option.name
 
     # Get all users in lesson
     query = LessonStudent.select().where(LessonStudent.lesson_id == lesson.id)

@@ -2,7 +2,7 @@ from flask import Blueprint, g, render_template, flash, redirect, url_for,  json
 from flask.ext.login import login_required
 from .forms import AttendLessonsForm, CreateLessonForm
 from .models import Lesson, LessonStudent
-from app.search.models import UserOption
+from app.search.models import UserOption, Option
 from app.auth.decorators import permission_required
 
 lesson_bp = Blueprint('lesson_bp', __name__, url_prefix='/lessons')
@@ -71,10 +71,24 @@ def create():
     form.school.data = g.user.school_id
 
     if form.validate_on_submit():
-        Lesson.create(
+        lesson = Lesson.create(
             lesson_name=form.name.data,
             professor=form.professor.data,
             school_id=g.user.school_id
+        )
+
+        Option.create(
+            name='Study Tips',
+            description='Are you willing to provide study tips?',
+            school=g.user.school_id.school_id,
+            lesson=lesson.id
+        )
+
+        Option.create(
+            name='Sell Old Textbooks',
+            description='Would you be willing to sell your old textbooks?',
+            school=g.user.school_id.school_id,
+            lesson=lesson.id
         )
         return redirect(url_for("auth_bp.profile"))
 

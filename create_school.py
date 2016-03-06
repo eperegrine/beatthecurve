@@ -61,14 +61,3 @@ super_user_permission = Permission.get(
 
 UserPermission.create(permission=super_user_permission, user=user)
 
-Option.create(
-    name='Study Tips',
-    description='Are you willing to provide study tips?',
-    school=school.school_id
-)
-
-Option.create(
-    name='Sell Old Textbooks',
-    description='Would you be willing to sell your old textbooks?',
-    school=school.school_id
-)

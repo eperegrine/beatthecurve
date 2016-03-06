@@ -10,7 +10,7 @@
   </ul>
     <form method="post">
       {% for field in form %}
-        {{ render_field(field) }}
+        {{ render_field(field, True) }}
       {% endfor %}
       <button type="submit" class="waves-effect waves-light btn-large">Submit</button>
     </form>
