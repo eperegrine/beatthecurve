@@ -41,7 +41,7 @@
         <h5 class="filename_title">Group {{sg.id}}</h5>
         <p class="desc">{{sg.location}}</p>
         {% set sessions = sg.get_all_upcoming_sessions() %}
-        <p class="desc">{% if sessions %}{{ sessions[0].datetime }}{% else %}No meetings scheduled{% endif %}</p>
+        <p class="desc">{% if sessions %}{{ sessions[0].datetime.strftime('%H:%M %m/%d/%Y') }}{% else %}No meetings scheduled{% endif %}</p>
       </div>
 
         <div class="col s2">

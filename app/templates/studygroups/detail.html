@@ -32,11 +32,11 @@
     <ul class="collection">
       {% if study_group.founder.user_id == current_user.user_id %}
         {% for session in study_group.get_all_upcoming_sessions() %}
-          <li class="collection-item">{{ session.datetime }}{% if session.cancelled %}<span class="red-text right">Cancelled</span>{% else %}<a href="{{ url_for("studygroups_bp.cancel", sessionid=session.id) }}" class="right">Cancel</a>{% endif %}</li>
+          <li class="collection-item">{{ session.datetime.strftime('%H:%M %m/%d/%Y')  }}{% if session.cancelled %}<span class="red-text right">Cancelled</span>{% else %}<a href="{{ url_for("studygroups_bp.cancel", sessionid=session.id) }}" class="right">Cancel</a>{% endif %}</li>
         {% endfor %}
       {% else %}
         {% for session in study_group.get_all_upcoming_sessions() %}
-          <li class="collection-item">{{ session.datetime }}{% if session.cancelled %} - Cancelled {% endif %}</li>
+          <li class="collection-item">{{ session.datetime.strftime('%H:%M %m/%d/%Y') }}{% if session.cancelled %} - Cancelled {% endif %}</li>
         {% endfor %}
       {% endif %}
     </ul>
