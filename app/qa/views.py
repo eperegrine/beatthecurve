@@ -112,7 +112,11 @@ def question_vote():
     if not created:
         vote.voted = not vote.voted
         vote.save()
-    return jsonify({'success': True})
+
+    question.votes += 1
+    question.save()
+
+    return jsonify({'success': True, 'number_of_posts': question.votes})
 
 
 @qa_bp.route('/reply-vote', methods=['POST'])
@@ -132,7 +136,11 @@ def reply_vote():
     if not created:
         vote.voted = not vote.voted
         vote.save()
-    return jsonify({'success': True})
+
+    reply.votes += 1
+    reply.save()
+
+    return jsonify({'success': True, 'number_of_posts': reply.votes})
 
 
 @qa_bp.route('/get-questions', methods=['POST'])

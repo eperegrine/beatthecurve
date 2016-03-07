@@ -30,4 +30,4 @@ class AddQuestionForm(Form):
 
 class AddReplyForm(Form):
     """Form to allow a user to reply to a question"""
-    content = StringField('Content', validators=[DataRequired()], id='reply-content')
+    content = TextAreaField('content', validators=[DataRequired()], id='reply-content')
