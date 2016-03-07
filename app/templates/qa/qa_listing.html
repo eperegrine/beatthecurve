@@ -19,7 +19,7 @@
             {{ render_field(field) }}
           {% endfor %}
           <div class="row">
-            <button type="submit" class="waves-effect waves-light btn col s12">Add Question</button>
+            <button type="submit" class="waves-effect waves-light btn col s12">send</button>
           </div>
         </form>
     </div>
@@ -67,7 +67,7 @@
                           {{ comment_form.content(id="reply-content-" + q.id|string, placeholder=comment_form.content.label.text) }}
                         </div>
                       <div class="row">
-                        <button type="submit" class="waves-effect waves-light btn col s12">Add Reply</button>
+                        <button type="submit" class="waves-effect waves-light btn center right">Reply</button>
                       </div>
                     </form>
                   </div>
