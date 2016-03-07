@@ -43,7 +43,7 @@ class Reply(Model):
     id = PrimaryKeyField(db_column='ID')
     question = ForeignKeyField(Question, db_column='QUESTION')
     user = ForeignKeyField(User, db_column='USER')
-    content = CharField(db_column='CONTENT')
+    content = TextField(db_column='CONTENT')
     datetime = DateTimeField(db_column='DATETIME', default=datetime.now)
     votes = IntegerField(db_column='VOTES', default=0)
 
