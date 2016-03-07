@@ -112,6 +112,10 @@ def question_vote():
     if not created:
         vote.voted = not vote.voted
         vote.save()
+
+    question.votes += 1
+    question.save()
+
     return jsonify({'success': True})
 
 
@@ -132,6 +136,10 @@ def reply_vote():
     if not created:
         vote.voted = not vote.voted
         vote.save()
+
+    reply.votes += 1
+    reply.save()
+
     return jsonify({'success': True})
 
 
