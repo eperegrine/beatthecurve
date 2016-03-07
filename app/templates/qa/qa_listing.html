@@ -26,42 +26,54 @@
     {% for q in questions %}
     <br>
       <div class="card-panel question" q_id={{ q.id }} {% if loop.first %}first{% endif %} semester="{{ q.semester }}" year="{{ q.year }}">
-      <div class="q_head" q_id={{ q.id }}>
-        <div class="row">
-          <span class="primary poster_name">{{q.user.first_name + " " + q.user.last_name}}</span>
-          <span class="lightBlue right q_document">{{q.document}}</span>
-        </div>
-        <div class="row no_bot" id="q_title_{{ q.id }}">
-          <h5 class="grey-text q_question">{{q.name}}</h5>
-        </div>
-      </div>
-        <div class="q_body" id="q_body_{{ q.id }}">
           <div class="row">
-            <p>{{q.content}}</p>
-          </div>
-          <div class="divider bg-primary"></div>
-          {% for reply in q.replies() %}
-            <div class="comment">
-              <div class="row comment_name primary">{{ reply.user.first_name + " " + reply.user.last_name }} <span class="lightBlue right">{{reply.datetime.strftime('%m/%d/%Y')}}</span></div>
-              <p class="grey-text">{{ reply.content }}</p>
-            </div>
-            {% if loop.last %}
-              <div class="divider bg-primary"></div><br>
-            {% else %}
-              <div class="divider light-grey"></div>
-            {% endif %}
-          {% endfor %}
-          <form class=""method="post" action="{{ url_for("qa_bp.add_reply", questionid=q.id) }}">
-            <h6 class="primary">Type a reply</h6>
-              {{ render_field(comment_form.csrf_token, useLabel=false) }}
-              <div class="input-field">
-                {{ comment_form.content(id="reply-content-" + q.id|string, placeholder=comment_form.content.label.text) }}
+              <div class="col s1">
+                  {% if q.has_voted(current_user) %}
+                      <a href="#" class="valign"><i class="material-icons">thumb_up</i> {{ q.votes}}</a>
+                  {% else %}
+                      <a href="#" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ q.votes }}</a>
+                  {% endif %}
               </div>
-            <div class="row">
-              <button type="submit" class="waves-effect waves-light btn col s12">Add Reply</button>
-            </div>
-          </form>
-        </div>
+              <div class="col s10">
+                  <div class="q_head" q_id={{ q.id }}>
+                    <div class="row">
+                      <span class="primary poster_name">{{q.user.first_name + " " + q.user.last_name}}</span>
+                      <span class="lightBlue right q_document">{{q.document}}</span>
+                    </div>
+                    <div class="row no_bot" id="q_title_{{ q.id }}">
+                      <h5 class="grey-text q_question">{{q.name}}</h5>
+                    </div>
+                  </div>
+                  <div class="q_body" id="q_body_{{ q.id }}">
+                    <div class="row">
+                      <p>{{q.content}}</p>
+                    </div>
+                    <div class="divider bg-primary"></div>
+                    {% for reply in q.replies() %}
+                      <div class="comment">
+                        <div class="row comment_name primary">{{ reply.user.first_name + " " + reply.user.last_name }} <span class="lightBlue right">{{reply.datetime.strftime('%m/%d/%Y')}}</span></div>
+                        <p class="grey-text">{{ reply.content }}</p>
+                      </div>
+                      {% if loop.last %}
+                        <div class="divider bg-primary"></div><br>
+                      {% else %}
+                        <div class="divider light-grey"></div>
+                      {% endif %}
+                    {% endfor %}
+                    <form class=""method="post" action="{{ url_for("qa_bp.add_reply", questionid=q.id) }}">
+                      <h6 class="primary">Type a reply</h6>
+                        {{ render_field(comment_form.csrf_token, useLabel=false) }}
+                        <div class="input-field">
+                          {{ comment_form.content(id="reply-content-" + q.id|string, placeholder=comment_form.content.label.text) }}
+                        </div>
+                      <div class="row">
+                        <button type="submit" class="waves-effect waves-light btn col s12">Add Reply</button>
+                      </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+
       </div>
     {% endfor %}
 </div>
