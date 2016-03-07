@@ -39,6 +39,10 @@
   margin-right: auto;
   margin-bottom: 20px;
 
+  &.no_bot{
+    margin-bottom: 0px;
+  }
+
   // Clear floating children
   &:after {
     content: "";
