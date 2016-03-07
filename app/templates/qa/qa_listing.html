@@ -25,7 +25,7 @@
     </div>
     {% for q in questions %}
     <br>
-      <div class="card-panel question" q_id={{ q.id }} semester="{{ q.semester }}" year="{{ q.year }}">
+      <div class="card-panel question" q_id={{ q.id }} {% if loop.first %}first{% endif %} semester="{{ q.semester }}" year="{{ q.year }}">
       <div class="q_head" q_id={{ q.id }}>
         <div class="row">
           <span class="primary poster_name">{{q.user.first_name + " " + q.user.last_name}}</span>
@@ -81,6 +81,7 @@
                 console.log(bodyIdStr);
                 $(bodyIdStr).slideToggle();
             });
+            $("#q_body_" + $(".question[first]").attr("q_id")).show();
         });
     </script>
  {# <script src="{{ url_for("static", filename="js/get_discussions.js") }}"></script>
