@@ -116,7 +116,7 @@ def question_vote():
     question.votes += 1
     question.save()
 
-    return jsonify({'success': True})
+    return jsonify({'success': True, 'number_of_posts': question.votes})
 
 
 @qa_bp.route('/reply-vote', methods=['POST'])
@@ -140,7 +140,7 @@ def reply_vote():
     reply.votes += 1
     reply.save()
 
-    return jsonify({'success': True})
+    return jsonify({'success': True, 'number_of_posts': reply.votes})
 
 
 @qa_bp.route('/get-questions', methods=['POST'])
