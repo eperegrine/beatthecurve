@@ -134,10 +134,9 @@ def add_admin_note(lessonid):
     form = AdminAddNoteForm()
     if form.validate_on_submit():
         # TODO: Add error handling
-        filename = form.file.data.filename
-
         note = Note.create(
-            filename=filename,
+            filename=form.filename.data,
+            s3_filename=form.file_hash.data,
             uploader=g.user.user_id,
             description=form.description.data,
             lesson=lessonid,
