@@ -19,7 +19,7 @@
             {{ render_field(field) }}
           {% endfor %}
           <div class="row">
-            <button type="submit" class="waves-effect waves-light btn col s12">Add Question</button>
+            <button type="submit" class="waves-effect waves-light btn col s12">send</button>
           </div>
         </form>
     </div>
@@ -61,13 +61,13 @@
                       {% endif %}
                     {% endfor %}
                     <form class=""method="post" action="{{ url_for("qa_bp.add_reply", questionid=q.id) }}">
-                      <h6 class="primary">Type a reply</h6>
                         {{ render_field(comment_form.csrf_token, useLabel=false) }}
                         <div class="input-field">
-                          {{ comment_form.content(id="reply-content-" + q.id|string, placeholder=comment_form.content.label.text) }}
+                          <strong><h6 class="grey-text">Type a reply</h6></strong>
+                          {{ comment_form.content(id="reply-content-" + q.id|string, class="q_reply materialize-textarea") }}
                         </div>
                       <div class="row">
-                        <button type="submit" class="waves-effect waves-light btn col s12">Add Reply</button>
+                        <button type="submit" class="waves-effect waves-light btn center right">Reply</button>
                       </div>
                     </form>
                   </div>

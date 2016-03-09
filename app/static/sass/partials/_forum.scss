@@ -1,0 +1,12 @@
+.q_reply {
+  background-color: lighten($lightBlue, 10) !important;
+  border-bottom: 0 !important;
+  color: $greyText;
+  &:hover, &:focus {
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+  }
+  padding-left: 3% !important;
+  padding-right: 1% !important;
+  width:96% !important;
+}
