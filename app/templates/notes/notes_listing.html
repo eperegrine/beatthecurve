@@ -62,7 +62,7 @@
             {% endif %}
           </span>
           <span class="col s10">
-            <span class="filename_title">{{ note.filename }}</span>
+            <a href="{{ uploads_url }}notes/{{ note.s3_filename }}" class="filename_title">{{ note.filename }}</a>
             <p class="note_description">{{note.description}}</p>
             <p class="note_date">{{note.year}}</p>
           </span>

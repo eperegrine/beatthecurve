@@ -53,8 +53,8 @@
             <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="1") }}" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ exam.votes }}</a>
           {% endif %}
         </span>
-        <span class="col s10">
-          <span class="filename_title">{{ exam.filename }}</span>
+        <span  class="col s10">
+          <a href="{{ uploads_url }}exams/{{ exam.s3_filename }}" class="filename_title">{{ exam.filename }}</a>
           <!-- <p class="note_description">Exam description</p> -->
           <!-- <p class="note_date">{{exam.year}}</p> -->
         </span>
