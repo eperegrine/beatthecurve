@@ -55,7 +55,7 @@ def view(lessonid):
     semsters = set()
     for ls in query:
         user_options = UserOption.select().where((UserOption.user == ls.student_id.user_id) & (UserOption.agreed == True))
-        user_options_list = [options[uo.option.id] for uo in user_options]
+        user_options_list = [uo.option.name for uo in user_options if uo.option.lesson.id == lesson.id]
         if len(user_options_list) < 1:
             continue
         user = User.get(User.user_id == ls.student_id.user_id)
