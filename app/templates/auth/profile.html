@@ -4,10 +4,10 @@
 {% block content %}
     <h1>Hello, {{ current_user.first_name }}</h1>
     <h5>Karma Points: {{ current_user.karma_points }}</h5>
-
+{#
     <hr>
 
-    {# <div class="row">
+     <div class="row">
       <span class="col s1">&nbsp;</span>
       <a href="{{ url_for("search_bp.options") }}" class="btn bg-primary col s10">Update Search Preferences</a>
       <span class="col s1">&nbsp;</span>

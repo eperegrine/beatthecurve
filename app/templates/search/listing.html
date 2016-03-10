@@ -4,14 +4,19 @@
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
   {% if semesters|length > 0 %}
-  <div class="col s2">
+  <div class="col s3">
     {{ render_semester_tabs(semesters, semester_enum) }}
   </div>
   {% endif %}
   {% if semesters|length < 1 %}
     <h5 class="no-content-message">No Students Available</h5>
   {% else %}
-    <div class="col s10">
+    <div class="col s9">
+        <div class="row">
+            <a href="/search/options/{{ lesson.id }}" class="col s12 btn">
+                Choose what you share
+            </a>
+        </div>
       <table class="highlight">
         <thead>
           <tr>
