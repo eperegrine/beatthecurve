@@ -26,7 +26,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for user in users %}
+          {% for user in users|sort(attribute='name') %}
             <tr class="student" semester="{{ user['semester'] }}" year="{{ user['year'] }}">
               <td>{{ user['name'] }}</td>
               <td>{{ user['email'] }}</td>
