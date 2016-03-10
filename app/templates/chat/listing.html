@@ -6,7 +6,7 @@
 {% endblock %}
 {% block page %}
 <div class="row">
-  <div class="card-panel pad0 bg chat_box col s9">
+  <div class="card-panel pad0 bg chat_box col s8">
     <div class="clearfix" id="chat_box"></div>
     <div class="send-box row valign-wrapper">
         <form id="send_room" method="POST" action='#'>
@@ -17,7 +17,7 @@
         </form>
     </div>
   </div>
-  <div class="col s3">
+  <div class="col s4">
     <div class="card-panel user_listing bg">
       <div id="app">
         <h5 class="white-text center">Who's here?</h5>
@@ -70,7 +70,9 @@
 
                       is_users = user_name == message.sender;
 
-                      var m = '<div class="chat-message ' + (is_users ? "you" : "") + '" id="'+ count +'"><span class="name">'+message.sender+'</span><span class="date">'+message.sent+'</span><div class="content">'+ message.text+'</div></div>';
+                      var m = '<div class="chat-message ' + (is_users ? "you" : "") + '" id="'
+                              + count +'"><span class="name">'+message.sender+'</span><span class="date">'+message.sent+'</span><div class="content">'
+                              + message.text+'</div></div>';
 
                       // $('#log').append('<br>' + $('<div/>').text(message.text + ' by ' + message.sender + ' @ ' + message.sent).html());
                        mbox = $('#chat_box').append(m);

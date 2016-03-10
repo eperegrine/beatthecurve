@@ -16,8 +16,15 @@
 	&.you {
 		@extend .right;
 		.content {
+			clear: both;
 			background-color: $primaryCol;
 			color: white;
+		}
+		.name {
+			@extend .right;
+		}
+		.date {
+			@extend .left;
 		}
 	}
 
