@@ -50,6 +50,12 @@
 		padding: 10px;
 		#room_data {
 			margin: 0px;
+			border-bottom: 0 !important;
+			color: $greyText;
+			&:hover, &:focus {
+				border-bottom: 0 !important;
+				box-shadow: none !important;
+			}
 		}
 		[type="submit"] {
 			background-color: white;
