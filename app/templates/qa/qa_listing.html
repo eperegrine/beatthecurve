@@ -27,11 +27,11 @@
     <br>
       <div class="card-panel question" q_id={{ q.id }} {% if loop.first %}first{% endif %} semester="{{ q.semester }}" year="{{ q.year }}">
           <div class="row">
-              <div class="col s1">
+              <div class="col s1 valign-wrapper">
                   {% if q.has_voted(current_user) %}
-                      <a href="#" class="valign"><i class="material-icons">thumb_up</i> {{ q.votes}}</a>
+                      <a href="#!" class="primary valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>
                   {% else %}
-                      <a href="#" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ q.votes }}</a>
+                      <a href="#!" class="grey-text-imp valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>
                   {% endif %}
               </div>
               <div class="col s10">
@@ -91,6 +91,29 @@
                 $(bodyIdStr).slideToggle();
             });
             $("#q_body_" + $(".question[first]").attr("q_id")).show();
+            $(".q_vote").click(function () {
+                var elem = $(this);
+                var id = $(this).attr("question");
+                $.post("/qa/question-vote", {question_id: id}, function (data) {
+                    if (data.success) {
+                        console.log(data);
+                        console.log(elem.hasClass("primary"));
+                        console.log(elem.hasClass("grey-text-imp"));
+                        if (elem.hasClass("primary")) {
+                            elem.removeClass("primary");
+                            elem.addClass("grey-text-imp");
+                        }else if (elem.hasClass("grey-text-imp")) {
+                            elem.removeClass("grey-text-imp");
+                            elem.addClass("primary");
+                        }
+
+                        $("#votes_" + id).text(data.number_of_posts);
+                    } else {
+                        alert("Error upvoting");
+                    }
+
+                });
+            });
         });
     </script>
  {# <script src="{{ url_for("static", filename="js/get_discussions.js") }}"></script>
