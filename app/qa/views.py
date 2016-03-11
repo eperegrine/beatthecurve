@@ -112,13 +112,10 @@ def question_vote():
     if not created:
         vote.voted = not vote.voted
         vote.save()
-        if vote.voted is True:
-            question.votes += 1
-        else:
-            question.votes -= 1
-    else:
-        question.votes += 1
+    question.votes = QuestionVote.select().where((QuestionVote.question == question.id) & (QuestionVote.voted == True)).count()
     question.save()
+
+
 
     return jsonify({'success': True, 'number_of_posts': question.votes})
 
