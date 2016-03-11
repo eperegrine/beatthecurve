@@ -112,8 +112,12 @@ def question_vote():
     if not created:
         vote.voted = not vote.voted
         vote.save()
-
-    question.votes += 1
+        if vote.voted is True:
+            question.votes += 1
+        else:
+            question.votes -= 1
+    else:
+        question.votes += 1
     question.save()
 
     return jsonify({'success': True, 'number_of_posts': question.votes})
@@ -133,11 +137,17 @@ def reply_vote():
 
     # Check if user has already voted
     vote, created = ReplyVote.create_or_get(reply=reply, user=g.user.user_id)
+    print(created)
     if not created:
         vote.voted = not vote.voted
         vote.save()
+        if vote.voted is False:
+            reply.votes -= 1
+        else:
+            reply.votes += 1
+    else:
+        reply.votes += 1
 
-    reply.votes += 1
     reply.save()
 
     return jsonify({'success': True, 'number_of_posts': reply.votes})

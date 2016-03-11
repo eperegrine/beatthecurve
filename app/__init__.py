@@ -28,10 +28,10 @@ from app.search.models import Option, UserOption
 from app.chat.models import Message
 
 # Print all queries to stderr.
-import logging
-logger = logging.getLogger('peewee')
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
+# import logging
+# logger = logging.getLogger('peewee')
+# logger.setLevel(logging.DEBUG)
+# logger.addHandler(logging.StreamHandler())
 
 tables = [School, User, Permission, UserPermission, Lesson, LessonStudent, Note,
                         NoteVote, Question, Reply, Exam, ExamVote, StudyGroup, StudyGroupComment, StudyGroupMembers,
