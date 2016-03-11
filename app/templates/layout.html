@@ -1,6 +1,6 @@
 {% set applicationName = "curvit" %}
 <!DOCTYPE html>
-<html>
+<html {% if not card %}class="white"{% endif %}>
   <head>
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -18,14 +18,10 @@
   </head>
   <body>
 
-    {% block page_title %}
-      <h1 class="page_title">{{ applicationName }}</h1>
-    {% endblock %}
-
-    <main class="pad_t0 {% if small %}small{% endif %}">
+   {% if card %} <main class="pad_t0 {% if small %}small{% endif %}"> {% endif %}
       {% block main %}
       {% endblock %}
-    </main>
+    {% if card %}</main>{% endif %}
 
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
