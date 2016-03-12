@@ -5,7 +5,7 @@ from .forms import AddQuestionForm, AddReplyForm
 from .models import Question, Reply, QuestionVote, ReplyVote
 from app.models import Semester
 from datetime import datetime
-from app.models import KarmaPoints
+from app.models import KarmaPoints, DATABASE
 
 qa_bp = Blueprint('qa_bp', __name__, url_prefix='/qa')
 
@@ -98,22 +98,31 @@ def add_reply(questionid):
 @qa_bp.route('/question-vote', methods=['POST'])
 @login_required
 def question_vote():
-    # Get question id
-    question_id = request.form['question_id']
-    # Validate question id
-    try:
-        question = Question.get(Question.id == question_id)
-    except:
-        return jsonify({'success': False, 'message': 'Invalid id for Question: {}'.format(question_id)})
+    with DATABASE.transaction():
+        # Get question id
+        question_id = request.form['question_id']
+        # Validate question id
+        try:
+            question = Question.get(Question.id == question_id)
+        except:
+            return jsonify({'success': False, 'message': 'Invalid id for Question: {}'.format(question_id)})
 
+        print("Before", question.votes)
+        # Check if user has already voted
+        vote, created = QuestionVote.create_or_get(question=question, user=g.user.user_id)
+        print("Created", created)
+        if not created:
+            vote.voted = not vote.voted
+            vote.save()
 
-    # Check if user has already voted
-    vote, created = QuestionVote.create_or_get(question=question, user=g.user.user_id)
-    if not created:
-        vote.voted = not vote.voted
-        vote.save()
-    question.votes = QuestionVote.select().where((QuestionVote.question == question.id) & (QuestionVote.voted == True)).count()
-    question.save()
+        if vote.voted:
+            question.votes += 1
+        else:
+            question.votes -= 1
+
+        question.save()
+        print("after", question.votes)
+
 
 
 
@@ -123,29 +132,29 @@ def question_vote():
 @qa_bp.route('/reply-vote', methods=['POST'])
 @login_required
 def reply_vote():
-    # Get reply id
-    reply_id = request.form['reply_id']
-    # Validate reply id
-    try:
-        reply = Reply.get(Reply.id == reply_id)
-    except:
-        return jsonify({'success': False, 'message': 'Invalid id for Reply: {}'.format(reply_id)})
+    with DATABASE.transaction():
+        # Get reply id
+        reply_id = request.form['reply_id']
+        # Validate reply id
+        try:
+            reply = Reply.get(Reply.id == reply_id)
+        except:
+            return jsonify({'success': False, 'message': 'Invalid id for Reply: {}'.format(reply_id)})
 
 
-    # Check if user has already voted
-    vote, created = ReplyVote.create_or_get(reply=reply, user=g.user.user_id)
-    print(created)
-    if not created:
-        vote.voted = not vote.voted
-        vote.save()
-        if vote.voted is False:
-            reply.votes -= 1
-        else:
+        # Check if user has already voted
+        vote, created = ReplyVote.create_or_get(reply=reply, user=g.user.user_id)
+        print(created)
+        if not created:
+            vote.voted = not vote.voted
+            vote.save()
+
+        if vote.voted:
             reply.votes += 1
-    else:
-        reply.votes += 1
+        else:
+            reply.votes -= 1
 
-    reply.save()
+        reply.save()
 
     return jsonify({'success': True, 'number_of_posts': reply.votes})
 
