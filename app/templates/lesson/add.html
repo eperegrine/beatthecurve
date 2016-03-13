@@ -25,34 +25,86 @@
     </div>
   </form>#}
 
-    <h3>Join a new class</h3>
+    <h3 xmlns:v-on="http://www.w3.org/1999/xhtml">Join a new class</h3>
 
-    <div class="row">
-        <div class="available_classes col s6">
-            <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>
+    <div id="class-select">
+        {% raw %}
+        <div class="row">
+            <div class="available_classes col s6">
+                <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>
 
-            <ul class="collection">
-                <li class="collection-item">Maths <span class="secondary-content"><i class="fa fa-circle-o-notch fa-spin"></i></span></li>
-                <li class="collection-item">English Literature <span class="secondary-content"><i class="fa fa-plus"></i></span></li>
-                <li class="collection-item">English Language <span class="secondary-content"><i class="fa fa-plus"></i></span></li>
-                <li class="collection-item">Physics <span class="secondary-content"><i class="fa fa-plus"></i></span></li>
-            </ul>
+                <ul class="collection">
+                    <li class="collection-item" v-for="l in lessons" v-if="!l.is_attended" >
+                        {{ l.name }}
+                        <button class=" secondary-content" lesson_id="{{ l.id }}" v-on:click="toggle_attendance($index)">
+                            <i class="fa fa-plus" v-if="!l.is_loading"></i>
+                            <i class="fa fa-circle-o-notch fa-spin" v-else></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="joined_classes col s4 push-s2">
+                <input type='text' autocomplete='off' id='selectableSearch' disabled value="Current Courses">
+                <ul class="collection">
+                    <li class="collection-item" v-for="l in lessons" v-if="l.is_attended" >
+                        {{ l.name }}
+                        <button lesson_id="{{ l.id }}" v-on:click="toggle_attendance($index)" class="secondary-content">
+                            <i class="fa fa-times" v-if="!l.is_loading"></i>
+                            <i class="fa fa-circle-o-notch fa-spin" v-else></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
-
-        <div class="joined_classes col s4 push-s2">
-            <input type='text' autocomplete='off' id='selectableSearch' disabled value="Current Courses">
-            <ul class="collection">
-                {% for l in get_lessons(current_user) %}
-                    <li class="collection-item">{{ l.lesson_name }} <span class="secondary-content"><i class="fa fa-times"></i></span></li>
-                {% endfor %}
-            </ul>
-        </div>
+        {% endraw %}
     </div>
 
 
 {% endblock %}
 {% block js %}
 {{super()}}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.15/vue.min.js"></script>
+    <script>
+        Array.prototype.clean = function(deleteValue) {
+          for (var i = 0; i < this.length; i++) {
+            if (this[i] == deleteValue) {
+              this.splice(i, 1);
+              i--;
+            }
+          }
+          return this;
+        };
+
+        var lessons = [
+                {% for l in get_unattended_lessons(current_user) %}
+                    {name: "{{ l.lesson_name }}", id: {{ l.id }}, is_attended: false, is_loading: false },
+                {% endfor%}
+                {% for l in get_lessons(current_user) %}
+                    {name: "{{ l.lesson_name }}", id: {{ l.id }}, is_attended: true, is_loading: false },
+                {% endfor%}
+        ];
+        lessons = lessons.clean(undefined);
+        for (var i = 0; i < lessons.length; i++) {
+            console.log(lessons[i]);
+        }
+
+        v = new Vue({
+            el: '#class-select',
+            data: {
+                lessons: lessons
+            },
+            methods: {
+                toggle_attendance: function (index) {
+                    lesson = this.lessons[index];
+                    console.log(lesson);
+                    console.log(index);
+                    console.log(lesson.name);
+                    lesson.is_attended = !lesson.is_attended;
+                }
+            }
+        });
+    </script>
 {#<script>
   $(document).ready(function () {
     for (var i = 0; i < $("#lessons").siblings().length; i++) {
