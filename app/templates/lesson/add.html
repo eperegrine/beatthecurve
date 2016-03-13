@@ -31,7 +31,7 @@
         {% raw %}
         <div class="row">
             <div class="available_classes col s6">
-                <input type='search' autocomplete='off' id='selectableSearch' class="primary" placeholder='Search for a lesson'>
+                <input type='search' autocomplete='off' id='selectableSearch' class="primary" v-model="name" placeholder='Search for a lesson'>
 
                 <ul class="collection">
                     <li class="collection-item" v-for="l in lessons" v-if="!l.is_attended" >
@@ -56,7 +56,11 @@
                         </button>
                     </li>
                 </ul>
+
             </div>
+        </div>
+        <div id="confirm_btn" class="btn" v-bind:class="{ 'disabled': !has_changed}">
+            Confirm Changes
         </div>
         {% endraw %}
     </div>
@@ -93,6 +97,7 @@
         v = new Vue({
             el: '#class-select',
             data: {
+                has_changed: false,
                 lessons: lessons
             },
             methods: {
@@ -102,7 +107,14 @@
                     console.log(index);
                     console.log(lesson.name);
                     lesson.is_attended = !lesson.is_attended;
+                    this.has_changed = true;
                 }
+            }
+        });
+
+        $("#confirm_btn").click(function () {
+            if (!$(this).hasClass("disabled")) {
+                console.log("conf");
             }
         });
     </script>
