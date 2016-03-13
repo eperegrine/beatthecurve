@@ -90,8 +90,15 @@
                 {% endfor%}
         ];
         lessons = lessons.clean(undefined);
-        for (var i = 0; i < lessons.length; i++) {
-            console.log(lessons[i]);
+
+        function have_lessons_changed() {
+            for (var i = 0; i < lessons.length; i++) {
+                l = lessons[i];
+                if (l.originally_attended != l.is_attended) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         v = new Vue({
@@ -103,11 +110,8 @@
             methods: {
                 toggle_attendance: function (index) {
                     lesson = this.lessons[index];
-                    console.log(lesson);
-                    console.log(index);
-                    console.log(lesson.name);
                     lesson.is_attended = !lesson.is_attended;
-                    this.has_changed = true;
+                    this.has_changed = have_lessons_changed();
                 }
             }
         });
