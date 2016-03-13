@@ -91,7 +91,7 @@
         ];
         lessons = lessons.clean(undefined);
 
-        function have_lessons_changed() {
+        function haveLessonsChanged() {
             for (var i = 0; i < lessons.length; i++) {
                 l = lessons[i];
                 if (l.originally_attended != l.is_attended) {
@@ -99,6 +99,21 @@
                 }
             }
             return false;
+        }
+
+        function getChangedLessons() {
+            var res = {'joined': [], 'left': []};
+            for (var i = 0; i < lessons.length; i++) {
+                l = lessons[i];
+                if (l.originally_attended != l.is_attended) {
+                    if (l.is_attended) {
+                        res.joined.push(l.id);
+                    } else {
+                        res.left.push(l.id);
+                    }
+                }
+            }
+            return res;
         }
 
         v = new Vue({
@@ -111,14 +126,15 @@
                 toggle_attendance: function (index) {
                     lesson = this.lessons[index];
                     lesson.is_attended = !lesson.is_attended;
-                    this.has_changed = have_lessons_changed();
+                    this.has_changed = haveLessonsChanged();
                 }
             }
         });
 
         $("#confirm_btn").click(function () {
             if (!$(this).hasClass("disabled")) {
-                console.log("conf");
+                console.log("Joined: " + getChangedLessons().joined);
+                console.log("Left: " + getChangedLessons().left);
             }
         });
     </script>
