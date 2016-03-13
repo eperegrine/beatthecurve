@@ -25,13 +25,13 @@
     </div>
   </form>#}
 
-    <h3 xmlns:v-on="http://www.w3.org/1999/xhtml">Join a new class</h3>
+    <h3>Class enrollment</h3>
 
     <div id="class-select">
         {% raw %}
         <div class="row">
             <div class="available_classes col s6">
-                <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>
+                <input type='search' autocomplete='off' id='selectableSearch' class="primary" placeholder='Search for a lesson'>
 
                 <ul class="collection">
                     <li class="collection-item" v-for="l in lessons" v-if="!l.is_attended" >
@@ -45,8 +45,9 @@
             </div>
 
             <div class="joined_classes col s4 push-s2">
-                <input type='text' autocomplete='off' id='selectableSearch' disabled value="Current Courses">
-                <ul class="collection">
+                <span class="false_input">Current Courses</span>
+
+                <ul class="collection with-header">
                     <li class="collection-item" v-for="l in lessons" v-if="l.is_attended" >
                         {{ l.name }}
                         <button lesson_id="{{ l.id }}" v-on:click="toggle_attendance($index)" class="secondary-content">
@@ -78,10 +79,10 @@
 
         var lessons = [
                 {% for l in get_unattended_lessons(current_user) %}
-                    {name: "{{ l.lesson_name }}", id: {{ l.id }}, is_attended: false, is_loading: false },
+                    {name: "{{ l.lesson_name }}", id: {{ l.id }}, originally_attended:false ,is_attended: false, is_loading: false },
                 {% endfor%}
                 {% for l in get_lessons(current_user) %}
-                    {name: "{{ l.lesson_name }}", id: {{ l.id }}, is_attended: true, is_loading: false },
+                    {name: "{{ l.lesson_name }}", id: {{ l.id }}, originally_attended:true ,is_attended: true, is_loading: false },
                 {% endfor%}
         ];
         lessons = lessons.clean(undefined);

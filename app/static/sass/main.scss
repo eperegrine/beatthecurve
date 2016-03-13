@@ -38,3 +38,16 @@ $formCol: #5FB7F4;
 @import "vendor/tp";
 @import "modules/all";
 @import "partials/base";
+
+// Text inputs
+.false_input {
+  @extend .primary;
+  border-bottom: solid 1px $primaryCol;
+  display: block;
+  height: 3rem;
+  padding-top: 10px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  font: inherit;
+}
