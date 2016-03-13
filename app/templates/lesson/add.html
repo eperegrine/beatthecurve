@@ -34,7 +34,7 @@
                 <input type='search' autocomplete='off' id='selectableSearch' class="primary" v-model="name" placeholder='Search for a lesson'>
 
                 <ul class="collection">
-                    <li class="collection-item" v-for="l in lessons" v-if="!l.is_attended" >
+                    <li class="collection-item" v-for="l in lessons | filterBy name in 'name'" v-if="!l.is_attended" >
                         {{ l.name }}
                         <button class=" secondary-content" lesson_id="{{ l.id }}" v-on:click="toggle_attendance($index)">
                             <i class="fa fa-plus" v-if="!l.is_loading"></i>
