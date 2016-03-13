@@ -7,9 +7,8 @@
 <!-- Dropdown Trigger -->
 <div class="row">
   <!-- <a class='col s12 center class_drop_btn' href='#' data-activates='class_drop'>{% if lesson %}{{lesson.lesson_name}}{% else %} Lessons {% endif %}</a> -->
-
+    <div class="col s12 center primary"><h4 class="title">{{ applicationName }}</h4></div>
   <ul id='class_drop' class='_tabs'>
-  <li class="tabs_item title_tab">{{ applicationName }}</li>
   {% if g.user.has_permission('lesson_admin') %}
     <li class="tabs_item {% if create_lesson %}active{% endif %}"><a href="{{ url_for("lesson_bp.create") }}">Create Class</a></li>
   {% endif %}

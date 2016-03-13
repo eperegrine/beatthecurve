@@ -56,7 +56,7 @@
       <div class="bg-primary white semester-title">Select Semester</div>
       <ul class="collection" id="semesters">
         {% for semester in semesters %}
-          <li class="collection-item semester-tab {% if loop.first %}active{% endif %}" semester="{{ semester[1] }}" year="{{ semester[0] }}"><a target="_self" href="#{{ semester_enum[semester[1]] }}{{ semester[0] }}">{{ semester_enum[semester[1]]|capitalize }} {{ semester[0] }}</a></li>
+          <li class="collection-item semester-tab center {% if loop.first %}active{% endif %}" semester="{{ semester[1] }}" year="{{ semester[0] }}"><a target="_self" href="#{{ semester_enum[semester[1]] }}{{ semester[0] }}">{{ semester_enum[semester[1]]|capitalize }} {{ semester[0] }}</a></li>
         {% endfor %}
       </ul>
     </div>

@@ -1,7 +1,7 @@
 {% extends 'li_layout.html' %}
-{% block container %}
+{% block content %}
   <div class="row">
-    <div class="col s2">
+    <div class="col s1">
       <ul class="class-page-nav">
 
         <li class="class-nav-item {% if active == "forum" %}active{% endif %}"><a href="{{ url_for('qa_bp.view', lessonid=lesson.id) }}">forum</a></li>
@@ -15,7 +15,7 @@
       <li class="class-nav-item"><a href="/logout">logout</a></li>
       </ul>
     </div>
-    <div class="col s10">
+    <div class="col s11">
       {% block page %}
       {% endblock %}
     </div>

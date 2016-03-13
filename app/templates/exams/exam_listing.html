@@ -3,14 +3,14 @@
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
-  <div class="col s3">
+  <div class="col s2">
     {% if semesters|length > 0 %}
       {{ render_semester_tabs(semesters, semester_enum) }}
     {% else %}
       <h5>No Exams Available</h5>
     {% endif %}
   </div>
-  <div class="col s9">
+  <div class="col s10">
     <div class="row valign-wrapper">
       <a class="waves-effect waves-light btn-large modal-trigger col s1 bg-primary" href="#newExamModal"><i class="material-icons">file_upload</i></a>
       <div class="col s11 vaglign desc">
