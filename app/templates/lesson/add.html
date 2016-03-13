@@ -3,7 +3,7 @@
 {% from 'macros.html' import render_field %}
 {% block title %}Join classes{% endblock %}
 {% block content %}
-  <ul class="collection with-header">
+  {#<ul class="collection with-header">
     {% for l in get_lessons(current_user) %}
       {% if loop.first %}<li class="collection-header"><h4>Joined Classes</h4></li>{% endif %}
       <li class="collection-item"><a href="{{ url_for("notes_bp.view", lessonid=l.id) }}">{{ l.lesson_name }}</a></li>
@@ -12,7 +12,9 @@
 
   <h3>Join a new class</h3>
   <form method="post" id="add-lesson-form">
-    <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>
+      <div class="row">
+          <input type='text' autocomplete='off' class="col s6" id='selectableSearch' placeholder='Search for a lesson'>
+      </div>
     {% for field in form %}
       {{ render_field(field) }}
     {% endfor %}
@@ -21,11 +23,37 @@
       <button type="submit" class="col s12 waves-effect waves-light btn-large">Add</button>
       <!-- <span class="col s1">&nbsp;</span> -->
     </div>
-  </form>
+  </form>#}
+
+    <h3>Join a new class</h3>
+
+    <div class="row">
+        <div class="available_classes col s6">
+            <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>
+
+            <ul class="collection">
+                <li class="collection-item">Maths <span class="secondary-content"><i class="fa fa-circle-o-notch fa-spin"></i></span></li>
+                <li class="collection-item">English Literature <span class="secondary-content"><i class="fa fa-plus"></i></span></li>
+                <li class="collection-item">English Language <span class="secondary-content"><i class="fa fa-plus"></i></span></li>
+                <li class="collection-item">Physics <span class="secondary-content"><i class="fa fa-plus"></i></span></li>
+            </ul>
+        </div>
+
+        <div class="joined_classes col s4 push-s2">
+            <input type='text' autocomplete='off' id='selectableSearch' disabled value="Current Courses">
+            <ul class="collection">
+                {% for l in get_lessons(current_user) %}
+                    <li class="collection-item">{{ l.lesson_name }} <span class="secondary-content"><i class="fa fa-times"></i></span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
 {% endblock %}
 {% block js %}
 {{super()}}
-<script>
+{#<script>
   $(document).ready(function () {
     for (var i = 0; i < $("#lessons").siblings().length; i++) {
       var item = $("#lessons").siblings()[i];
@@ -77,5 +105,5 @@
     });
     // lessons_select.attr("size",lessons_select.children().size());
   });
-</script>
+</script>#}
 {% endblock %}
