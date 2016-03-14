@@ -79,4 +79,6 @@ dump.rdb
 logs.txt
 setup.sh
 
+
+*.scssc
 .DS_Store
