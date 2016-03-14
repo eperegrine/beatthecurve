@@ -20,8 +20,9 @@
 
   <div class="col s10">
     <div class="row valign-wrapper">
+        <span class="col s1">&nbsp;</span>
       <a class="waves-effect waves-light btn-large modal-trigger col s1 bg-primary" href="#newNoteModal"><i class="material-icons">file_upload</i></a>
-      <div class="col s11 vaglign desc">
+      <div class="col s10 vaglign desc">
         <h5>Upload a note</h5>
       </div>
     </div>
@@ -61,7 +62,10 @@
               <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ note.votes }}</a>
             {% endif %}
           </span>
-          <span class="col s10">
+        <span class="col s1 center">
+          <i class="fa fa-file-o primary fa-3x center"></i>
+      </span>
+          <span class="col s9">
             <a href="{{ uploads_url }}notes/{{ note.s3_filename }}" class="filename_title">{{ note.filename }}</a>
             <p class="note_description">{{note.description}}</p>
             <p class="note_date">{{note.year}}</p>
