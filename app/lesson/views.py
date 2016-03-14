@@ -4,6 +4,7 @@ from .forms import AttendLessonsForm, CreateLessonForm
 from .models import Lesson, LessonStudent
 from app.search.models import UserOption, Option
 from app.auth.decorators import permission_required
+import json
 
 lesson_bp = Blueprint('lesson_bp', __name__, url_prefix='/lessons')
 
@@ -62,16 +63,18 @@ def attend_class():
     # return jsonify({'success': False, 'errors': form.errors})
     attended = 'joined[]' in request.form.keys()
     left = 'left[]' in request.form.keys()
+    data = request.data
+    print(request.form)
     if attended or left:
         if left:
-            for lesson_id in request.form['left[]']:
+            for lesson_id in request.form.getlist('left[]'):
                 try:
                     LessonStudent.get(student_id=g.user.user_id, lesson_id=lesson_id).delete_instance()
                 except Exception as e:
                     print(e)
                     return jsonify({'success': False, 'errors': [e]})
         if attended:
-            for lesson_id in request.form['joined[]']:
+            for lesson_id in request.form.getlist('joined[]'):
                 try:
                     LessonStudent.attend(g.user.user_id, [lesson_id])
                 except Exception as e:
