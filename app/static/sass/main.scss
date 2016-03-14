@@ -33,6 +33,10 @@ form div:last-of-type > input[type="checkbox"] + label {
   color: grey !important;
 }
 
+.lowercase {
+  text-transform: lowercase !important;
+}
+
 $formCol: #5FB7F4;
 
 @import "vendor/tp";

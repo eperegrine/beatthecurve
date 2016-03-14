@@ -4,32 +4,41 @@
 		// idk
 	}
 }
-
+.title {
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
 ._tabs {
-    margin:  0;
-    padding: 0;
-    list-style: none;
-    display: table; /* [1] */
-    table-layout: fixed; /* [2] */
-    width: 100%; /* [3] */
-    .tabs_item {
-    		text-align: center;
-    		padding: 1em;
-        display: table-cell; /* [4] */
-        background-color: $primaryCol;
-      	color: white !important;
-      	a {
-        	color: inherit !important; /* [5] */
-        }
-      	&.active {
-      		background-color: white;
-        	color: $primaryCol;
-        	a {
-	        	color: $primaryCol !important; /* [5] */
-	        }
-        }
-        .tabs_link {
-            display: block; /* [5] */
-        }
+  margin:  0;
+  padding: 0;
+  list-style: none;
+  display: table; /* [1] */
+  table-layout: fixed; /* [2] */
+  width: 100%; /* [3] */
+  .tabs_item {
+    &:not(:first-child) {
+      border-left: $lightBlue solid 2px;
+      &.active {
+        border-left: 0;
+      }
     }
+    text-align: center;
+    padding: 1em;
+    display: table-cell; /* [4] */
+    background-color: $primaryCol;
+    color: white !important;
+    a {
+      color: inherit !important; /* [5] */
+    }
+    &.active {
+      background-color: lighten($lightBlue, 5);
+      color: $primaryCol;
+      a {
+        color: $primaryCol !important; /* [5] */
+      }
+    }
+    .tabs_link {
+      display: block; /* [5] */
+    }
+  }
 }

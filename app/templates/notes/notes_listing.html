@@ -10,7 +10,7 @@
       {% endfor %}
   </ul>
 
-  <div class="col s3">
+  <div class="col s2">
     {% if semesters|length > 0 %}
       {{ render_semester_tabs(semesters, semester_enum) }}
     {% else %}
@@ -18,7 +18,7 @@
     {% endif %}
   </div>
 
-  <div class="col s9">
+  <div class="col s10">
     <div class="row valign-wrapper">
       <a class="waves-effect waves-light btn-large modal-trigger col s1 bg-primary" href="#newNoteModal"><i class="material-icons">file_upload</i></a>
       <div class="col s11 vaglign desc">
