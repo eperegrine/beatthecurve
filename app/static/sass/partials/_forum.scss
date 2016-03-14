@@ -1,4 +1,4 @@
-.q_reply {
+.blue_field {
   background-color: lighten($lightBlue, 10) !important;
   border-bottom: 0 !important;
   color: $greyText;
@@ -6,6 +6,12 @@
     border-bottom: 0 !important;
     box-shadow: none !important;
   }
+  padding-left: 1% !important;
+  padding-right: 1% !important;
+}
+
+.q_reply {
+  @extend .blue_field;
   padding-left: 3% !important;
   padding-right: 1% !important;
   width:96% !important;

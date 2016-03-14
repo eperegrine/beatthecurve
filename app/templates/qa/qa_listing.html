@@ -15,9 +15,22 @@
     <div class="card-panel">
         <h3 class="content_title">Add a Question</h3>
         <form method="post" action="{{ url_for("qa_bp.add_question", lessonid=lesson.id) }}">
-          {% for field in form %}
+         {# {% for field in form %}
             {{ render_field(field) }}
-          {% endfor %}
+          {% endfor %}#}
+            {{ form.csrf_token() }}
+            <div class="input-field">
+                <strong><h6 class="grey-text text-darken-1">Subject</h6></strong>
+                {{ form.document(class_="blue_field") }}
+            </div>
+            <div class="input-field">
+                <strong><h6 class="grey-text text-darken-1">Question</h6></strong>
+                {{ form.name(class_="blue_field") }}
+            </div>
+            <div class="input-field">
+                <strong><h6 class="grey-text text-darken-1">Content</h6></strong>
+                {{ form.content(class_="materialize-textarea q_reply") }}
+            </div>
           <div class="row">
             <button type="submit" class="waves-effect waves-light btn col s2 push-s5 lowercase">send</button>
           </div>
