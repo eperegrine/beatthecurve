@@ -1,4 +1,4 @@
-from flask import Blueprint, g, render_template, flash, redirect, url_for,  jsonify
+from flask import Blueprint, g, render_template, flash, redirect, url_for, jsonify, request
 from flask.ext.login import login_required
 from .forms import AttendLessonsForm, CreateLessonForm
 from .models import Lesson, LessonStudent
@@ -42,24 +42,47 @@ def add():
 @lesson_bp.route('/attend-class', methods=['POST'])
 @login_required
 def attend_class():
-    form = AttendLessonsForm()
+    # form = AttendLessonsForm()
+    #
+    # # Setup choices for form
+    # form.lessons.choices = [(str(lesson.id), lesson.lesson_name + " - " + lesson.professor) for lesson in
+    #                         Lesson.get_unattended_lessons(g.user)]
+    #
+    # # If there are no lessons available display that
+    # if len(form.lessons.choices) == 0:
+    #     form.lessons.choices =[("-1", "No Lessons Available")]
+    #
+    # # Check if form is valid
+    # if form.validate_on_submit():
+    #     # TODO: Add exception handling
+    #     lesson_ids = [int(id) for id in form.lessons.data]
+    #     LessonStudent.attend(g.user.user_id, lesson_ids)
+    #
+    #     return jsonify({'success': True})
+    # return jsonify({'success': False, 'errors': form.errors})
+    attended = 'joined[]' in request.form.keys()
+    left = 'left[]' in request.form.keys()
+    if attended or left:
+        if left:
+            for lesson_id in request.form['left[]']:
+                try:
+                    LessonStudent.get(student_id=g.user.user_id, lesson_id=lesson_id).delete_instance()
+                except Exception as e:
+                    print(e)
+                    return jsonify({'success': False, 'errors': [e]})
+        if attended:
+            for lesson_id in request.form['joined[]']:
+                try:
+                    LessonStudent.attend(g.user.user_id, [lesson_id])
+                except Exception as e:
+                    print(e)
+                    return jsonify({'success': False, 'errors': [e]})
 
-    # Setup choices for form
-    form.lessons.choices = [(str(lesson.id), lesson.lesson_name + " - " + lesson.professor) for lesson in
-                            Lesson.get_unattended_lessons(g.user)]
-
-    # If there are no lessons available display that
-    if len(form.lessons.choices) == 0:
-        form.lessons.choices =[("-1", "No Lessons Available")]
-
-    # Check if form is valid
-    if form.validate_on_submit():
-        # TODO: Add exception handling
-        lesson_ids = [int(id) for id in form.lessons.data]
-        LessonStudent.attend(g.user.user_id, lesson_ids)
 
         return jsonify({'success': True})
-    return jsonify({'success': False, 'errors': form.errors})
+    else:
+        return jsonify({'success': False, 'errors': ['You must have either joined or left']})
+
 
 
 @lesson_bp.route('/create', methods=('POST', 'GET'))

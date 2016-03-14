@@ -135,6 +135,7 @@
             if (!$(this).hasClass("disabled")) {
                 console.log("Joined: " + getChangedLessons().joined);
                 console.log("Left: " + getChangedLessons().left);
+                $.post('/lessons/attend-class', getChangedLessons())
             }
         });
     </script>
