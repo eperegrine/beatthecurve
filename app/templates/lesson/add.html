@@ -115,7 +115,21 @@
                 console.log("Left: " + getChangedLessons().left);
                 $.post('/lessons/attend-class', getChangedLessons(), function (data, textStatus, jqXHR) {
                     if (data.success) {
-                        location.reload();
+                        //swal = sweetAlert;
+                        swal({
+                            title: "Success",
+                            text: "Your classes have been changed, the page will now reload",
+                            type: "success"
+                        }, function () {
+                            location.reload();
+                        });
+                    } else {
+                        swal({
+                            title: "Oh noes!",
+                            text: "There was an error changing your classes :( " + "<br><pre>" + data.errors + "</pre>",
+                            type: "error",
+                            html: true
+                        });
                     }
                 });
             }
