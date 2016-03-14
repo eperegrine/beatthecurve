@@ -1,4 +1,4 @@
- from flask import Blueprint, g, render_template, flash, redirect, url_for,  jsonify, request
+from flask import Blueprint, g, render_template, flash, redirect, url_for, jsonify, request
 from flask.ext.login import login_required
 from .forms import AttendLessonsForm, CreateLessonForm
 from .models import Lesson, LessonStudent
@@ -60,18 +60,28 @@ def attend_class():
     #
     #     return jsonify({'success': True})
     # return jsonify({'success': False, 'errors': form.errors})
-    attended = 'attended' in request.form.keys()
-    left = 'left' in request.form.keys()
+    attended = 'joined[]' in request.form.keys()
+    left = 'left[]' in request.form.keys()
     if attended or left:
         if left:
-            for lesson_id in request.form['left']:
-                LessonStudent.get(student_id=g.user.user_id, lesson_id=lesson_id).delete_instance()
+            for lesson_id in request.form['left[]']:
+                try:
+                    LessonStudent.get(student_id=g.user.user_id, lesson_id=lesson_id).delete_instance()
+                except Exception as e:
+                    print(e)
+                    return jsonify({'success': False, 'errors': [e]})
         if attended:
-            for lesson_id in request.form['attended']:
-                LessonStudent.create_or_get(student_id=g.user.user_id, lesson_id=lesson_id)
-        return jsonify({'success': False})
+            for lesson_id in request.form['joined[]']:
+                try:
+                    LessonStudent.attend(g.user.user_id, [lesson_id])
+                except Exception as e:
+                    print(e)
+                    return jsonify({'success': False, 'errors': [e]})
+
+
+        return jsonify({'success': True})
     else:
-        return jsonify({'success': False, 'errors': ['You must have either ']})
+        return jsonify({'success': False, 'errors': ['You must have either joined or left']})
 
 
 
