@@ -49,9 +49,9 @@
       <div class="row exam-item valign-wrapper" semester="{{ exam.semester }}" year="{{ exam.year }}">
         <span class="col s1 ">
           {% if exam.has_upvoted(current_user) %}
-            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="0") }}" class="valign"><i class="material-icons">thumb_up</i> {{ exam.votes}}</a>
+            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="0") }}" class="valign"><i class="fa fa-thumbs-up fa-lg"></i>  {{ exam.votes}}</a>
           {% else %}
-            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="1") }}" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ exam.votes }}</a>
+            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="1") }}" class="grey-text-imp valign"><i class="fa fa-thumbs-up fa-lg"></i> {{ exam.votes }}</a>
           {% endif %}
         </span>
       <span class="col s1 center">
