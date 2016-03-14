@@ -1,7 +1,7 @@
 {% macro render_field(field, useLabel=false) %}
         {% if field.errors %}
-            {%  for error in field.errors %}
-                <div class="">{{ error }}</div>
+            {%for error in field.errors %}
+                <div class="red-text">{{ error }}</div>
             {% endfor %}
         {% endif %}
     {% if field.type == "FileField" %}

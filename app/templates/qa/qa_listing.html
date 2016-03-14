@@ -20,14 +20,23 @@
           {% endfor %}#}
             {{ form.csrf_token() }}
             <div class="input-field">
+                {%for error in form.document.errors %}
+                    <div class="red-text">{{ error }}</div>
+                {% endfor %}
                 <strong><h6 class="grey-text text-darken-1">Subject</h6></strong>
                 {{ form.document(class_="blue_field") }}
             </div>
             <div class="input-field">
+                {%for error in form.name.errors %}
+                    <div class="red-text">{{ error }}</div>
+                {% endfor %}
                 <strong><h6 class="grey-text text-darken-1">Question</h6></strong>
                 {{ form.name(class_="blue_field") }}
             </div>
             <div class="input-field">
+                {% for error in form.content.errors %}
+                    <div class="red-text">{{ error }}</div>
+                {% endfor %}
                 <strong><h6 class="grey-text text-darken-1">Content</h6></strong>
                 {{ form.content(class_="materialize-textarea q_reply") }}
             </div>
