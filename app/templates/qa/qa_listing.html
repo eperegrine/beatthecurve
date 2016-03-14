@@ -19,7 +19,7 @@
             {{ render_field(field) }}
           {% endfor %}
           <div class="row">
-            <button type="submit" class="waves-effect waves-light btn col s12">send</button>
+            <button type="submit" class="waves-effect waves-light btn col s2 push-s5 lowercase">send</button>
           </div>
         </form>
     </div>
@@ -63,7 +63,7 @@
                         <p class="grey-text">{{ reply.content }}</p>
                       </div>
                       {% if loop.last %}
-                        <div class="divider bg-primary"></div><br>
+                        <div class="divider bg-primary"></div>
                       {% else %}
                         <div class="divider light-grey"></div>
                       {% endif %}
@@ -75,7 +75,7 @@
                           {{ comment_form.content(id="reply-content-" + q.id|string, class="q_reply materialize-textarea") }}
                         </div>
                       <div class="row">
-                        <button type="submit" class="waves-effect waves-light btn center right">Reply</button>
+                        <button type="submit" class="waves-effect waves-light btn center right lowercase">send</button>
                       </div>
                     </form>
                   </div>

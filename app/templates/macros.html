@@ -18,7 +18,8 @@
       <div class="input-field">
 
           {% if field.type == "TextAreaField" %}
-            {{ field(class_="materialize-textarea", placeholder=field.label.text) }}
+             <strong><h6 class="grey-text text-darken-2">{{ field.label.text }}</h6></strong>
+            {{ field(class_="materialize-textarea q_reply") }}
           {% elif field.type == "DateField" %}
             {{ field(class_="datepicker") }}
           {% else %}
