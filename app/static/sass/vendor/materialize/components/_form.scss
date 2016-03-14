@@ -33,7 +33,7 @@ label {
    color: lighten($input-border-color, 20%);
 }
 
-// Text inputs
+//Text
 input:not([type]),
 input[type=text],
 input[type=password],
@@ -129,7 +129,7 @@ textarea.materialize-textarea {
     color: $input-border-color;
     position: absolute;
     top: 0.8rem;
-    left: $gutter-width / 2;
+    //left: $gutter-width / 2;
     font-size: 1rem;
     cursor: text;
     transition: .2s ease-out;

@@ -3,7 +3,7 @@
 {% from 'macros.html' import render_field %}
 {% block title %}Join classes{% endblock %}
 {% block content %}
-  <ul class="collection with-header">
+  {#<ul class="collection with-header">
     {% for l in get_lessons(current_user) %}
       {% if loop.first %}<li class="collection-header"><h4>Joined Classes</h4></li>{% endif %}
       <li class="collection-item"><a href="{{ url_for("notes_bp.view", lessonid=l.id) }}">{{ l.lesson_name }}</a></li>
@@ -12,7 +12,9 @@
 
   <h3>Join a new class</h3>
   <form method="post" id="add-lesson-form">
-    <input type='text' autocomplete='off' id='selectableSearch' placeholder='Search for a lesson'>
+      <div class="row">
+          <input type='text' autocomplete='off' class="col s6" id='selectableSearch' placeholder='Search for a lesson'>
+      </div>
     {% for field in form %}
       {{ render_field(field) }}
     {% endfor %}
@@ -21,11 +23,122 @@
       <button type="submit" class="col s12 waves-effect waves-light btn-large">Add</button>
       <!-- <span class="col s1">&nbsp;</span> -->
     </div>
-  </form>
+  </form>#}
+
+    <h3>Class enrollment</h3>
+
+    <div id="class-select">
+        {% raw %}
+        <div class="row">
+            <div class="available_classes col s6">
+                <input type='search' autocomplete='off' id='selectableSearch' class="primary" v-model="name" placeholder='Search for a lesson'>
+
+                <ul class="collection">
+                    <li class="collection-item" v-for="l in lessons | filterBy name in 'name'" v-if="!l.is_attended" >
+                        {{ l.name }}
+                        <button class=" secondary-content" lesson_id="{{ l.id }}" v-on:click="toggle_attendance($index)">
+                            <i class="fa fa-plus" v-if="!l.is_loading"></i>
+                            <i class="fa fa-circle-o-notch fa-spin" v-else></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="joined_classes col s4 push-s2">
+                <span class="false_input">Current Courses</span>
+
+                <ul class="collection with-header">
+                    <li class="collection-item" v-for="l in lessons" v-if="l.is_attended" >
+                        {{ l.name }}
+                        <button lesson_id="{{ l.id }}" v-on:click="toggle_attendance($index)" class="secondary-content">
+                            <i class="fa fa-times" v-if="!l.is_loading"></i>
+                            <i class="fa fa-circle-o-notch fa-spin" v-else></i>
+                        </button>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div id="confirm_btn" class="btn" v-bind:class="{ 'disabled': !has_changed}">
+            Confirm Changes
+        </div>
+        {% endraw %}
+    </div>
+
+
 {% endblock %}
 {% block js %}
 {{super()}}
-<script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.15/vue.min.js"></script>
+    <script>
+        Array.prototype.clean = function(deleteValue) {
+          for (var i = 0; i < this.length; i++) {
+            if (this[i] == deleteValue) {
+              this.splice(i, 1);
+              i--;
+            }
+          }
+          return this;
+        };
+
+        var lessons = [
+                {% for l in get_unattended_lessons(current_user) %}
+                    {name: "{{ l.lesson_name }}", id: {{ l.id }}, originally_attended:false ,is_attended: false, is_loading: false },
+                {% endfor%}
+                {% for l in get_lessons(current_user) %}
+                    {name: "{{ l.lesson_name }}", id: {{ l.id }}, originally_attended:true ,is_attended: true, is_loading: false },
+                {% endfor%}
+        ];
+        lessons = lessons.clean(undefined);
+
+        function haveLessonsChanged() {
+            for (var i = 0; i < lessons.length; i++) {
+                l = lessons[i];
+                if (l.originally_attended != l.is_attended) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function getChangedLessons() {
+            var res = {'joined': [], 'left': []};
+            for (var i = 0; i < lessons.length; i++) {
+                l = lessons[i];
+                if (l.originally_attended != l.is_attended) {
+                    if (l.is_attended) {
+                        res.joined.push(l.id);
+                    } else {
+                        res.left.push(l.id);
+                    }
+                }
+            }
+            return res;
+        }
+
+        v = new Vue({
+            el: '#class-select',
+            data: {
+                has_changed: false,
+                lessons: lessons
+            },
+            methods: {
+                toggle_attendance: function (index) {
+                    lesson = this.lessons[index];
+                    lesson.is_attended = !lesson.is_attended;
+                    this.has_changed = haveLessonsChanged();
+                }
+            }
+        });
+
+        $("#confirm_btn").click(function () {
+            if (!$(this).hasClass("disabled")) {
+                console.log("Joined: " + getChangedLessons().joined);
+                console.log("Left: " + getChangedLessons().left);
+            }
+        });
+    </script>
+{#<script>
   $(document).ready(function () {
     for (var i = 0; i < $("#lessons").siblings().length; i++) {
       var item = $("#lessons").siblings()[i];
@@ -77,5 +190,5 @@
     });
     // lessons_select.attr("size",lessons_select.children().size());
   });
-</script>
+</script>#}
 {% endblock %}

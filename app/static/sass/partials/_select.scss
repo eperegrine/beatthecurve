@@ -27,3 +27,11 @@
 		}
 	}
 }
+
+.secondary-content {
+  background-color: transparent;
+  border: 0;
+  &:active {
+    background-color: transparent;
+  }
+}
