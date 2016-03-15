@@ -182,6 +182,8 @@ def get_questions():
             'details': question.content,
             'semester': question.semester,
             'year': question.year,
+            'has_voted': question.has_voted(g.user.user_id),
+            'votes': question.votes,
             'replies': [
                 {
                     'user': reply.user.first_name + " " + reply.user.last_name,
