@@ -196,6 +196,7 @@ def get_questions():
 
     for question in questions:
         questions_data[question.id] = {
+            'id': question.id,
             'user': question.user.first_name + " " + question.user.last_name,
             'number_of_posts': question.number_of_posts,
             'document': question.document,
