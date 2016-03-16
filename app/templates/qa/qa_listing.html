@@ -190,7 +190,8 @@
   '</div>' +
 '{% endfor %}';
         {% endraw %}
-        $(document).ready(function () {
+
+        function setupQuestions() {
             $(".q_body").hide();
             $(".q_head").click(function (e) {
                 q_id = $(this).attr("q_id");
@@ -246,8 +247,10 @@
 
                 });
             });
+        }
 
-
+        $(document).ready(function () {
+            setupQuestions();
         });
 
     function test() {
@@ -257,9 +260,11 @@
                     console.log(data);
                     data.questions = $.map(data.questions, function(el) { return el });
                     $("#questions_list").append(nunjucks.renderString(questionTemplate, data));
+                    setupQuestions();
                 }
         );
     }
+
     </script>
  {# <script src="{{ url_for("static", filename="js/get_discussions.js") }}"></script>
   <script>
