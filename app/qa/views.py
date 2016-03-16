@@ -217,6 +217,11 @@ def get_questions():
             ]
         }
 
-    return jsonify({'success': True, 'questions': questions_data})
+    more_to_load = True
+
+    if len(question_ids) + len(questions_data.keys()) == Question.select().count():
+        more_to_load = False
+
+    return jsonify({'success': True, 'questions': questions_data, 'moreToLoad': more_to_load})
 
 
