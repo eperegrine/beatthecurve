@@ -210,7 +210,9 @@ def get_questions():
                 {
                     'user': reply.user.first_name + " " + reply.user.last_name,
                     'content': reply.content,
-                    'datetime': reply.datetime
+                    'datetime': reply.datetime,
+                    'votes': reply.votes,
+                    'has_voted': reply.has_voted(g.user.user_id)
                 } for reply in question.replies()
             ]
         }
