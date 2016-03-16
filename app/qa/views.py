@@ -190,7 +190,7 @@ def get_questions():
     except:
         return jsonify({'success': False, 'message': 'Invalid question id'})
 
-    questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id))
+    questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id)).limit(10)
 
     questions_data = {}
 
