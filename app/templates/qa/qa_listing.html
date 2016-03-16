@@ -45,6 +45,7 @@
           </div>
         </form>
     </div>
+  <div id="questions_list">
     {% for q in questions %}
     <br>
       <div class="card-panel question" q_id={{ q.id }} {% if loop.first %}first{% endif %} semester="{{ q.semester }}" year="{{ q.year }}">
@@ -107,12 +108,88 @@
 
       </div>
     {% endfor %}
+  </div>
 </div>
 </div>
 {% endblock %}
 {% block js %}
 {{super()}}
     <script>
+        // First, checks if it isn't implemented yet.
+        if (!String.prototype.format) {
+          String.prototype.format = function() {
+            var args = arguments;
+            return this.replace(/{(\d+)}/g, function(match, number) {
+              return typeof args[number] != 'undefined'
+                ? args[number]
+                : match
+              ;
+            });
+          };
+        }
+        {% raw %}
+        var questionTemplate = '{% for q in questions %}' +
+'<br>' +
+  '<div class="card-panel question" q_id={{ q.id }} {% if loop.first %}first{% endif %} semester="{{ q.semester }}" year="{{ q.year }}">' +
+      '<div class="row">' +
+         '<div class="col s1 valign-wrapper">' +
+              '{% if q.has_voted %}' +
+                  '<a href="#!" class="primary valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>' +
+              '{% else %}' +
+                  '<a href="#!" class="grey-text-imp valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>' +
+              '{% endif %}' +
+          '</div>' +
+          '<div class="col s10">' +
+              '<div class="q_head" q_id={{ q.id }}>' +
+                '<div class="row">' +
+                    '<i class="fa fa-user fa-lg primary"></i>' +
+                  '<span class="primary poster_name">{{q.user}}</span>' +
+                  '<span class="lightBlue right q_document">{{q.document}}</span>' +
+                '</div>' +
+                '<div class="row no_bot" id="q_title_{{ q.id }}">' +
+                  '<h5 class="grey-text q_question">{{q.question}}</h5>' +
+                '</div>' +
+              '</div>' +
+              '<div class="q_body" id="q_body_{{ q.id }}">' +
+                '<div class="row">' +
+                  '<p>{{q.details}}</p>' +
+                '</div>' +
+                '<div class="divider bg-primary"></div>' +
+                '{% for reply in q.replies %}' +
+                  '<div class="comment">' +
+                    '<div class="row comment_name primary">' +
+                       /* {# {% if q.has_voted(current_user) %}
+                              <a href="#!" class="primary valign r_vote" reply="{{ reply.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ reply.id }}">{{ reply.votes}}</span></a>
+                          {% else %}
+                              <a href="#!" class="grey-text-imp valign r_vote" reply="{{ reply.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ reply.id }}">{{ reply.votes}}</span></a>
+                          {% endif %} #} */
+                        '&nbsp;<i class="fa fa-user fa-lg"></i>&nbsp;{{ reply.user }}' +
+                        '<span class="lightBlue right">{{reply.datetime}}</span>' +
+                    '</div>' +
+                    '<p class="grey-text" style="margin-left: 42px;">{{ reply.content }}</p>' +
+                  '</div>' +
+                  '{% if loop.last %}' +
+                    '<div class="divider bg-primary"></div>' +
+                  '{% else %}' +
+                    '<div class="divider light-grey"></div>' +
+                  '{% endif %}' +
+                '{% endfor %}' +
+                '<form class=""method="post" action="/qa/reply/{{ q.id }}">' +
+                    '<input id="csrf_token" name="csrf_token" placeholder="Csrf Token" type="hidden" value="">' +
+                    '<div class="input-field">' +
+                      '<strong><h6 class="grey-text">Type a reply</h6></strong>' +
+                      '<textarea class="q_reply materialize-textarea" id="reply-content-1" name="content"></textarea>' +
+                    '</div>' +
+                  '<div class="row">' +
+                    '<button type="submit" class="waves-effect waves-light btn center right lowercase">send</button>' +
+                  '</div>' +
+                '</form>' +
+              '</div>' +
+          '</div>' +
+      '</div>' +
+  '</div>' +
+'{% endfor %}';
+        {% endraw %}
         $(document).ready(function () {
             $(".q_body").hide();
             $(".q_head").click(function (e) {
@@ -169,7 +246,20 @@
 
                 });
             });
+
+
         });
+
+    function test() {
+        $.post("/qa/get-questions",
+                {question_ids: '1,2', lesson_id: '1'},
+                function (data) {
+                    console.log(data);
+                    data.questions = $.map(data.questions, function(el) { return el });
+                    $("#questions_list").append(nunjucks.renderString(questionTemplate, data));
+                }
+        );
+    }
     </script>
  {# <script src="{{ url_for("static", filename="js/get_discussions.js") }}"></script>
   <script>
