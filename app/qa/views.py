@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, g, request, jsonify
+from flask import Blueprint, render_template, flash, redirect, url_for, g, request, jsonify, session
 from flask.ext.login import login_required
 from app.lesson.models import Lesson
 from .forms import AddQuestionForm, AddReplyForm
@@ -33,7 +33,23 @@ def view(lessonid):
         except:
             pass
 
+    print(request.form)
+
     form = AddQuestionForm()
+
+    try:
+        print("name", session['name'])
+        if session['add_question_data']:
+            session['add_question_data'] = False
+            form.name.data = session['name']
+            form.content.data = session['content']
+            form.document.data = session['document']
+            form.validate()
+
+    except KeyError as e:
+        print(e)
+
+
 
     comment_form = AddReplyForm()
 
@@ -63,9 +79,14 @@ def add_question(lessonid):
 
         g.user.karma_points += KarmaPoints.post_question.value
         g.user.save()
+    else:
+        print('update globals')
+        session['name'] = form.name.data
+        session['content'] = form.content.data
+        session['document'] = form.document.data
+        session['add_question_data'] = True
 
-        return redirect(url_for(".view", lessonid=lessonid))
-    return render_template('qa/add_question.html', form=form)
+    return redirect(url_for(".view", lessonid=lessonid))
 
 
 @qa_bp.route('/add-reply/<questionid>', methods=('POST', 'GET'))
@@ -182,6 +203,8 @@ def get_questions():
             'details': question.content,
             'semester': question.semester,
             'year': question.year,
+            'has_voted': question.has_voted(g.user.user_id),
+            'votes': question.votes,
             'replies': [
                 {
                     'user': reply.user.first_name + " " + reply.user.last_name,
