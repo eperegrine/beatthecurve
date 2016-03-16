@@ -184,18 +184,25 @@ def reply_vote():
 @login_required
 def get_questions():
     lesson_id = request.form['lesson_id']
-    question_ids = request.form['question_ids'].split(",")
-    try:
-        question_ids = [int(i) for i in question_ids]
-    except:
-        return jsonify({'success': False, 'message': 'Invalid question id'})
+    question_ids = request.form.get('question_ids', False)
 
-    questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id))
+    if question_ids:
+        question_ids.split(",")
+
+        try:
+            question_ids = [int(i) for i in question_ids]
+        except:
+            return jsonify({'success': False, 'message': 'Invalid question id'})
+
+        questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id)).limit(10)
+    else:
+        questions = Question.select().limit(10)
 
     questions_data = {}
 
     for question in questions:
         questions_data[question.id] = {
+            'id': question.id,
             'user': question.user.first_name + " " + question.user.last_name,
             'number_of_posts': question.number_of_posts,
             'document': question.document,
@@ -209,11 +216,18 @@ def get_questions():
                 {
                     'user': reply.user.first_name + " " + reply.user.last_name,
                     'content': reply.content,
-                    'datetime': reply.datetime
+                    'datetime': reply.datetime.strftime('%m/%d/%Y'),
+                    'votes': reply.votes,
+                    'has_voted': reply.has_voted(g.user.user_id)
                 } for reply in question.replies()
             ]
         }
 
-    return jsonify({'success': True, 'questions': questions_data})
+    more_to_load = True
+
+    if len(question_ids) + len(questions_data.keys()) == Question.select().count():
+        more_to_load = False
+
+    return jsonify({'success': True, 'questions': questions_data, 'moreToLoad': more_to_load})
 
 
