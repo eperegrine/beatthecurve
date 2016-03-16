@@ -59,6 +59,7 @@
               <div class="col s10">
                   <div class="q_head" q_id={{ q.id }}>
                     <div class="row">
+                        <i class="fa fa-user fa-lg primary"></i>
                       <span class="primary poster_name">{{q.user.first_name + " " + q.user.last_name}}</span>
                       <span class="lightBlue right q_document">{{q.document}}</span>
                     </div>
@@ -79,10 +80,10 @@
                               {% else %}
                                   <a href="#!" class="grey-text-imp valign r_vote" reply="{{ reply.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ reply.id }}">{{ reply.votes}}</span></a>
                               {% endif %}
-                            &nbsp;{{ reply.user.first_name + " " + reply.user.last_name }}
+                            &nbsp;<i class="fa fa-user fa-lg"></i>&nbsp;{{ reply.user.first_name + " " + reply.user.last_name }}
                             <span class="lightBlue right">{{reply.datetime.strftime('%m/%d/%Y')}}</span>
                         </div>
-                        <p class="grey-text">{{ reply.content }}</p>
+                        <p class="grey-text" style="margin-left: 42px;">{{ reply.content }}</p>
                       </div>
                       {% if loop.last %}
                         <div class="divider bg-primary"></div>

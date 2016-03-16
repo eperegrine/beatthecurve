@@ -59,7 +59,7 @@
             {% if note.has_upvoted(current_user) %}
               <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}" class="valign"><i class="fa fa-thumbs-up fa-lg"></i>  {{ note.votes}}</a>
             {% else %}
-              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp valign"><i class="fa fa-thumbs-up fa-lg"></i> {{ note.votes }}</a>
+              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ note.votes }}</a>
             {% endif %}
           </span>
         <span class="col s1 center">
