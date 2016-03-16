@@ -184,7 +184,7 @@ def reply_vote():
 @login_required
 def get_questions():
     lesson_id = request.form['lesson_id']
-    question_ids = request.form.get('question_ids', False)\
+    question_ids = request.form.get('question_ids', False)
 
     if question_ids:
         question_ids.split(",")
