@@ -184,13 +184,19 @@ def reply_vote():
 @login_required
 def get_questions():
     lesson_id = request.form['lesson_id']
-    question_ids = request.form['question_ids'].split(",")
-    try:
-        question_ids = [int(i) for i in question_ids]
-    except:
-        return jsonify({'success': False, 'message': 'Invalid question id'})
+    question_ids = request.form.get('question_ids', False)\
 
-    questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id)).limit(10)
+    if question_ids:
+        question_ids.split(",")
+
+        try:
+            question_ids = [int(i) for i in question_ids]
+        except:
+            return jsonify({'success': False, 'message': 'Invalid question id'})
+
+        questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id)).limit(10)
+    else:
+        questions = Question.select().limit(10)
 
     questions_data = {}
 
