@@ -187,7 +187,7 @@ def get_questions():
     question_ids = request.form.get('question_ids', False)
 
     if question_ids:
-        question_ids.split(",")
+        question_ids = question_ids.split(",")
 
         try:
             question_ids = [int(i) for i in question_ids]
@@ -225,8 +225,9 @@ def get_questions():
 
     more_to_load = True
 
-    if len(question_ids) + len(questions_data.keys()) == Question.select().count():
-        more_to_load = False
+    if question_ids:
+        if len(question_ids) + len(questions_data.keys()) == Question.select().count():
+            more_to_load = False
 
     return jsonify({'success': True, 'questions': questions_data, 'moreToLoad': more_to_load})
 

@@ -255,7 +255,7 @@
 
     function test() {
         $.post("/qa/get-questions",
-                {question_ids: '1,2', lesson_id: '1'},
+                {lesson_id: '1'},
                 function (data) {
                     console.log(data);
                     data.questions = $.map(data.questions, function(el) { return el });
