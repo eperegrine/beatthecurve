@@ -49,7 +49,7 @@
       <div class="card-panel question" q_id="{{ q.id }}" semester="{{ q.semester }}" year="{{ q.year }}" >
           <div class="row">
               <div class="col s1 valign-wrapper">
-                      <a href="#!" v-bind:class="{ 'primary': q.has_voted, 'grey-text-imp': !q.has_voted }" class="primary valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>
+                      <a v-on:click="q_vote(q.id)" href="#!" v-bind:class="{ 'primary': q.has_voted, 'grey-text-imp': !q.has_voted }" class="primary valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>
               </div>
               <div class="col s10">
                   <div class="q_head" q_id={{ q.id }}>
@@ -69,7 +69,7 @@
                     <div class="divider bg-primary"></div>
                       <span v-for="reply in q.replies"><div class="comment">
                         <div class="row comment_name primary">
-                                  <a v-bind:class="{ 'primary': q.has_voted, 'grey-text-imp': !q.has_voted }" href="#!" class="primary valign r_vote" reply="{{ $key }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ $key }}">{{ reply.votes}}</span></a>
+                                  <a v-on:click="reply_vote(q.id, reply.id)" v-bind:class="{ 'primary': reply.has_voted, 'grey-text-imp': !reply.has_voted }" href="#!" class="primary valign r_vote" reply="{{ $key }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ $key }}">{{ reply.votes}}</span></a>
                             &nbsp;<i class="fa fa-user fa-lg"></i>&nbsp;{{ reply.user }}
                             <span class="lightBlue right">{{reply.datetime}}</span>
                         </div>
@@ -188,10 +188,31 @@
                     return res;
                 },
                 q_vote: function (q_id) {
-                    //TODO: Implement
+                    t = this;
+                    $.post("/qa/question-vote", {question_id: q_id}, function (data) {
+                        if (data.success) {
+                            t.$set('questions[' + q_id +'].has_voted', !t.questions[q_id].has_voted);
+                            t.$set('questions[' + q_id +'].votes', data.number_of_posts);
+                        } else {
+                            alert("Error Voting");
+                        }
+                    });
                 },
-                reply_vote: function (q_id, reply) {
-                    //TODO: Implement
+                reply_vote: function (q_id, r_id) {
+                    t = this;
+                     p = $.post("/qa/reply-vote", {reply_id: r_id}, function (data) {
+                         console.log(data);
+                        if (data.success) {
+                            t.$set('questions[' + q_id + '].replies[' + r_id + ']has_voted', !t.questions[q_id].replies[r_id].has_voted);
+                            t.$set('questions[' + q_id + '].replies[' + r_id + ']votes', data.number_of_posts);
+                        } else {
+                            alert("Error Voting");
+                        }
+                    });
+
+                    p.fail(function (err) {
+                        console.log(err);
+                    }) ;
                 }
             }
         });
@@ -207,7 +228,7 @@
             $.post("/qa/get-questions",
                     {
                         question_ids: q_ids,
-                        lesson_id: '1'
+                        lesson_id: '{{ lesson.id }}'
                     },
                     function (data) {
                         if (data.success) {
