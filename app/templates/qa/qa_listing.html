@@ -95,7 +95,12 @@
       </div>
     {% endraw %}
       </span>
-      <i v-if="is_loading" class="fa fa-circle-o-notch fa-5x fa-spin primary center"></i>
+      <div class="row">
+          <i v-if="is_loading" class="fa fa-circle-o-notch fa-5x fa-spin primary center col s2 push-s5"></i>
+      </div>
+      <div class="row">
+          <button v-if="moreToLoad" v-bind:class="{ 'disabled': is_loading }" class="btn col s2 push-s5" v-on:click="load(get_ids())">Load More</button>
+      </div>
   </div>
 </div>
 </div>
@@ -168,6 +173,26 @@
                 questions: {},
                 is_loading: true,
                 moreToLoad: true
+            }, methods: {
+                load: loadQuestions,
+                get_ids: function () {
+                    res = '';
+                    for (key in this.questions) {
+                        if (this.questions.hasOwnProperty(key)) {
+                            res += key + ','
+                        }
+                    }
+                    if (res.endsWith(',')) {
+                        res = res.substring(0, res.length - 1);
+                    }
+                    return res;
+                },
+                q_vote: function (q_id) {
+                    //TODO: Implement
+                },
+                reply_vote: function (q_id, reply) {
+                    //TODO: Implement
+                }
             }
         });
 
@@ -189,9 +214,9 @@
                             console.log(data);
                             //Add questions to vue
                             q_vue.$set('questions', $.extend($.extend({}, q_vue.questions), data.questions));
-                            setupQuestions();
                             q_vue.is_loading = false;
                             q_vue.moreToLoad = data.moreToLoad;
+                            setupQuestions();
                         } else {
                             q_vue.is_loading = false;
                             alert("Error loading more Questions");
