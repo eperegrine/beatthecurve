@@ -206,6 +206,8 @@
                             q_vue.$set('questions', $.extend($.extend({}, q_vue.questions), data.questions));
                             q_vue.is_loading = false;
                             q_vue.moreToLoad = data.moreToLoad;
+
+                            q_vue.$set("questions[" + Object.keys(q_vue.questions)[0]+ "].show", true);
                         } else {
                             q_vue.is_loading = false;
                             alert("Error loading more Questions");
