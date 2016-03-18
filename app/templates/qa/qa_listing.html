@@ -3,6 +3,12 @@
 {% from 'macros.html' import render_lesson_tabs, render_field, render_semester_tabs %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
+    <style>
+    .expand-transition {
+      transition: all .5s ease;
+      overflow: hidden;
+    }
+    </style>
 <div class="row">
   <div class="col s2">
     {% if semesters|length > 0 %}
@@ -52,7 +58,7 @@
                       <a v-on:click="q_vote(q.id)" href="#!" v-bind:class="{ 'primary': q.has_voted, 'grey-text-imp': !q.has_voted }" class="primary valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>
               </div>
               <div class="col s10">
-                  <div class="q_head" q_id={{ q.id }}>
+                  <div class="q_head" q_id={{ q.id }} v-on:click="toggle_visibility(q.id)">
                     <div class="row">
                         <i class="fa fa-user fa-lg primary"></i>
                       <span class="primary poster_name">{{q.user }}</span>
@@ -62,7 +68,7 @@
                       <h5 class="grey-text q_question">{{q.question}}</h5>
                     </div>
                   </div>
-                  <div class="q_body" id="q_body_{{ q.id }}">
+                  <div class="q_body" id="q_body_{{ q.id }}" v-show="q.show" transition="expand">
                     <div class="row">
                       <p>{{q.details}}</p>
                     </div>
@@ -108,63 +114,23 @@
 {% block js %}
 {{super()}}
     <script>
-        function setupQuestions() {
-            $(".q_body").hide();
-            $(".q_head").click(function (e) {
-                q_id = $(this).attr("q_id");
-                bodyIdStr = "#q_body_" + q_id;
-                console.log(bodyIdStr);
-                $(bodyIdStr).slideToggle();
-            });
-            $("#q_body_" + $(".question[first]").attr("q_id")).show();
-            $(".q_vote").click(function () {
-                var elem = $(this);
-                var id = $(this).attr("question");
-                $.post("/qa/question-vote", {question_id: id}, function (data) {
-                    if (data.success) {
-                        console.log(data);
-                        console.log(elem.hasClass("primary"));
-                        console.log(elem.hasClass("grey-text-imp"));
-                        if (elem.hasClass("primary")) {
-                            elem.removeClass("primary");
-                            elem.addClass("grey-text-imp");
-                        }else if (elem.hasClass("grey-text-imp")) {
-                            elem.removeClass("grey-text-imp");
-                            elem.addClass("primary");
-                        }
-
-                        $("#votes_" + id).text(data.number_of_posts);
-                    } else {
-                        alert("Error upvoting");
-                    }
-
-                });
-            });
-
-            $(".r_vote").click(function () {
-                var elem = $(this);
-                var id = $(this).attr("reply");
-                $.post("/qa/reply-vote", {reply_id: id}, function (data) {
-                    if (data.success) {
-                        console.log(data);
-                        console.log(elem.hasClass("primary"));
-                        console.log(elem.hasClass("grey-text-imp"));
-                        if (elem.hasClass("primary")) {
-                            elem.removeClass("primary");
-                            elem.addClass("grey-text-imp");
-                        }else if (elem.hasClass("grey-text-imp")) {
-                            elem.removeClass("grey-text-imp");
-                            elem.addClass("primary");
-                        }
-
-                        $("#votes_" + id).text(data.number_of_posts);
-                    } else {
-                        alert("Error upvoting");
-                    }
-
-                });
-            });
-        }
+        Vue.transition('expand', {
+          enter: function(el) {
+            el.style.height = 'auto'
+            var endWidth = getComputedStyle(el).height
+            el.style.height = '0px'
+            el.offsetHeight // force repaint
+            el.style.height = endWidth;
+          },
+          afterEnter: function(el) {
+            el.style.height = 'auto'
+          },
+          beforeLeave: function(el) {
+            el.style.height = getComputedStyle(el).height
+            el.offsetHeight // force repaint
+            el.style.height = '0px'
+          }
+        })
 
         var q_vue = new Vue({
             el: "#questions_list",
@@ -213,13 +179,16 @@
                     p.fail(function (err) {
                         console.log(err);
                     }) ;
+                },
+                toggle_visibility: function (q_id) {
+                    console.log("Toggling vis of " + q_id);
+                    this.$set('questions[' + q_id + '].show', !this.questions[q_id].show);
                 }
             }
         });
 
         $(document).ready(function () {
             q_vue.csrf_token = $("#csrf_token").val();
-            setupQuestions();
             loadQuestions();
         });
 
@@ -237,7 +206,6 @@
                             q_vue.$set('questions', $.extend($.extend({}, q_vue.questions), data.questions));
                             q_vue.is_loading = false;
                             q_vue.moreToLoad = data.moreToLoad;
-                            setupQuestions();
                         } else {
                             q_vue.is_loading = false;
                             alert("Error loading more Questions");
