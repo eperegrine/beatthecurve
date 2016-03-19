@@ -194,9 +194,9 @@ def get_questions():
         except:
             return jsonify({'success': False, 'message': 'Invalid question id'})
 
-        questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id)).limit(10)
+        questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id)).order_by(Question.id.desc()).limit(10)
     else:
-        questions = Question.select().where(Question.lesson == lesson_id).limit(10)
+        questions = Question.select().where(Question.lesson == lesson_id).order_by(Question.id.desc()).limit(10)
 
     questions_data = {}
 
