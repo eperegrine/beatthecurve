@@ -56,7 +56,7 @@
         </form>
     </div>
   <div id="questions_list">
-      <span v-for="q in questions">
+      <span v-for="q in questions | orderBy 'id' -1">
 
     {% raw %}
           <span v-if="q.new_semester">
