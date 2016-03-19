@@ -99,7 +99,7 @@
                         <div v-if="$index == q.replies.length - 1" class="divider bg-primary"></div>
                         <div v-else class="divider light-grey"></div>
                       </span>
-                    <form class=""method="post" action="/qa/reply/{{ q.id }}">
+                    <form class=""method="post" action="/qa/add-reply/{{ q.id }}">
                         <input id="csrf_token" name="csrf_token" placeholder="Csrf Token" type="hidden" value="{{ csrf_token }}">
                         <div class="input-field">
                           <strong><h6 class="grey-text">Type a reply</h6></strong>
@@ -275,6 +275,7 @@
                                     q.new_semester = true;
                                     semesters.push(semester);
                                 }
+                              console.log(ArrayContainsObj(semesters, semester));
 
                                 q.semester_string = semesterIdToStr(q.semester);
                             }
