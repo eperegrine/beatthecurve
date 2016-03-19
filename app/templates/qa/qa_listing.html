@@ -116,6 +116,7 @@
       </div>
     {% endraw %}
       </span>
+      <span v-else class="text-grey center"> No Questions Found! </span>
       <div class="row">
           <i v-if="is_loading" class="fa fa-circle-o-notch fa-5x fa-spin primary center col s2 push-s5"></i>
       </div>
@@ -278,12 +279,17 @@
                                 q.semester_string = semesterIdToStr(q.semester);
                             }
 
-                            sem_vue.$set('semesters', semesters);
-                            q_vue.$set('questions', newQuestionsObj);
-                            q_vue.is_loading = false;
-                            q_vue.moreToLoad = data.moreToLoad;
+                            if ($.isEmptyObject(data.questions)) {
+                                q_vue.$set('questions', []);
+                            } else {
+                                sem_vue.$set('semesters', semesters);
+                                q_vue.$set('questions', newQuestionsObj);
+                                q_vue.$set("questions[" + Object.keys(q_vue.questions)[0]+ "].show", true);
+                            }
 
-                            q_vue.$set("questions[" + Object.keys(q_vue.questions)[0]+ "].show", true);
+                            q_vue.$set("is_loading", false);
+                            q_vue.$set("moreToLoad", data.moreToLoad);
+
                         } else {
                             q_vue.is_loading = false;
                             alert("Error loading more Questions");
