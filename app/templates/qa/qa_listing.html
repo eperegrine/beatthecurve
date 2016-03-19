@@ -50,8 +50,16 @@
     </div>
   <div id="questions_list">
       <span v-for="q in questions">
+
     {% raw %}
-    <br>
+          <span v-if="q.new_semester">
+              <br>
+              <div class="bg-primary white semester-title" id="{{ q.semester_string|lowercase }}{{ q.year }}">
+                  {{ q.semester_string }} {{ q.year }}
+              </div>
+          </span>
+
+          <br>
       <div class="card-panel question" q_id="{{ q.id }}" semester="{{ q.semester }}" year="{{ q.year }}" >
           <div class="row">
               <div class="col s1 valign-wrapper">
@@ -114,6 +122,28 @@
 {% block js %}
 {{super()}}
     <script>
+        /**
+         * @return {boolean}
+         */
+        function ArrayContainsObj (arr, val) {
+            for (key in arr) {
+                if (typeof arr[key] != "object") {
+                    if (arr[key] == val) {
+                        return true;
+                    }
+                } else {
+                    isMatch = false;
+                    for (prop in arr[key]) {
+                        isMatch = val[prop] == arr[key][prop];
+                    }
+                    if (isMatch) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         Vue.transition('expand', {
           enter: function(el) {
             el.style.height = 'auto'
@@ -130,7 +160,7 @@
             el.offsetHeight // force repaint
             el.style.height = '0px'
           }
-        })
+        });
 
         var q_vue = new Vue({
             el: "#questions_list",
@@ -192,6 +222,21 @@
             loadQuestions();
         });
 
+        function semesterIdToStr(id) {
+            switch (id) {
+                case (4):
+                    return "Summer";
+                case (3):
+                    return "Spring";
+                case (2):
+                    return "Fall";
+                case (1):
+                    return "Winter";
+                default:
+                    return "SEMESTER_ID_NOT_FOUND";
+            }
+        }
+
         function loadQuestions(q_ids) {
             q_vue.is_loading = true;
             $.post("/qa/get-questions",
@@ -203,7 +248,21 @@
                         if (data.success) {
                             console.log(data);
                             //Add questions to vue
-                            q_vue.$set('questions', $.extend($.extend({}, q_vue.questions), data.questions));
+                            var newQuestionsObj = $.extend($.extend({}, q_vue.questions), data.questions);
+                            var semesters = [];
+
+                            for (id in newQuestionsObj) {
+                                var q = newQuestionsObj[id];
+                                var semester = { season: q.semester, year: q.year };
+                                if (!ArrayContainsObj(semesters, semester)) {
+                                    q.new_semester = true;
+                                    semesters.push(semester);
+                                }
+
+                                q.semester_string = semesterIdToStr(q.semester);
+                            }
+
+                            q_vue.$set('questions', newQuestionsObj);
                             q_vue.is_loading = false;
                             q_vue.moreToLoad = data.moreToLoad;
 
