@@ -11,11 +11,18 @@
     </style>
 <div class="row">
   <div class="col s2" id="sem_col">
-    {% if semesters|length > 0 %}
-      {{ render_semester_tabs(semesters, semester_enum) }}
-    {% else %}
-      <h5>No Questions Found</h5>
-    {% endif %}
+    <div id="lesson-tabs">
+        <div>
+            {% raw %}
+          <div class="bg-primary white semester-title">Select Semester</div>
+          <ul class="collection" id="semesters">
+              <li v-for="semester in semesters" class="collection-item semester-tab center" style="text-transform: capitalize;" semester="{{ semester.season }}" year="{{ semester.year }}">
+                  <a target="_self" href="#{{ semester.season + semester.year }}">{{ semester.season + " " + semester.year }}</a>
+              </li>
+          </ul>
+            {% endraw %}
+        </div>
+      </div>
   </div>
   <div class="col s10">
     <div class="card-panel">
@@ -163,6 +170,13 @@
           }
         });
 
+        var sem_vue = new Vue({
+            el: "#sem_col",
+            data: {
+                semesters: []
+            }
+        });
+
         var q_vue = new Vue({
             el: "#questions_list",
             data: {
@@ -255,7 +269,7 @@
 
                             for (id in newQuestionsObj) {
                                 var q = newQuestionsObj[id];
-                                var semester = { season: q.semester, year: q.year };
+                                var semester = { season: semesterIdToStr(q.semester).toLowerCase(), year: q.year };
                                 if (!ArrayContainsObj(semesters, semester)) {
                                     q.new_semester = true;
                                     semesters.push(semester);
@@ -264,6 +278,7 @@
                                 q.semester_string = semesterIdToStr(q.semester);
                             }
 
+                            sem_vue.$set('semesters', semesters);
                             q_vue.$set('questions', newQuestionsObj);
                             q_vue.is_loading = false;
                             q_vue.moreToLoad = data.moreToLoad;
