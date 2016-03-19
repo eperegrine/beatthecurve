@@ -196,7 +196,7 @@ def get_questions():
 
         questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id)).limit(10)
     else:
-        questions = Question.select().limit(10)
+        questions = Question.select(Question.lesson == lesson_id).limit(10)
 
     questions_data = {}
 
