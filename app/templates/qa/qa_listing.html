@@ -143,10 +143,9 @@
                     isMatch = false;
                     for (prop in arr[key]) {
                         isMatch = val[prop] == arr[key][prop];
+                        if (!isMatch) { return false; }
                     }
-                    if (isMatch) {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
