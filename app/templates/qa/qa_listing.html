@@ -136,11 +136,11 @@
         function ArrayContainsObj (arr, val) {
             for (key in arr) {
                 if (typeof arr[key] != "object") {
-                    if (arr[key] == val) {
+                    if (arr[key] === val) {
                         return true;
                     }
                 } else {
-                    isMatch = false;
+                    var isMatch = false;
                     for (prop in arr[key]) {
                         isMatch = val[prop] == arr[key][prop];
                         if (!isMatch) { return false; }
