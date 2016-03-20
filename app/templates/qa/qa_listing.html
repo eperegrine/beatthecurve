@@ -16,7 +16,7 @@
             {% raw %}
           <div class="bg-primary white semester-title">Select Semester</div>
           <ul class="collection" id="semesters">
-              <li v-for="semester in semesters" class="collection-item semester-tab center" style="text-transform: capitalize;" semester="{{ semester.season }}" year="{{ semester.year }}">
+              <li v-for="semester in semesters | orderBy $index -1" class="collection-item semester-tab center" style="text-transform: capitalize;" semester="{{ semester.season }}" year="{{ semester.year }}">
                   <a target="_self" href="#{{ semester.season + semester.year }}">{{ semester.season + " " + semester.year }}</a>
               </li>
           </ul>
