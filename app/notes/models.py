@@ -12,6 +12,7 @@ class Note(Model):
     id = PrimaryKeyField(db_column='ID')
     votes = IntegerField(db_column='VOTES', default=0)
     filename = CharField(db_column='FILENAME')
+    original_filename = CharField(db_column='ORIGINAL_FILENAME')
     s3_filename = CharField(db_column='S3_FILENAME', unique=True)
     uploader = ForeignKeyField(User, db_column='UPLOADER')
     description = CharField(db_column='DESCRIPTION', null=True)

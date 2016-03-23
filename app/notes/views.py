@@ -58,7 +58,8 @@ def add_note(lessonid):
             description=form.description.data,
             lesson=lessonid,
             semester=semester.value,
-            year=datetime.now().year)
+            year=datetime.now().year,
+            original_filename=form.file.data.filename)
         g.user.karma_points += KarmaPoints.upload_note.value
         g.user.save()
 
