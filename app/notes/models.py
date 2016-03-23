@@ -18,6 +18,7 @@ class Note(Model):
     lesson = ForeignKeyField(Lesson, db_column='LESSON_ID')
     semester = IntegerField(db_column='SEMESTER')
     year = IntegerField(db_column='YEAR')
+    datetime = DateTimeField(db_column='DATETIME', default=datetime.now)
 
     class Meta:
         database = DATABASE

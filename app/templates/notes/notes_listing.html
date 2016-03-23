@@ -68,7 +68,7 @@
           <span class="col s9">
             <a href="{{ uploads_url }}notes/{{ note.s3_filename }}" class="filename_title">{{ note.filename }}</a>
             <p class="note_description">{{note.description}}</p>
-            <p class="note_date">{{note.year}}</p>
+            <p class="note_date">{{note.datetime.strftime("%m/%d/%Y")}}</p>
           </span>
           <span class="col s1">
             <a  href="{{ uploads_url }}notes/{{ note.s3_filename }}"><i class="material-icons left valign ">file_download</i></a>
