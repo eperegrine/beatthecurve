@@ -58,7 +58,8 @@ def add_note(lessonid):
             description=form.description.data,
             lesson=lessonid,
             semester=semester.value,
-            year=datetime.now().year)
+            year=datetime.now().year,
+            original_filename=form.file.data.filename)
         g.user.karma_points += KarmaPoints.upload_note.value
         g.user.save()
 
@@ -111,19 +112,17 @@ def vote(noteid, upvote):
     has_voted = note.has_voted(g.user)
     vote = True if upvote == "1" else False
     if has_upvoted and vote:
-        flash("Error! You have already upvoted this note!", 'error')
+        return jsonify({'success': False, 'message': "Error! You have already upvoted this note!"})
     elif has_voted and not has_upvoted and not vote:
-        flash("Error! You have already downvoted this note!", 'error')
+        return jsonify({'success': False, 'message': "Error! You have already downvoted this note!"})
     else:
         success, message = note.vote(g.user, vote)
         if success:
             if not has_voted:
                 g.user.karma_points += KarmaPoints.note_vote.value
                 g.user.save()
-            flash("Success", 'success')
-        else:
-            flash(message, 'error')
-    return redirect(url_for(".view", lessonid=note.lesson.id))
+
+        return jsonify({'success': success, 'message': message})
 
 
 @notes_bp.route('/add-admin-note/<lessonid>', methods=('POST', 'GET'))
