@@ -23,7 +23,7 @@
         <span class="col s1">&nbsp;</span>
       <a class="waves-effect waves-light btn-large modal-trigger col s1 bg-primary" href="#newNoteModal"><i class="material-icons">file_upload</i></a>
       <div class="col s10 vaglign desc">
-        <h5>Upload a note</h5>
+        <h5>upload a note</h5>
       </div>
     </div>
     <form method="post" enctype="multipart/form-data" id="add-note-form"
@@ -36,17 +36,17 @@
              {% for field in form %}
                {{ render_field(field) }}
              {% endfor %}
-             <!-- <div class="row">
+             <div class="row">
                <div class="col s2">&nbsp;</div>
                <button type="button" class="waves-effect waves-light btn-large col s8 bg-primary" id="submit">Upload</button>
                <div class="col s2">&nbsp;</div>
-             </div> -->
+             </div>
 
           </div>
         </div>
         <div class="modal-footer">
           <a class=" modal-action modal-close waves-effect btn-flat">Cancel</a>
-          <a class=" modal-action waves-effect btn-flat primary" id="submit">Upload</a>
+{#          <a class=" modal-action waves-effect btn-flat primary" id="submit">Upload</a>#}
         </div>
       </div>
      </form>
@@ -59,7 +59,7 @@
             {% if note.has_upvoted(current_user) %}
               <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="0") }}" class="valign"><i class="fa fa-thumbs-up fa-lg"></i>  {{ note.votes}}</a>
             {% else %}
-              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp valign"><i class="material-icons">thumb_up</i> {{ note.votes }}</a>
+              <a href="{{ url_for("notes_bp.vote", noteid=note.id, upvote="1") }}" class="grey-text-imp valign"><i class="fa fa-thumbs-up fa-lg"></i> {{ note.votes }}</a>
             {% endif %}
           </span>
         <span class="col s1 center">
