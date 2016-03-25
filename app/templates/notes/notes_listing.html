@@ -21,7 +21,7 @@
   <div class="col s10">
     <div class="row valign-wrapper">
         <span class="col s1">&nbsp;</span>
-      <a class="waves-effect waves-light btn-large modal-trigger col s1 bg-primary" href="#newNoteModal"><i class="material-icons">file_upload</i></a>
+      <a class="waves-effect waves-light btn-large modal-trigger col s1 bg-primary" href="#newNoteModal"><i class="fa fa-upload fa-5x"></i></a>
       <div class="col s10 vaglign desc">
         <h5>upload a note</h5>
       </div>
@@ -31,7 +31,7 @@
       <div id="newNoteModal" class="modal modal-fixed-footer">
         <div class="modal-content">
           <div class="container">
-            <h3>Upload a note</h3>
+            <h3 class="grey-text-imp">upload a note</h3>
 
              {% for field in form %}
                {{ render_field(field) }}
@@ -63,14 +63,14 @@
             {% endif %}
           </span>
         <span class="col s1 center">
-          <i class="fa fa-file-o primary fa-3x center"></i>
+          <i class="fa fa-file primary fa-3x center"></i>
       </span>
           <span class="col s9">
-            <a href="{{ uploads_url }}notes/{{ note.s3_filename }}" class="filename_title">{{ note.filename }}</a>
+            <a href="{{ uploads_url }}notes/{{ note.s3_filename }}" class="filename_title">{{ note.filename }} - <span class="note_date">{{note.original_filename}}</span></a>
             <p class="note_description">{{note.description}}</p>
             <p class="note_date">{{note.datetime.strftime("%m/%d/%Y")}}</p>
           </span>
-          <span class="col s1">
+          <span class="col s1 pull-s2">
             <a  href="{{ uploads_url }}notes/{{ note.s3_filename }}"><i class="material-icons left valign ">file_download</i></a>
           </span>
         </div>
