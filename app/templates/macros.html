@@ -7,11 +7,11 @@
     {% if field.type == "FileField" %}
       <div class="file-field input-field">
         <div class="btn bg-primary">
-          <span>File</span>
+          <span><i class="fa fa-upload"></i></span>
           {{ field() }}
         </div>
         <div class="file-path-wrapper">
-          <input class="file-path validate" type="text">
+          <input class="file-path validate" type="text" placeholder="Upload a file" style="border-bottom: none">
         </div>
       </div>
     {% else %}
