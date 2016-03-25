@@ -718,7 +718,17 @@ select:disabled {
     padding-left: 10px;
   }
 
-  input.file-path { width: 100%; }
+  input.file-path {
+    width: 100%;
+    border-bottom: 0 !important;
+    @include placeholder {
+      color: $greyText;
+    }
+    &.valid {
+     border-bottom: 0 !important;
+      box-shadow: none;
+    }
+  }
 
   .btn {
     float: left;
