@@ -50,7 +50,7 @@ def add_note(lessonid):
         filename = form.filename.data
         month = datetime.now().month
         semester = Semester.current_semester()
-
+        print(form.file.data)
         note = Note.create(
             filename=filename,
             s3_filename=form.file_hash.data,
@@ -140,7 +140,8 @@ def add_admin_note(lessonid):
             description=form.description.data,
             lesson=lessonid,
             semester=int(form.semester.data),
-            year=form.year.data)
+            year=form.year.data,
+            original_filename=form.file.data.filename)
         g.user.karma_points += KarmaPoints.upload_note.value
         g.user.save()
 
