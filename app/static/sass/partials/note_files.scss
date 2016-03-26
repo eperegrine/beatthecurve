@@ -1,0 +1,15 @@
+.powerpoint {
+  @extend .red-text;
+}
+
+.word {
+  @extend .blue-text;
+}
+
+.excel {
+  @extend .green-text;
+}
+
+.default {
+  color: #000000;
+}

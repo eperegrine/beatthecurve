@@ -3,12 +3,7 @@
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
-<div class="row">
-  <ul>
-      {% for message in get_flashed_messages() %}
-        <li>{{ message }}</li>
-      {% endfor %}
-  </ul>
+
 
   <div class="col s2">
     {% if semesters|length > 0 %}
@@ -63,20 +58,20 @@
             {% endif %}
           </span>
         <span class="col s1 center">
-          <i class="fa fa-file primary fa-3x center"></i>
+          <i file-type="{{note.original_filename.split('.')[note.original_filename.split('.')|length - 1]}}" class="file-icon fa fa-file-text-o fa-3x center"></i>
       </span>
           <span class="col s9">
-            <a href="{{ uploads_url }}notes/{{ note.s3_filename }}" class="filename_title">{{ note.filename }} - <span class="note_date">{{note.original_filename}}</span></a>
+            <a href="{{ uploads_url }}notes/{{ note.s3_filename }}" class="filename_title">{{ note.filename }}</a>
             <p class="note_description">{{note.description}}</p>
             <p class="note_date">{{note.datetime.strftime("%m/%d/%Y")}}</p>
           </span>
           <span class="col s1 pull-s2">
-            <a  href="{{ uploads_url }}notes/{{ note.s3_filename }}"><i class="material-icons left valign ">file_download</i></a>
+            <a  href="{{ uploads_url }}notes/{{ note.s3_filename }}"><i class="fa fa-download fa-2x primary"></i></a>
           </span>
         </div>
       {% endfor %}
   </div>
-</div>
+
 {% endblock %}
 {% block js %}
 {{super()}}
@@ -95,6 +90,43 @@
             $(this).addClass('active');
             $('.note-item').hide();
             $('.note-item[year="' + year + '"][semester="' + semester + '"]').show();
+          });
+
+          $(".file-icon").each(function (index) {
+              var file_type = $(this).attr("file-type");
+
+              var file_type_class = "";
+
+              switch (file_type) {
+                  case "ppt":
+                  case "pptx":
+                      file_type_class = "powerpoint";
+                      break;
+                  case "doc":
+                  case "docx":
+                      file_type_class = "word";
+                      break;
+                  case "xls":
+                  case "xlsx":
+                      file_type_class = "excel";
+                      break;
+{#                  case "pdf":#}
+{#                      file_type_class = "fa-file-pdf-o";#}
+{#                      break;#}
+{#                  case "wmv":#}
+{#                  case "avi":#}
+{#                  case "mp4":#}
+{#                      file_type_class = "fa-file-video-o";#}
+{#                      break;#}
+{#                  case "png":#}
+{#                  case "jpg":#}
+{#                  case "svg":#}
+{#                      file_type_class = "fa-file-image-o";#}
+                  default:
+                      file_type_class = "grey-text";
+              }
+
+              $(this).addClass(file_type_class);
           });
       });
   </script>
