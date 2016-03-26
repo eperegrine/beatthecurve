@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, g, jsoni
 from flask.ext.login import login_required
 from app.lesson.models import Lesson, LessonStudent
 from .forms import AddNoteForm, AdminAddNoteForm
-from .models import Note
+from .models import Note, NoteVote
 import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1, md5
 from app.auth.decorators import permission_required
@@ -102,28 +102,47 @@ def sign_s3():
     return content
 
 
-@notes_bp.route("/vote/<noteid>/<upvote>")
+# @notes_bp.route("/vote/<noteid>/<upvote>")
+# @login_required
+# def vote(noteid, upvote):
+#     """Route to allow a user to vote on a note"""
+#     # TODO: Move to POST request
+#     note = Note.get(Note.id == noteid)
+#     has_upvoted = note.has_upvoted(g.user)
+#     has_voted = note.has_voted(g.user)
+#     vote = True if upvote == "1" else False
+#     if has_upvoted and vote:
+#         return jsonify({'success': False, 'message': "Error! You have already upvoted this note!"})
+#     elif has_voted and not has_upvoted and not vote:
+#         return jsonify({'success': False, 'message': "Error! You have already downvoted this note!"})
+#     else:
+#         success, message = note.vote(g.user, vote)
+#         if success:
+#             if not has_voted:
+#                 g.user.karma_points += KarmaPoints.note_vote.value
+#                 g.user.save()
+#
+#         return jsonify({'success': success, 'message': message})
+
+@notes_bp.route("/vote/<noteid>")
 @login_required
-def vote(noteid, upvote):
+def vote(noteid):
     """Route to allow a user to vote on a note"""
     # TODO: Move to POST request
     note = Note.get(Note.id == noteid)
-    has_upvoted = note.has_upvoted(g.user)
+
     has_voted = note.has_voted(g.user)
-    vote = True if upvote == "1" else False
-    if has_upvoted and vote:
-        return jsonify({'success': False, 'message': "Error! You have already upvoted this note!"})
-    elif has_voted and not has_upvoted and not vote:
-        return jsonify({'success': False, 'message': "Error! You have already downvoted this note!"})
-    else:
-        success, message = note.vote(g.user, vote)
-        if success:
-            if not has_voted:
-                g.user.karma_points += KarmaPoints.note_vote.value
-                g.user.save()
 
-        return jsonify({'success': success, 'message': message})
+    note_vote, created = NoteVote.create_or_get(user=g.user.user_id, note=note.id)
+    if not created:
+        note_vote.upvote = not note_vote.upvote
+        note_vote.save()
 
+    if not has_voted:
+        g.user.karma_points += KarmaPoints.note_vote.value
+        g.user.save()
+
+    return jsonify({'success': True})
 
 @notes_bp.route('/add-admin-note/<lessonid>', methods=('POST', 'GET'))
 @login_required

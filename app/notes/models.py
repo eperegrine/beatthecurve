@@ -68,7 +68,7 @@ class NoteVote(Model):
     id = PrimaryKeyField(db_column='ID')
     user = ForeignKeyField(User, db_column='USER_ID')
     note = ForeignKeyField(Note, db_column='NOTE_ID')
-    upvote = BooleanField(db_column='UPVOTE')
+    upvote = BooleanField(db_column='UPVOTE', default=True)
 
     class Meta:
         database = DATABASE
