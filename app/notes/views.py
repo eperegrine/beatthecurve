@@ -138,11 +138,18 @@ def vote(noteid):
         note_vote.upvote = not note_vote.upvote
         note_vote.save()
 
+    if note_vote.upvote:
+        note.votes += 1
+    else:
+        note.votes -= 1
+
+    note.save()
+
     if not has_voted:
         g.user.karma_points += KarmaPoints.note_vote.value
         g.user.save()
 
-    return jsonify({'success': True})
+    return jsonify({'success': True, 'numberOfVotes': note.votes})
 
 @notes_bp.route('/add-admin-note/<lessonid>', methods=('POST', 'GET'))
 @login_required
