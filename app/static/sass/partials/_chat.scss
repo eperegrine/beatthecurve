@@ -8,10 +8,13 @@
 		@extend .right;
 	}
 	.content {
-		background-color: color("grey", "lighten-2");
-		color: color("grey", "base");
-		padding: 1em;
-        border-radius: 0.5em;
+      background-color: color("grey", "lighten-2");
+      color: color("grey", "base");
+      padding: 1em;
+      border-radius: 0.5em;
+      padding-left: 2em;
+      padding-right: 2em;
+      box-sizing: border-box;
 	}
 
 	&.you {
@@ -30,7 +33,7 @@
 	}
 
 	@extend .left;
-	margin-bottom: 2em;
+	margin-bottom: 1em;
 }
 
 .chat_box { 
@@ -48,7 +51,7 @@
 		display: block;
 		clear: both;
 		margin: 0px;
-		padding: 10px;
+		padding: 2px;
 		#room_data {
 			margin: 0px;
 			border-bottom: 0 !important;
