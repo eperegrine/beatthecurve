@@ -11,6 +11,7 @@
 		background-color: color("grey", "lighten-2");
 		color: color("grey", "base");
 		padding: 1em;
+        border-radius: 0.5em;
 	}
 
 	&.you {
@@ -37,7 +38,7 @@
 	#chat_box{
 		padding: 1em;
 		overflow-y: scroll;
-		height: 60vh;
+		height: 30em;
 	}
 	.send-box {
 		border-top-width: 1px;
@@ -70,7 +71,7 @@
 }
 
 .user_listing {
-	min-height: 68vh;
+	min-height: 34em;
 	margin-left: 2em;
 	background-color: $lightBlue;
 }
