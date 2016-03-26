@@ -52,9 +52,9 @@
         <div class="note-item row valign-wrapper" semester="{{ note.semester }}" year="{{ note.year }}">
           <span class="col s1 ">
             {% if note.has_upvoted(current_user) %}
-              <a note_id="{{ note.id }}" class="valign"><i class="fa fa-thumbs-up fa-lg"></i>  {{ note.votes}}</a>
+              <a href="#" note_id="{{ note.id }}" class="note_vote primary valign"><i class="fa fa-thumbs-up fa-lg"></i>  <span id="votes_{{ note.id }}">{{ note.votes}}</span></a>
             {% else %}
-              <a note_id="{{ note.id }}" class="grey-text-imp valign"><i class="fa fa-thumbs-up fa-lg"></i> {{ note.votes }}</a>
+              <a href="#" note_id="{{ note.id }}" class="note_vote grey-text-imp valign"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ note.id }}">{{ note.votes}}</span></a>
             {% endif %}
           </span>
         <span class="col s1 center">
@@ -110,24 +110,34 @@
                   case "xlsx":
                       file_type_class = "excel";
                       break;
-{#                  case "pdf":#}
-{#                      file_type_class = "fa-file-pdf-o";#}
-{#                      break;#}
-{#                  case "wmv":#}
-{#                  case "avi":#}
-{#                  case "mp4":#}
-{#                      file_type_class = "fa-file-video-o";#}
-{#                      break;#}
-{#                  case "png":#}
-{#                  case "jpg":#}
-{#                  case "svg":#}
-{#                      file_type_class = "fa-file-image-o";#}
                   default:
                       file_type_class = "grey-text";
               }
 
               $(this).addClass(file_type_class);
           });
+
+            $(".note_vote").click(function () {
+                var elem = $(this);
+                var id = $(this).attr("note_id");
+                $.get("/notes/vote/" + id, function (data) {
+                    if (data.success) {
+                        console.log(data);
+                        console.log(elem.hasClass("primary"));
+                        console.log(elem.hasClass("grey-text-imp"));
+                        if (elem.hasClass("primary")) {
+                            elem.removeClass("primary");
+                            elem.addClass("grey-text-imp");
+                        }else if (elem.hasClass("grey-text-imp")) {
+                            elem.removeClass("grey-text-imp");
+                            elem.addClass("primary");
+                        }
+                        $("#votes_" + id).text(data.numberOfVotes);
+                    } else {
+                        alert("Error upvoting");
+                    }
+                });
+            });
       });
   </script>
     <script src="{{ static_url }}js/upload_note.js"></script>
