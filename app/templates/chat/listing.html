@@ -10,10 +10,13 @@
     <div class="clearfix" id="chat_box"></div>
     <div class="send-box row valign-wrapper">
         <form id="send_room" method="POST" action='#'>
-            <input type="hidden" name="room_name" id="room_name" value="{{ lesson.id }}">
-            <input type="text" name="room_data" class="col s10" id="room_data" placeholder="type message">
-            {# <input type="submit" class="btn col s2" value="send"/> #}
-            <button type="submit" class="right"><i class='material-icons '>send</i></button>
+            <div class="valign" style="margin-bottom: 0;">
+                <input  type="hidden" name="room_name" id="room_name" value="{{ lesson.id }}">
+                <input type="text" name="room_data" class="col s10 push-s1" id="room_data" placeholder="type message">
+                {# <input type="submit" class="btn col s2" value="send"/> #}
+                <button type="submit" class="col s1"><i class='material-icons '>send</i></button>
+            </div>
+
         </form>
     </div>
   </div>

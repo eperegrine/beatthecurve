@@ -37,7 +37,7 @@
 	#chat_box{
 		padding: 1em;
 		overflow-y: scroll;
-		height: 40em;
+		height: 60vh;
 	}
 	.send-box {
 		border-top-width: 1px;
@@ -70,7 +70,7 @@
 }
 
 .user_listing {
-	min-height: 44.5em;
+	min-height: 68vh;
 	margin-left: 2em;
 	background-color: $lightBlue;
 }
