@@ -24,8 +24,10 @@
   <div class="col s3">
     <div class="card-panel user_listing bg">
       <div id="app">
-        <h5 class="white-text center">Who's here?</h5>
-        <div class="divider white"></div>
+          <div class="user_listing_title_contatiner">
+              <h5 class="white-text center user_listing_title">Who's here?</h5>
+          </div>
+{#        <div class="divider white"></div>#}
         {% raw %}
         <ul class="center white-text">
           <li v-for="user in users">

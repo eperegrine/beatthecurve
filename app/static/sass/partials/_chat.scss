@@ -11,7 +11,6 @@
       margin-right: 20px;
 	}
 	.date {
-
 		color: color("grey", "base");
 		@extend .right;
 	}
@@ -87,6 +86,19 @@
 	height: 56.5vh;
 	margin-left: 2em;
 	background-color: $lightBlue;
+}
+
+.user_listing_title_contatiner {
+  text-align: center;
+}
+
+.user_listing_title {
+  font-weight: bold;
+  margin-right: auto;
+  margin-left: auto;
+  display: inline-block;
+  border-bottom: 2px solid #fff;
+  padding-bottom: 10px;
 }
 
 .chat_input {
