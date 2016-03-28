@@ -51,7 +51,7 @@ def join(message):
     messages = [
         {
             'text': msg.text,
-            'sent': msg.sent.strftime("%H:%M %m/%d/%Y"),
+            'sent': msg.sent.strftime("%b %d - %I:%M %p"),
             'sender': msg.sender.first_name + ' ' + msg.sender.last_name
         }
         for msg in Message.select().where(Message.lesson == message['room']).order_by(Message.sent)
@@ -104,7 +104,7 @@ def send_room_message(message):
         )
         messages.append({
             'text': msg.text,
-            'sent': msg.sent.strftime("%H:%M %m/%d/%Y"),
+            'sent': msg.sent.strftime("%b %d - %I:%M %p"),
             'sender': msg.sender.first_name + ' ' + msg.sender.last_name
         })
     except Exception as e:

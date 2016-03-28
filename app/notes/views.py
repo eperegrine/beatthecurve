@@ -23,7 +23,7 @@ def view(lessonid):
         flash('Id not found', 'error')
         return redirect(url_for('auth_bp.profile'))
 
-    notes = Note.select().where(Note.lesson == lessonid)
+    notes = Note.select().where(Note.lesson == lessonid).order_by(-Note.year, +Note.semester)
     semesters = set()
     for note in notes:
         semesters.add((note.year, note.semester))
