@@ -7,7 +7,7 @@ import time, os, json, base64, hmac, urllib.parse
 from hashlib import sha1, md5
 from app.auth.decorators import permission_required
 from datetime import datetime
-from app.models import Semester, KarmaPoints
+from app.models import Semester, KarmaPoints, DATABASE
 
 
 notes_bp = Blueprint('notes_bp', __name__, url_prefix='/notes')
@@ -133,23 +133,18 @@ def vote(noteid):
 
     has_voted = note.has_voted(g.user)
 
-    note_vote, created = NoteVote.create_or_get(user=g.user.user_id, note=note.id)
-    if not created:
-        note_vote.upvote = not note_vote.upvote
-        note_vote.save()
+    upvote = True
 
-    if note_vote.upvote:
-        note.votes += 1
-    else:
-        note.votes -= 1
+    if has_voted:
+        upvote = not note.has_upvoted(g.user)
 
-    note.save()
+    success, message = note.vote(g.user, upvote)
+    if success:
+        if not has_voted:
+            g.user.karma_points += KarmaPoints.note_vote.value
+            g.user.save()
 
-    if not has_voted:
-        g.user.karma_points += KarmaPoints.note_vote.value
-        g.user.save()
-
-    return jsonify({'success': True, 'numberOfVotes': note.votes})
+    return jsonify({'success': success, 'numberOfVotes': note.votes, 'message': message})
 
 @notes_bp.route('/add-admin-note/<lessonid>', methods=('POST', 'GET'))
 @login_required
