@@ -14,11 +14,10 @@
   </div>
 
   <div class="right" style="width: 82%">
-    <div class="valign-wrapper">
-        <span class="">&nbsp;</span>
-      <a class="waves-effect waves-light btn-large modal-trigger bg-primary z-depth-0" href="#newNoteModal"><i class="fa fa-upload fa-5x"></i></a>
-      <div class="vaglign desc">
-        <h5>upload a note</h5>
+    <div class="row valign-wrapper">
+            <a class="waves-effect waves-light btn-large modal-trigger bg-primary z-depth-0 col s1 push-s1" href="#newNoteModal"><i class="fa fa-upload fa-5x"></i></a>
+      <div class="vaglign desc col s10 push-s1">
+        <h6>upload a new file</h6>
       </div>
     </div>
     <form method="post" enctype="multipart/form-data" id="add-note-form"
@@ -52,9 +51,9 @@
         <div class="note-item row valign-wrapper" semester="{{ note.semester }}" year="{{ note.year }}">
           <span class="col s1 center">
             {% if note.has_upvoted(current_user) %}
-              <a href="#" note_id="{{ note.id }}" class="note_vote primary valign"><i class="fa fa-thumbs-up fa-lg"></i>  <span id="votes_{{ note.id }}">{{ note.votes}}</span></a>
+              <a href="#" note_id="{{ note.id }}" class="note_vote vote_voted valign"><i class="fa fa-thumbs-up fa-lg"></i>  <span id="votes_{{ note.id }}">{{ note.votes}}</span></a>
             {% else %}
-              <a href="#" note_id="{{ note.id }}" class="note_vote grey-text-imp valign"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ note.id }}">{{ note.votes}}</span></a>
+              <a href="#" note_id="{{ note.id }}" class="note_vote vote valign"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ note.id }}">{{ note.votes}}</span></a>
             {% endif %}
           </span>
         <span class="col s1 center">
@@ -65,7 +64,7 @@
             <p class="note_description">{{note.description}}</p>
             <p class="note_date">{{note.datetime.strftime("%m/%d/%Y")}}</p>
           </span>
-          <span class="col s1 pull-s2">
+          <span class="col s1">
             <a  href="{{ uploads_url }}notes/{{ note.s3_filename }}"><i class="fa fa-download fa-2x primary"></i></a>
           </span>
         </div>
@@ -123,14 +122,14 @@
                 $.get("/notes/vote/" + id, function (data) {
                     if (data.success) {
                         console.log(data);
-                        console.log(elem.hasClass("primary"));
-                        console.log(elem.hasClass("grey-text-imp"));
-                        if (elem.hasClass("primary")) {
-                            elem.removeClass("primary");
-                            elem.addClass("grey-text-imp");
-                        }else if (elem.hasClass("grey-text-imp")) {
-                            elem.removeClass("grey-text-imp");
-                            elem.addClass("primary");
+                        console.log(elem.hasClass("vote_voted"));
+                        console.log(elem.hasClass("vote"));
+                        if (elem.hasClass("vote_voted")) {
+                            elem.removeClass("vote_voted");
+                            elem.addClass("vote");
+                        }else if (elem.hasClass("vote")) {
+                            elem.removeClass("vote");
+                            elem.addClass("vote_voted");
                         }
                         $("#votes_" + id).text(data.numberOfVotes);
                     } else {

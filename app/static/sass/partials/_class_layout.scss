@@ -53,13 +53,13 @@
 
 .filename_title {
   font-size: 1.1em;
-  color: darken($lightBlue,10);
+  color: #BFE0FA;
 }
 
 .note_description {
   margin-top: 0.3em;
   margin-bottom: 0.3em;
-  color: color("grey", "base");
+  color: #979797;
 }
 
 .desc {
@@ -70,4 +70,13 @@
   @extend .note_description;
   font-size: 0.8em;
   font-style: italic;
+  color: #A8A8A8;
+}
+
+.vote {
+  color: #979797 !important;
+}
+
+.vote_voted {
+  color: #5FB7F4 !important;
 }

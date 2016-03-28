@@ -64,7 +64,7 @@
       $perc: unquote((100 / ($num-cols / $i)) + "%");
       &.s#{$i} {
         width: $perc;
-        margin-left: auto;
+        //margin-left: auto;
         left: auto;
         right: auto;
       }
