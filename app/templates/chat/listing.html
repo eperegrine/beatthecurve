@@ -5,17 +5,17 @@
   Real Time Chat
 {% endblock %}
 {% block page %}
-    <h5 class="grey-text-imp">{{ lesson.lesson_name }} chatroom</h5>
+    <h5 class="room_title">{{ lesson.lesson_name }} chatroom</h5>
 <div class="row">
   <div class="card-panel pad0 bg chat_box col s9">
     <div class="clearfix" id="chat_box"></div>
     <div class="send-box row valign-wrapper">
         <form id="send_room" method="POST" action='#'>
-            <div class="valign" style="margin-bottom: 0;">
+            <div class="valign" style="margin-bottom: 0; height: 5.55vh; line-height: 5.55vh; font-size: 5.55vh;">
                 <input  type="hidden" name="room_name" id="room_name" value="{{ lesson.id }}">
-                <input type="text" name="room_data" class="col s10" id="room_data" placeholder="type message">
+                <input type="text" name="room_data" class="col s10 chat_input" id="room_data" placeholder="type message..." style="height: 5.55vh; line-height: 5.55vh;">
                 {# <input type="submit" class="btn col s2" value="send"/> #}
-                <button type="submit" class="right"><i class='material-icons '>send</i></button>
+                <button type="submit" class="right pad_t0"><i class='material-icons pad_t0'>send</i></button>
             </div>
 
         </form>

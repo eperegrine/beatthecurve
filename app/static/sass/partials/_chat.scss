@@ -1,9 +1,17 @@
+.room_title {
+  color: #979797;
+}
+
 .chat-message {
-	width: 60%;
+  clear: both;
+	max-width: 60%;
 	.name {
+      font-weight: bold;
 		color: color("grey", "base");
+      margin-right: 20px;
 	}
 	.date {
+
 		color: color("grey", "base");
 		@extend .right;
 	}
@@ -25,9 +33,11 @@
 			color: white;
 		}
 		.name {
+          margin-right: 0px;
 			@extend .right;
 		}
 		.date {
+          margin-right: 20px;
 			@extend .left;
 		}
 	}
@@ -41,7 +51,7 @@
 	#chat_box{
 		padding: 1em;
 		overflow-y: scroll;
-		height: 30em;
+		height: 50vh;
 	}
 	.send-box {
 		border-top-width: 1px;
@@ -74,7 +84,13 @@
 }
 
 .user_listing {
-	min-height: 34em;
+	height: 56.5vh;
 	margin-left: 2em;
 	background-color: $lightBlue;
+}
+
+.chat_input {
+  @include placeholder {
+    color: #979797;
+  }
 }
