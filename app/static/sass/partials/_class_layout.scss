@@ -1,14 +1,18 @@
 .class-page-nav {
+  margin-top: 0;
   padding-left: 1em;
   .class-nav-item {
-    margin-top: 1.4em;
-    margin-bottom: 1.4em;
-    color: color("grey", "base");
+    &:first-child {
+      margin-top: 0;
+    }
+    margin-top: 1.85vh;
+    margin-bottom: 1.85vh;
+    color: #979797;
     a {
       color: inherit;
     }
     &.active {
-      color: color("blue", "base");
+      color: #5FB7F4;
     }
   }
 
@@ -20,22 +24,30 @@
 .semester-title {
   @extend .bg-primary;
   color: white !important;
-  padding: 1em;
+  height: 56px;
+  line-height: 56px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
+#semesters {
+  border: 0!important;
+}
+
 .semester-tab {
-  background-color: $bgCol !important;
+  background-color: #F8FDFC !important;
 
-  color: $greyText !important;
+  a{ color: #979797 !important;}
 
-  a {
-    color: inherit !important;
-  }
+  //border-bottom: 0 !important;
 
   &.active {
-    background-color: $lightBlue !important;
-    color: white !important;
+    background-color: #BFE0FA !important;
+    color: #FFF !important;
+    a {
+      color: #FFF !important;
+    }
+
   }
 }
 
