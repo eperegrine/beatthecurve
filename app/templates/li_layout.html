@@ -5,12 +5,12 @@
 
     {% block page_title %}{% endblock %}
 <!-- Dropdown Trigger -->
-<div class="row">
+<div>
   <!-- <a class='col s12 center class_drop_btn' href='#' data-activates='class_drop'>{% if lesson %}{{lesson.lesson_name}}{% else %} Lessons {% endif %}</a> -->
     <div class="col s12 center primary"><h4 class="title">{{ applicationName }}</h4></div>
   <ul id='class_drop' class='_tabs'>
   {% if g.user.has_permission('lesson_admin') %}
-    <li class="tabs_item {% if create_lesson %}active{% endif %}"><a href="{{ url_for("lesson_bp.create") }}">Create Class</a></li>
+    <li class="tabs_item  {% if create_lesson %}active{% endif %}"><a href="{{ url_for("lesson_bp.create") }}">Create Class</a></li>
   {% endif %}
     <li class="tabs_item {% if join_lesson %}active{% endif %}"><a href="{{ url_for("lesson_bp.add") }}">Join Class</a></li>
     <!-- <li class="divider"></li> -->
@@ -30,7 +30,7 @@
 
 
 
-    <div class="container pad">
+    <div class="pad">
     {% block container %}
     <ul>
     {% for category, message in get_flashed_messages(with_categories=true) %}

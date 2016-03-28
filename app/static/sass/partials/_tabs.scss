@@ -9,6 +9,7 @@
   padding-bottom: .5em;
 }
 ._tabs {
+  @extend .valign-wrapper;
   margin:  0;
   padding: 0;
   list-style: none;
@@ -16,26 +17,32 @@
   table-layout: fixed; /* [2] */
   width: 100%; /* [3] */
   .tabs_item {
+    @extend .valign;
     &:not(:first-child) {
-      border-left: $lightBlue solid 2px;
+      //border-left: $lightBlue solid 2px;
       &.active {
         border-left: 0;
       }
     }
     text-align: center;
-    padding: 1em;
+    //padding: 1em;
+    height: 7.47vh;
+    line-height: 7.47vh;
     display: table-cell; /* [4] */
-    background-color: $primaryCol;
-    color: white !important;
+    background-color: #BFE0FA;
+    color: #FFF !important;
     a {
       color: inherit !important; /* [5] */
     }
+    box-shadow: inset 0 0 5px #999;
     &.active {
-      background-color: lighten($lightBlue, 5);
-      color: $primaryCol;
+      border-top: 1px solid #BBB;
+      background-color: #FFF;
+      color: #5FB7F4;
       a {
-        color: $primaryCol !important; /* [5] */
+        color: #5FB7F4 !important; /* [5] */
       }
+      box-shadow: inset 0 0 0px #000;
     }
     .tabs_link {
       display: block; /* [5] */

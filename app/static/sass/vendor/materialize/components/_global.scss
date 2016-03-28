@@ -487,11 +487,11 @@ td, th{
   position: relative !important;
 
   .collection-item {
-    background-color: $collection-bg-color !important;
+    //background-color: $collection-bg-color !important;
     line-height: 1.5rem !important;
     padding: 10px 20px !important;
     margin: 0 !important;
-    border-bottom: 1px solid $collection-border-color !important;
+    border-bottom: 1px solid $collection-border-color;
 
     // Avatar Collection
     &.avatar {
