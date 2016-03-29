@@ -17,7 +17,7 @@
     <div class="row valign-wrapper">
             <a class="waves-effect waves-light btn-large modal-trigger bg-primary z-depth-0 col s1 push-s1" href="#newNoteModal"><i class="fa fa-upload fa-5x"></i></a>
       <div class="vaglign desc col s10 push-s1">
-        <h6>upload a new file</h6>
+        <h6 style="padding-left: 1.5%">upload a new file</h6>
       </div>
     </div>
     <form method="post" enctype="multipart/form-data" id="add-note-form"
@@ -60,9 +60,11 @@
           <i file-type="{{note.original_filename.split('.')[note.original_filename.split('.')|length - 1]}}" class="file-icon fa fa-file-text-o fa-3x center"></i>
       </span>
           <span class="col s9">
-            <a href="{{ uploads_url }}notes/{{ note.s3_filename }}" class="filename_title">{{ note.filename }}</a>
-            <p class="note_description">{{note.description}}</p>
-            <p class="note_date">{{note.datetime.strftime("%m/%d/%Y")}}</p>
+              <div style="margin-left: 1.5%">
+                <a href="{{ uploads_url }}notes/{{ note.s3_filename }}" class="filename_title">{{ note.filename }}</a>
+                <p class="note_description">{{note.description}}</p>
+                <p class="note_date">{{note.datetime.strftime("%m/%d/%Y")}}</p>
+              </div>
           </span>
           <span class="col s1">
             <a  href="{{ uploads_url }}notes/{{ note.s3_filename }}"><i class="fa fa-download fa-2x primary"></i></a>

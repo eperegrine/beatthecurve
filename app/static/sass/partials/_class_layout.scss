@@ -37,7 +37,7 @@
 .semester-tab {
   background-color: #F8FDFC !important;
 
-  a{ color: #979797 !important;}
+  a{ height: 3.7vh; line-height: 3.7vh; color: #979797 !important;}
 
   //border-bottom: 0 !important;
 
@@ -69,7 +69,6 @@
 .note_date {
   @extend .note_description;
   font-size: 0.8em;
-  font-style: italic;
   color: #A8A8A8;
 }
 
