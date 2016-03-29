@@ -17,11 +17,12 @@ for key, value in data.items():
 
         if value["professors"][0] is not None:
             for p in value["professors"]:
-                name = p.split(" ")
-                Professor.create(
-                    lesson_id=lesson.id,
-                    first_name=name[0],
-                    last_name=name[1]
-                )
+                if p is not None:
+                    name = p.split(" ")
+                    Professor.create(
+                        lesson_id=lesson.id,
+                        first_name=name[0],
+                        last_name=name[1]
+                    )
 
 
