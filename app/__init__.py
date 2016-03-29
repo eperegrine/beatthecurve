@@ -19,7 +19,7 @@ sg = sendgrid.SendGridClient(os.environ['SENDGRID_KEY'])
 
 from app.models import DATABASE
 from app.auth.models import School, User, Permission, UserPermission
-from app.lesson.models import Lesson, LessonStudent
+from app.lesson.models import Lesson, LessonStudent, Professor
 from app.notes.models import Note, NoteVote
 from app.qa.models import Question, Reply, QuestionVote, ReplyVote
 from app.exams.models import Exam, ExamVote
@@ -33,7 +33,7 @@ from app.chat.models import Message
 # logger.setLevel(logging.DEBUG)
 # logger.addHandler(logging.StreamHandler())
 
-tables = [School, User, Permission, UserPermission, Lesson, LessonStudent, Note,
+tables = [School, User, Permission, UserPermission, Lesson, Professor, LessonStudent, Note,
                         NoteVote, Question, Reply, Exam, ExamVote, StudyGroup, StudyGroupComment, StudyGroupMembers,
                         StudyGroupSession, Option, UserOption, Message, QuestionVote, ReplyVote]
 for table in tables:

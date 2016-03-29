@@ -38,6 +38,18 @@ class Lesson(Model):
         return lessons
 
 
+class Professor(Model):
+    """Model representing a professor for a class"""
+    id = PrimaryKeyField(db_column='ID')
+    lesson_id = ForeignKeyField(Lesson, db_column='LESSON_ID')
+    first_name = CharField(db_column='FIRST_NAME')
+    last_name = CharField(db_column='LAST_NAME')
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_PROFESSOR'
+
+
 class LessonStudent(Model):
     """Model representing a user attending a lesson in a specific year and semester"""
     id = PrimaryKeyField(db_column='ID')
