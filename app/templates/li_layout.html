@@ -17,9 +17,9 @@
       {% for l in get_lessons(current_user) %}
         <li class="tabs_item {% if lesson and l.id == lesson.id %}active{% endif %}">
           {% if request.endpoint in ["notes_bp.view", "qa_bp.view", "exams_bp.view", "studygroups_bp.view", "chat_bp.index", "search_bp.view"] %}
-            <a href="{{ url_for(request.endpoint, lessonid=l.id) }}">{{ l.lesson_name }}</a>
+            <a href="{{ url_for(request.endpoint, lessonid=l.id) }}">{{ l.code }}</a>
           {% else %}
-            <a href="{{ url_for("notes_bp.view", lessonid=l.id) }}">{{ l.lesson_name }}</a>
+            <a href="{{ url_for("notes_bp.view", lessonid=l.id) }}">{{ l.code }}</a>
           {% endif %}
         </li>
       {% endfor %}

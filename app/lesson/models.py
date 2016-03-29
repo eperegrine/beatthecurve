@@ -11,17 +11,13 @@ class Lesson(Model):
     within a school.
     """
     id = PrimaryKeyField(db_column='ID')
-    code = CharField(db_column='CODE', unique=True)
+    code = CharField(db_column='CODE')
     lesson_name = CharField(db_column='NAME')
-    professor = CharField(db_column='PROFESSOR', null=True, max_length=400)
     school_id = ForeignKeyField(School, db_column='SCHOOL')
 
     class Meta:
         database = DATABASE
         db_table = 'TBL_LESSON'
-        indexes = (
-            (('code', 'school_id'), True),
-        )
 
     @classmethod
     def get_unattended_lessons(cls, user):
@@ -36,6 +32,26 @@ class Lesson(Model):
             if lesson.id not in users_lessons:
                 lessons.append(lesson)
         return lessons
+
+    def get_professors_names_as_string(self):
+        names = []
+        professors = Professor.select().where(Professor.lesson_id == self.id)
+        for professor in professors:
+            names.append(professor.first_name + " " + professor.last_name)
+        return ", ".join(names)
+
+
+
+class Professor(Model):
+    """Model representing a professor for a class"""
+    id = PrimaryKeyField(db_column='ID')
+    lesson_id = ForeignKeyField(Lesson, db_column='LESSON_ID')
+    first_name = CharField(db_column='FIRST_NAME')
+    last_name = CharField(db_column='LAST_NAME')
+
+    class Meta:
+        database = DATABASE
+        db_table = 'TBL_PROFESSOR'
 
 
 class LessonStudent(Model):

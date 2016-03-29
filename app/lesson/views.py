@@ -1,7 +1,7 @@
 from flask import Blueprint, g, render_template, flash, redirect, url_for, jsonify, request
 from flask.ext.login import login_required
 from .forms import AttendLessonsForm, CreateLessonForm
-from .models import Lesson, LessonStudent
+from .models import Lesson, LessonStudent, Professor
 from app.search.models import UserOption, Option
 from app.auth.decorators import permission_required
 import json
@@ -16,7 +16,7 @@ def add():
     form = AttendLessonsForm()
 
     # Setup choices for form
-    form.lessons.choices = [(str(lesson.id), lesson.lesson_name + " - " + lesson.professor) for lesson in
+    form.lessons.choices = [(str(lesson.id), lesson.code) for lesson in
                             Lesson.get_unattended_lessons(g.user)]
 
     # If there are no lessons available display that
@@ -99,9 +99,19 @@ def create():
     if form.validate_on_submit():
         lesson = Lesson.create(
             lesson_name=form.name.data,
-            professor=form.professor.data,
-            school_id=g.user.school_id
+            school_id=g.user.school_id,
+            code=form.code.data
         )
+
+        professors = form.professor.data.split(",")
+
+        for professor in professors:
+            name = professor.split(" ")
+            Professor.create(
+                lesson_id=lesson.id,
+                first_name=name[0],
+                last_name=name[1]
+            )
 
         Option.create(
             name='Study Tips',
