@@ -8,7 +8,7 @@ data = json.load(f)
 school = School.get()
 
 for key, value in data.items():
-    if value["link"] is not None and "professors" in value.keys() and key != "UNIV100":
+    if value["link"] is not None and "professors" in value.keys():
         lesson = Lesson.create(
             code=key,
             lesson_name=value["title"],
