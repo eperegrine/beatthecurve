@@ -19,7 +19,7 @@ for key, value in data.items():
             for p in value["professors"]:
                 name = p.split(" ")
                 Professor.create(
-                    lesson=lesson.id,
+                    lesson_id=lesson.id,
                     first_name=name[0],
                     last_name=name[1]
                 )
