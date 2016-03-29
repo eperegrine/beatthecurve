@@ -11,15 +11,16 @@ class Lesson(Model):
     within a school.
     """
     id = PrimaryKeyField(db_column='ID')
+    code = CharField(db_column='CODE', unique=True)
     lesson_name = CharField(db_column='NAME')
-    professor = CharField(db_column='PROFESSOR')
+    professor = CharField(db_column='PROFESSOR', null=True, max_length=400)
     school_id = ForeignKeyField(School, db_column='SCHOOL')
 
     class Meta:
         database = DATABASE
         db_table = 'TBL_LESSON'
         indexes = (
-            (('lesson_name', 'school_id'), True),
+            (('code', 'school_id'), True),
         )
 
     @classmethod
