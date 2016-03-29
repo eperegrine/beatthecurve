@@ -16,7 +16,7 @@ def add():
     form = AttendLessonsForm()
 
     # Setup choices for form
-    form.lessons.choices = [(str(lesson.id), lesson.lesson_name) for lesson in
+    form.lessons.choices = [(str(lesson.id), lesson.code) for lesson in
                             Lesson.get_unattended_lessons(g.user)]
 
     # If there are no lessons available display that

@@ -36,6 +36,14 @@ class Lesson(Model):
                 lessons.append(lesson)
         return lessons
 
+    def get_professors_names_as_string(self):
+        names = []
+        professors = Professor.select().where(Professor.lesson_id == self.id)
+        for professor in professors:
+            names.append(professor.first_name + " " + professor.last_name)
+        return ", ".join(names)
+
+
 
 class Professor(Model):
     """Model representing a professor for a class"""

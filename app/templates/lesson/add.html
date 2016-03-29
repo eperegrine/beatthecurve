@@ -61,12 +61,12 @@
         var lessons = {
         {% for l in get_unattended_lessons(current_user) %}
             {{ l.id }} : {
-                name: "{{ l.lesson_name }}", id: {{ l.id }},originally_attended:false , is_attended:false, is_loading:false
+                name: "{{ l.code + " - " + l.get_professors_names_as_string() }}", id: {{ l.id }},originally_attended:false , is_attended:false, is_loading:false
             },
         {% endfor%}
         {% for l in get_lessons(current_user) %}
             {{ l.id }}: {
-                name: "{{ l.lesson_name }}", id: {{ l.id }},originally_attended:true , is_attended:true, is_loading:false
+                name: "{{ l.code + " - " + l.get_professors_names_as_string() }}", id: {{ l.id }},originally_attended:true , is_attended:true, is_loading:false
             },
         {% endfor%}
         };
