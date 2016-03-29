@@ -5,10 +5,10 @@
   Real Time Chat
 {% endblock %}
 {% block page %}
-    <h5 class="room_title" style="margin-top: 0;">{{ lesson.lesson_name }} chatroom</h5>
+    <h5 class="room_title" style="margin-top: 0; margin-bottom: 7.4vh;">{{ lesson.lesson_name }} chatroom</h5>
 <div class="row">
   <div class="card-panel pad0 bg chat_box col s9">
-    <div class="clearfix" id="chat_box"></div>
+    <div class="clearfix cust-scroll mCustomScrollbar" id="chat_box" data-mcs-theme="dark"></div>
     <div class="send-box row valign-wrapper">
         <form id="send_room" method="POST" action='#'>
             <div class="valign" style="margin-bottom: 0; height: 5.55vh; line-height: 5.55vh; font-size: 5.55vh;">

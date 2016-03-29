@@ -47,7 +47,7 @@
 .chat_box { 
 	padding: 0px;
 	#chat_box{
-		padding: 1em;
+		padding: 2% 4% 0;
 		overflow-y: scroll;
 		height: 50vh;
 	}
@@ -85,6 +85,12 @@
 	height: 56.5vh;
 	margin-left: 2em;
 	background-color: $lightBlue;
+	ul {
+		margin-top: 0;
+		li {
+			margin-top: 1.9vh;
+		}
+	}
 }
 
 .user_listing_title_contatiner {
@@ -98,7 +104,8 @@
   margin-left: auto;
   display: inline-block;
   border-bottom: 2px solid #fff;
-  padding-bottom: 10px;
+  padding-bottom: 2vh;
+	margin-bottom: 0;
 }
 
 .chat_input {
