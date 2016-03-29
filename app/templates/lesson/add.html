@@ -70,32 +70,6 @@
             },
         {% endfor%}
         };
-        //lessons = lessons.clean(undefined);
-
-        function haveLessonsChanged() {
-            for (var i = 0; i < lessons.length; i++) {
-                l = lessons[i];
-                if (l.originally_attended != l.is_attended) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function getChangedLessons() {
-            var res = {'joined': [], 'left': []};
-            for (var i = 0; i < lessons.length; i++) {
-                l = lessons[i];
-                if (l.originally_attended != l.is_attended) {
-                    if (l.is_attended) {
-                        res.joined.push(l.id);
-                    } else {
-                        res.left.push(l.id);
-                    }
-                }
-            }
-            return res;
-        }
 
         v = new Vue({
             el: '#class-select',
@@ -108,10 +82,39 @@
                     console.log(index);
                     lesson = this.lessons[index];
                     lesson.is_attended = !lesson.is_attended;
-                    this.has_changed = lesson.is_attended != lesson.originally_attended;
+                    this.$set("lessons[" + index + "].has_changed", lesson.originally_attended != lesson.is_attended);
+                    this.has_changed = haveLessonsChanged();
                 }
             }
         });
+
+        function haveLessonsChanged() {
+            console.log("Helooooo");
+            hc = false;
+            $.each(v.lessons, function (index, obj) {
+                l = v.lessons[index];
+                console.log(l.has_changed);
+                if (l.has_changed) {
+                    hc = true;
+                }
+            });
+            return hc;
+        }
+
+        function getChangedLessons() {
+            var res = {'joined': [], 'left': []};
+            $.each(v.lessons, function (i, obj) {
+                l = lessons[i];
+                if (l.originally_attended != l.is_attended) {
+                    if (l.is_attended) {
+                        res.joined.push(l.id);
+                    } else {
+                        res.left.push(l.id);
+                    }
+                }
+            });
+            return res;
+        }
 
         $("#confirm_btn").click(function () {
             if (!$(this).hasClass("disabled")) {
