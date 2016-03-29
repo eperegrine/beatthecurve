@@ -9,7 +9,8 @@
         {% raw %}
         <div class="row">
             <div class="available_classes col s6">
-                <input type='search' autocomplete='off' id='selectableSearch' class="primary" v-model="name" placeholder='Search for a lesson'>
+                <span class="text-grey text-lighten-2" style="font-style: italic;">Note: press enter to update search term</span>
+                <input type='search' autocomplete='off' id='selectableSearch' class="primary" v-model="name" lazy placeholder='Search for a lesson'>
 
                 <ul class="collection">
                     <li class="collection-item" v-for="(key, l) in lessons | filterBy name in 'name'" v-if="!l.is_attended" >
@@ -23,6 +24,7 @@
             </div>
 
             <div class="joined_classes col s4 push-s2">
+                <span class="text-grey text-lighten-2" style="font-style: italic;">&nbsp;</span>
                 <span class="false_input">Current Courses</span>
 
                 <ul class="collection with-header">

@@ -12,7 +12,6 @@
 	}
 	.date {
 		color: color("grey", "base");
-		@extend .right;
 	}
 	.content {
       background-color: color("grey", "lighten-2");
@@ -37,7 +36,7 @@
 		}
 		.date {
           margin-right: 20px;
-			@extend .left;
+			@extend .right;
 		}
 	}
 
@@ -89,6 +88,7 @@
 }
 
 .user_listing_title_contatiner {
+	margin-top: 3.7vh;
   text-align: center;
 }
 
