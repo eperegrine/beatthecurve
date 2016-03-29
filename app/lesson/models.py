@@ -18,9 +18,6 @@ class Lesson(Model):
     class Meta:
         database = DATABASE
         db_table = 'TBL_LESSON'
-        indexes = (
-            (('code', 'school_id'), True),
-        )
 
     @classmethod
     def get_unattended_lessons(cls, user):
