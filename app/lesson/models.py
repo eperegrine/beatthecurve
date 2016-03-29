@@ -11,9 +11,8 @@ class Lesson(Model):
     within a school.
     """
     id = PrimaryKeyField(db_column='ID')
-    code = CharField(db_column='CODE', unique=True)
+    code = CharField(db_column='CODE')
     lesson_name = CharField(db_column='NAME')
-    professor = CharField(db_column='PROFESSOR', null=True, max_length=400)
     school_id = ForeignKeyField(School, db_column='SCHOOL')
 
     class Meta:
