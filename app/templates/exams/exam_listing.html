@@ -3,19 +3,18 @@
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
-  <div class="col s2">
+  <div class="left" style="width: 14.89%">
     {% if semesters|length > 0 %}
       {{ render_semester_tabs(semesters, semester_enum) }}
     {% else %}
       <h5>No Exams Available</h5>
     {% endif %}
   </div>
-  <div class="col s10">
+  <div class="right" style="width: 82%">
     <div class="row valign-wrapper">
-        <span class="col s1">&nbsp;</span>
-        <a class="waves-effect waves-light btn-large modal-trigger col s1 bg-primary" href="#newExamModal"><i class="material-icons">file_upload</i></a>
-        <div class="col s10 vaglign desc">
-            <h5>Upload an exam</h5>
+        <a class="waves-effect waves-light btn-large modal-trigger z-depth-0 col s1 push-s1 bg-primary" href="#newExamModal"><i class="fa fa-upload fa-5x"></i></a>
+        <div class="col s10 push-s1 vaglign desc">
+            <h6 style="padding-left: 1.5%">upload an exam</h6>
         </div>
     </div>
     <div class="modal" id="newExamModal">
@@ -28,9 +27,9 @@
             {% endfor %}
             <!-- <button type="button" class="waves-effect waves-light btn-large" id="submit">Add Exam</button> -->
             <div class="row">
-              <div class="col s2">&nbsp;</div>
-              <button type="button" id="submit" class="waves-effect waves-light btn-large col s8 bg-primary">Upload</button>
-              <div class="col s2">&nbsp;</div>
+              <div class="col s4">&nbsp;</div>
+              <button type="button" id="submit" class="waves-effect waves-light btn-large col s4 bg-primary">Upload</button>
+              <div class="col s4">&nbsp;</div>
             </div>
           </form>
         </div>
@@ -47,23 +46,23 @@
     <div class="section">
       {% for exam in exams %}
       <div class="row exam-item valign-wrapper" semester="{{ exam.semester }}" year="{{ exam.year }}">
-        <span class="col s1 ">
+        <span class="col center s1 ">
           {% if exam.has_upvoted(current_user) %}
-            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="0") }}" class="valign"><i class="fa fa-thumbs-up fa-lg"></i>  {{ exam.votes}}</a>
+            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="0") }}" class="vote_voted valign"><i class="fa fa-thumbs-up fa-lg"></i>  {{ exam.votes}}</a>
           {% else %}
-            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="1") }}" class="grey-text-imp valign"><i class="fa fa-thumbs-up fa-lg"></i> {{ exam.votes }}</a>
+            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="1") }}" class="vote valign"><i class="fa fa-thumbs-up fa-lg"></i> {{ exam.votes }}</a>
           {% endif %}
         </span>
       <span class="col s1 center">
-          <i class="fa fa-file-o primary fa-3x center"></i>
+          <i class="file-icon fa fa-file-text-o fa-3x center primary"></i>
       </span>
         <span  class="col s9">
-          <a href="{{ uploads_url }}exams/{{ exam.s3_filename }}" class="filename_title">{{ exam.filename }}</a>
+          <a style="padding-left: 1.5%" href="{{ uploads_url }}exams/{{ exam.s3_filename }}" class="filename_title">{{ exam.filename }}</a>
           <!-- <p class="note_description">Exam description</p> -->
           <!-- <p class="note_date">{{exam.year}}</p> -->
         </span>
         <span class="col s1">
-          <a  href="{{ uploads_url }}exams/{{ exam.s3_filename }}"><i class="material-icons left valign ">file_download</i></a>
+          <a  href="{{ uploads_url }}exams/{{ exam.s3_filename }}"><i class="fa fa-download fa-2x primary"></i></a>
         </span>
       </div>
       {% endfor %}
