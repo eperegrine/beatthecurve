@@ -9,14 +9,13 @@
       overflow: hidden;
     }
     </style>
-<div class="row">
-  <div class="col s2" id="sem_col">
-    <div id="lesson-tabs">
+  <div class="left" style="width: 14.89%" id="sem_col">
+    <div id="lesson-tabs" style="z-index: 5555;">
         <div>
             {% raw %}
           <div class="bg-primary white semester-title">Select Semester</div>
           <ul class="collection" id="semesters">
-              <li v-for="semester in semesters | orderBy $index -1" class="collection-item semester-tab center" style="text-transform: capitalize;" semester="{{ semester.season }}" year="{{ semester.year }}">
+              <li v-for="semester in semesters" class="collection-item semester-tab center" style="text-transform: capitalize;" semester="{{ semester.season }}" year="{{ semester.year }}">
                   <a target="_self" href="#{{ semester.season + semester.year }}">{{ semester.season + " " + semester.year }}</a>
               </li>
           </ul>
@@ -24,30 +23,30 @@
         </div>
       </div>
   </div>
-  <div class="col s10">
+  <div class="right" style="width: 82%">
     <div class="card-panel">
-        <h3 class="content_title">Add a Question</h3>
+        <h3 class="content_title grey-text">add a question</h3>
         <form method="post" action="{{ url_for("qa_bp.add_question", lessonid=lesson.id) }}">
             {{ form.csrf_token() }}
             <div class="input-field">
                 {%for error in form.document.errors %}
                     <div class="red-text">{{ error }}</div>
                 {% endfor %}
-                <strong><h6 class="grey-text text-darken-1">Subject</h6></strong>
+                <strong><h6 class="grey-text text-darken-1">subject</h6></strong>
                 {{ form.document(class_="blue_field") }}
             </div>
             <div class="input-field">
                 {%for error in form.name.errors %}
                     <div class="red-text">{{ error }}</div>
                 {% endfor %}
-                <strong><h6 class="grey-text text-darken-1">Question</h6></strong>
+                <strong><h6 class="grey-text text-darken-1">question</h6></strong>
                 {{ form.name(class_="blue_field") }}
             </div>
             <div class="input-field">
                 {% for error in form.content.errors %}
                     <div class="red-text">{{ error }}</div>
                 {% endfor %}
-                <strong><h6 class="grey-text text-darken-1">Content</h6></strong>
+                <strong><h6 class="grey-text text-darken-1">content</h6></strong>
                 {{ form.content(class_="materialize-textarea q_reply") }}
             </div>
           <div class="row">
@@ -75,7 +74,6 @@
               <div class="col s10">
                   <div class="q_head" q_id={{ q.id }} v-on:click="toggle_visibility(q.id)">
                     <div class="row">
-                        <i class="fa fa-user fa-lg primary"></i>
                       <span class="primary poster_name">{{q.user }}</span>
                       <span class="lightBlue right q_document">{{q.document}}</span>
                     </div>
@@ -90,20 +88,18 @@
                     <div class="divider bg-primary"></div>
                       <span v-for="reply in q.replies"><div class="comment">
                         <div class="row comment_name primary">
-                                  <a v-on:click="reply_vote(q.id, reply.id)" v-bind:class="{ 'primary': reply.has_voted, 'grey-text-imp': !reply.has_voted }" href="#!" class="primary valign r_vote" reply="{{ $key }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ $key }}">{{ reply.votes}}</span></a>
+                                  <a v-on:click="reply_vote(q.id, reply.id)" v-bind:class="{ 'primary': reply.has_voted, 'grey-text-imp': !reply.has_voted }" href="#!" class="primary valign r_vote right" reply="{{ $key }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ $key }}">{{ reply.votes}}</span></a>
                             &nbsp;<i class="fa fa-user fa-lg"></i>&nbsp;{{ reply.user }}
-                            <span class="lightBlue right">{{reply.datetime}}</span>
                         </div>
-                        <p class="grey-text" style="margin-left: 42px;">{{ reply.content }}</p>
+                        <p class="grey-text" style="margin-left: 25px; margin-bottom: 0;">{{ reply.content }}</p>
                       </div>
-                        <div v-if="$index == q.replies.length - 1" class="divider bg-primary"></div>
-                        <div v-else class="divider light-grey"></div>
+                        <div v-if="$index == q.replies.length - 1" style="margin-top: 3vh" class="divider bg-primary"></div>
                       </span>
-                    <form class=""method="post" action="/qa/add-reply/{{ q.id }}">
+                    <form style="margin-top: 3.7vh" class=""method="post" action="/qa/add-reply/{{ q.id }}">
                         <input id="csrf_token" name="csrf_token" placeholder="Csrf Token" type="hidden" value="{{ csrf_token }}">
                         <div class="input-field">
-                          <strong><h6 class="grey-text">Type a reply</h6></strong>
-                          <textarea class="q_reply materialize-textarea" id="reply-content-{{ q.id }}" name="content"></textarea>
+                        <!-- <strong><h6 class="grey-text">Type a reply</h6></strong>-->
+                          <textarea class="q_reply materialize-textarea" id="reply-content-{{ q.id }}" placeholder="Type a reply" name="content"></textarea>
                         </div>
                       <div class="row">
                         <button type="submit" class="waves-effect waves-light btn center right lowercase">send</button>
@@ -124,11 +120,10 @@
       </div>
   </div>
 </div>
-</div>
 {% endblock %}
 {% block js %}
 {{super()}}
-    <script src="http://stickyjs.com/jquery.sticky.js" type="text/javascript"></script>
+
     <script>
         /**
          * @return {boolean}
@@ -234,7 +229,6 @@
         $(document).ready(function () {
             q_vue.csrf_token = $("#csrf_token").val();
             loadQuestions();
-            $("#lesson-tabs").sticky({topSpacing:10, getWidthFrom: '#sem_col'});
         });
 
         function semesterIdToStr(id) {

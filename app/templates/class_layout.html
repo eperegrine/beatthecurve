@@ -1,7 +1,7 @@
 {% extends 'li_layout.html' %}
 {% block container %}
   <div class="row">
-    <div class="left" style="width: 11.59%; padding-left: 3.19%;">
+    <div id="class_nav_wrap" class="left" style="width: 11.59%; padding-left: 3.19%;">
       <ul class="class-page-nav">
 
         <li class="class-nav-item {% if active == "forum" %}active{% endif %}"><a href="{{ url_for('qa_bp.view', lessonid=lesson.id) }}">forum</a></li>

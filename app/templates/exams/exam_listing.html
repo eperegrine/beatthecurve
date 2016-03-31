@@ -3,9 +3,12 @@
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
-  <div class="left" style="width: 14.89%">
-      {{ render_semester_tabs(semesters, semester_enum) }}
+  <div class="left" id="sem_col" style="width: 14.89%">
+    <div class="lesson-tabs">
+        {{ render_semester_tabs(semesters, semester_enum) }}
+    </div>
   </div>
+
   <div class="right" style="width: 82%">
     <div class="row valign-wrapper">
         <a class="waves-effect waves-light btn-large modal-trigger z-depth-0 col s1 push-s1 bg-primary" href="#newExamModal"><i class="fa fa-upload fa-5x"></i></a>

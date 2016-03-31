@@ -9,6 +9,12 @@
   margin-bottom: 7.41vh;
 }
 
+.is-sticky {
+  #class_drop {
+  margin-bottom: 0;
+}
+}
+
 .dropdown-content {
   color: $primaryCol !important;
   li {

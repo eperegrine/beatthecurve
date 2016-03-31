@@ -5,8 +5,10 @@
 {% block page %}
 
 
-  <div class="left" style="width: 14.89%">
-      {{ render_semester_tabs(semesters, semester_enum) }}
+  <div class="left" id="sem_col" style="width: 14.89%">
+    <div class="lesson-tabs">
+        {{ render_semester_tabs(semesters, semester_enum) }}
+    </div>
   </div>
 
   <div class="right" style="width: 82%">
