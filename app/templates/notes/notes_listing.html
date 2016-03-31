@@ -6,11 +6,7 @@
 
 
   <div class="left" style="width: 14.89%">
-    {% if semesters|length > 0 %}
       {{ render_semester_tabs(semesters, semester_enum) }}
-    {% else %}
-      <h5>No notes found</h5>
-    {% endif %}
   </div>
 
   <div class="right" style="width: 82%">
@@ -70,6 +66,8 @@
             <a  href="{{ uploads_url }}notes/{{ note.s3_filename }}"><i class="fa fa-download fa-2x primary"></i></a>
           </span>
         </div>
+          {% else %}
+          <h4 class="center">no notes available</h4>
       {% endfor %}
   </div>
 
