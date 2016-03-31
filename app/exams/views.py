@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, request, g
+from flask import Blueprint, render_template, flash, redirect, url_for, request, g, jsonify
 from flask.ext.login import login_required
 from .forms import AddExamForm
 from .models import Exam
@@ -99,25 +99,47 @@ def add_exam(lessonid):
     return render_template("exams/add-exam.html", form=form)
 
 
-@exams_bp.route('/vote/<examid>/<upvote>')
+# @exams_bp.route('/vote/<examid>/<upvote>')
+# @login_required
+# def vote(examid, upvote):
+#     """Route to vote on an exam"""
+#     # TODO: Move to POST request
+#     exam = Exam.get(Exam.id == examid)
+#     vote = True if upvote == "1" else False
+#     has_voted = exam.has_voted(g.user)
+#     if exam.has_upvoted(g.user) and vote:
+#         flash("Error! You have already upvoted this exam!", 'error')
+#     elif not exam.has_upvoted(g.user) and not vote:
+#         flash("Error! You have already downvoted this exam!", 'error')
+#     else:
+#         sucess, message = exam.vote(g.user, vote)
+#         if sucess:
+#             if not has_voted:
+#                 g.user.karma_points += KarmaPoints.exam_vote.value
+#                 g.user.save()
+#             flash("Success", 'success')
+#         else:
+#             flash(message)
+#     return redirect(url_for(".view", lessonid=exam.lesson.id))
+
+@exams_bp.route("/vote/<examid>")
 @login_required
-def vote(examid, upvote):
-    """Route to vote on an exam"""
+def vote(noteid):
+    """Route to allow a user to vote on an exam"""
     # TODO: Move to POST request
-    exam = Exam.get(Exam.id == examid)
-    vote = True if upvote == "1" else False
+    exam = Exam.get(Exam.id == noteid)
+
     has_voted = exam.has_voted(g.user)
-    if exam.has_upvoted(g.user) and vote:
-        flash("Error! You have already upvoted this exam!", 'error')
-    elif not exam.has_upvoted(g.user) and not vote:
-        flash("Error! You have already downvoted this exam!", 'error')
-    else:
-        sucess, message = exam.vote(g.user, vote)
-        if sucess:
-            if not has_voted:
-                g.user.karma_points += KarmaPoints.exam_vote.value
-                g.user.save()
-            flash("Success", 'success')
-        else:
-            flash(message)
-    return redirect(url_for(".view", lessonid=exam.lesson.id))
+
+    upvote = True
+
+    if has_voted:
+        upvote = not exam.has_upvoted(g.user)
+
+    success, message = exam.vote(g.user, upvote)
+    if success:
+        if not has_voted:
+            g.user.karma_points += KarmaPoints.note_vote.value
+            g.user.save()
+
+    return jsonify({'success': success, 'numberOfVotes': exam.votes, 'message': message})
