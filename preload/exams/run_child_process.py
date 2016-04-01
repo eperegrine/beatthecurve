@@ -3,13 +3,13 @@ import sys
 from urllib.request import urlretrieve
 from redis import Redis
 from rq import Queue
-from download_images import get_image
+from preload.exams.download import get_image
 
 q = Queue(connection=Redis())
 
 
 
-cmd = ["./phantomjs", "download_images.js"]
+cmd = ["preload/exams/phantomjs", "preload/exams/download_images.js"]
 p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
 
 urls = []

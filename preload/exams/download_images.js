@@ -2,7 +2,7 @@ var page = require('webpage').create();
 
 
 var fs = require('fs');
-var file = fs.read('./exams.json');
+var file = fs.read('preload/exams/exams.json');
 var data = JSON.parse(file);
 
 var system = require('system');
@@ -13,7 +13,7 @@ page.onConsoleMessage = function(msg) {
 
 phantom.addCookie({
   'name': 'AWSELB',
-  'value': '57739FA112D946239A2969DD58550557F507F5176E022D5E8AB41AEAF990158FCD5CF5D53FD2E934F8F804EC41CDA5AD24EF1F36AFADBD8E5265F21C3BD386C378927A8445',
+  'value': '57739FA112D946239A2969DD58550557F507F5176E022D5E8AB41AEAF990158FCD5CF5D53FB639AC3B13817F376E65A08E95A1E565900DC34031CCE96A97BD18A170F8BA60',
   'domain': '.koofers.com'
 });
 
