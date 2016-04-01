@@ -42,9 +42,9 @@
       <div class="row exam-item valign-wrapper" semester="{{ exam.semester }}" year="{{ exam.year }}">
         <span class="col center s1 ">
           {% if exam.has_upvoted(current_user) %}
-            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="0") }}" class="vote_voted valign"><i class="fa fa-thumbs-up fa-lg"></i>  {{ exam.votes}}</a>
+            <a exam_id="{{ exam.id }}" href="#" class="exam_vote vote_voted valign"><i class="fa fa-thumbs-up fa-lg"></i>  <span id="votes_{{ exam.id }}">{{ exam.votes}}</span></a>
           {% else %}
-            <a href="{{ url_for("exams_bp.vote", examid=exam.id, upvote="1") }}" class="vote valign"><i class="fa fa-thumbs-up fa-lg"></i> {{ exam.votes }}</a>
+            <a exam_id="{{ exam.id }}" href="#" class="exam_vote vote valign"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ exam.id }}">{{ exam.votes}}</span></a>
           {% endif %}
         </span>
       <span class="col s1 center">
@@ -89,6 +89,28 @@
   $(document).ready(function(){
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
     $('.modal-trigger').leanModal();
+
+      $(".exam_vote").click(function () {
+                var elem = $(this);
+                var id = $(this).attr("exam_id");
+                $.get("/exam/vote/" + id, function (data) {
+                    if (data.success) {
+                        console.log(data);
+                        console.log(elem.hasClass("vote_voted"));
+                        console.log(elem.hasClass("vote"));
+                        if (elem.hasClass("vote_voted")) {
+                            elem.removeClass("vote_voted");
+                            elem.addClass("vote");
+                        }else if (elem.hasClass("vote")) {
+                            elem.removeClass("vote");
+                            elem.addClass("vote_voted");
+                        }
+                        $("#votes_" + id).text(data.numberOfVotes);
+                    } else {
+                        alert("Error upvoting");
+                    }
+                });
+            });
   })
   </script>
 {% endblock %}
