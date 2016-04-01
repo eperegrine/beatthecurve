@@ -87,8 +87,7 @@ while payload['p'] < 450:
             'term': term,
         })
 
+    print("Done page: " + str(payload['p']))
     payload['p'] += 1
-    break
-
-f = open("exams.json", "w")
-json.dump(data, f)
+    f = open("preload/exams/exams.json", "w")
+    json.dump(data, f)
