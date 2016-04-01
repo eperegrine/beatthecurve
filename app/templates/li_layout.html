@@ -50,11 +50,14 @@
     {{ super() }}
     <script src="http://stickyjs.com/jquery.sticky.js" type="text/javascript"></script>
     <script>$(document).ready(function () {
+            //pad = window.innerHeight * 7.47;
+            var pad = $("#topWrapper").height() + window.innerHeight * 0.0747;
+
             if ($("#lesson-tabs")) {
-                $("#lesson-tabs").sticky({topSpacing:205, getWidthFrom: '#sem_col'});
+                $("#lesson-tabs").sticky({topSpacing:pad, getWidthFrom: '#sem_col'});
             }
             if ($(".class-page-nav")) {
-                $(".class-page-nav").sticky({topSpacing:205, getWidthFrom: '#class_nav_wrap'});
+                $(".class-page-nav").sticky({topSpacing:pad, getWidthFrom: '#class_nav_wrap'});
             }
             $("#topWrapper").sticky({topSpacing:0, getWidthFrom: 'html'});
         });

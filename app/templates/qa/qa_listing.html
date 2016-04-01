@@ -78,22 +78,22 @@
                       <span class="lightBlue right q_document">{{q.document}}</span>
                     </div>
                     <div class="row no_bot" id="q_title_{{ q.id }}">
-                      <h5 class="grey-text q_question">{{q.question}}</h5>
+                      <span class="grey-text q_question" >{{q.question}}</span>
                     </div>
                   </div>
                   <div class="q_body" id="q_body_{{ q.id }}" v-show="q.show" transition="expand">
-                    <div class="row">
-                      <p>{{q.details}}</p>
+                    <div class="row" style="margin-bottom: 0;">
+                      <p style="margin-top: 4.4vh; margin-bottom:4.6vh;">{{q.details}}</p>
                     </div>
-                    <div class="divider bg-primary"></div>
+                    <div class="divider bg-primary" style="margin-bottom: 3.7vh;"></div>
                       <span v-for="reply in q.replies"><div class="comment">
-                        <div class="row comment_name primary">
+                        <div class="row comment_name primary" style="margin-bottom: 1.8vh">
                                   <a v-on:click="reply_vote(q.id, reply.id)" v-bind:class="{ 'primary': reply.has_voted, 'grey-text-imp': !reply.has_voted }" href="#!" class="primary valign r_vote right" reply="{{ $key }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ $key }}">{{ reply.votes}}</span></a>
-                            &nbsp;<i class="fa fa-user fa-lg"></i>&nbsp;{{ reply.user }}
+                            &nbsp;<i class="fa fa-user fa-lg grey-text-imp"></i>&nbsp;&nbsp;{{ reply.user }}
                         </div>
-                        <p class="grey-text" style="margin-left: 25px; margin-bottom: 0;">{{ reply.content }}</p>
+                        <p class="grey-text" style="margin-bottom: 0;">{{ reply.content }}</p>
                       </div>
-                        <div v-if="$index == q.replies.length - 1" style="margin-top: 3vh" class="divider bg-primary"></div>
+                        <div v-if="$index == q.replies.length - 1" style="" class="divider bg-primary"></div>
                       </span>
                     <form style="margin-top: 3.7vh" class=""method="post" action="/qa/add-reply/{{ q.id }}">
                         <input id="csrf_token" name="csrf_token" placeholder="Csrf Token" type="hidden" value="{{ csrf_token }}">
