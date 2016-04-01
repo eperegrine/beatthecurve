@@ -32,39 +32,39 @@ def get_schools():
 
 class SignUpForm(Form):
     """Form to allow users to sign up"""
-    first_name = StringField('First Name', validators=[DataRequired()])
-    last_name = StringField('Last Name', validators=[DataRequired()])
-    school = SelectField('School', choices=[("-1", "Choose a university")] + get_schools())
-    email = StringField('.edu Email',
+    first_name = StringField('first Name', validators=[DataRequired()])
+    last_name = StringField('last Name', validators=[DataRequired()])
+    school = SelectField('school', choices=[("-1", "choose a university")] + get_schools())
+    email = StringField('.edu email',
                         validators=[DataRequired(),
                                     Email(),
                                     edu_email_validator,
                                     email_in_use_validator])
-    password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password',
+    password = PasswordField('password', validators=[DataRequired()])
+    password2 = PasswordField('confirm password', validators=[DataRequired(), EqualTo('password',
                                                                                       message='Passwords must match')])
 
 
 class LoginForm(Form):
     """Form to allow users to login using their email and password"""
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired(), Email()])
+    password = PasswordField('password', validators=[DataRequired()])
 
 
 class ChangeEmailForm(Form):
     """Form to allow users to update their email"""
-    email = StringField('Email', validators=[DataRequired(),Email(), edu_email_validator, email_in_use_validator])
+    email = StringField('email', validators=[DataRequired(),Email(), edu_email_validator, email_in_use_validator])
 
 
 class ChangePasswordForm(Form):
     """Form to allow users to update their password. It requires them to have access to their origin password."""
-    current_password = PasswordField('Old Password', validators=[DataRequired()])
-    new_password = PasswordField('New Password', validators=[DataRequired()])
-    new_password2 = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password',
+    current_password = PasswordField('old password', validators=[DataRequired()])
+    new_password = PasswordField('new password', validators=[DataRequired()])
+    new_password2 = PasswordField('confirm new password', validators=[DataRequired(), EqualTo('new_password',
                                                                                       message='Passwords must match')])
 
 
 class UpdatePermissions(Form):
     """Form to grant a user a permission"""
-    user = SelectField('Users', validators=[DataRequired()])
-    permission = SelectField('Permission', validators=[DataRequired()], choices=[("-1", "Choose a permission")])
+    user = SelectField('users', validators=[DataRequired()])
+    permission = SelectField('permission', validators=[DataRequired()], choices=[("-1", "Choose a permission")])
