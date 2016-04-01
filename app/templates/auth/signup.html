@@ -6,7 +6,7 @@
 {% block main %}
   <div class="container">
     <br>
-    <h2 class="content_title">Sign Up</h2>
+    <h2 class="content_title">sign up</h2>
     <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
@@ -17,15 +17,13 @@
         {{ render_field(field, useLabel=true) }}
       {% endfor %}
       <div class="row">
-        <div class="col s2">&nbsp;</div>
-        <button type="submit" class="waves-effect waves-light btn-large col s8">Sign Up</button>
-        <div class="col s2">&nbsp;</div>
+        <button type="submit" class="waves-effect waves-light btn-large col s8" style="width: 20%; margin-left: 40%; padding: 0;">Sign Up</button>
       </div>
     </form>
   </div>
   <a href="/login">
-    <div class="card-action main-action">
-      Log In
+    <div class="card-action main-action" style="padding-left: 0;">
+      <span style="margin-left: 13%; width: 20%">login</span>
       <i class="material-icons right chevron_right">chevron_right</i>
     </div>
   </a>

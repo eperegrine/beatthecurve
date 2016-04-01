@@ -5,8 +5,7 @@
 {% block title %}Login{% endblock %}
 {% block main %}
   <div class="container">
-    <br>
-    <h2 class="content_title">Log in</h2>
+    <h2 class="content_title" style="padding-top: 7.4vh; padding-bottom: 5vh; margin-top: 0; margin-bottom: 0;">login</h2>
     <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
@@ -17,15 +16,13 @@
         {{ render_field(field, useLabel=true) }}
       {% endfor %}
       <div class="row">
-        <div class="col s2">&nbsp;</div>
-        <button type="submit" class="waves-effect waves-light btn-large col s8">Login</button>
-        <div class="col s2">&nbsp;</div>
+        <button type="submit" class="waves-effect waves-light btn-large z-depth-0 center" style="width: 20%; margin-left: 40%; padding: 0;">login</button>
       </div>
     </form>
   </div>
   <a href="/signup">
-    <div class="card-action main-action">
-      Sign Up
+    <div class="card-action main-action" style="padding-left: 0">
+      <span style="margin-left: 13%; width: 20%">create an account</span>
       <i class="material-icons right chevron_right">chevron_right</i>
     </div>
   </a>
