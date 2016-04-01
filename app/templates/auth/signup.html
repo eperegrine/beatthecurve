@@ -21,21 +21,24 @@
 {#    {{ render_field(form.first_name, useLabel=true) }}#}
 {#    {{ render_field(form.last_name, useLabel=true) }}#}
         <div class="row" style="margin-bottom: 0;">
-            <div class="input-field col s6">
+            <div class="input-field col s6" style="padding-left: 0; padding-right: 1.5rem">
                 <label for="first_name">first name</label>
           <input name="last_name" id="first_name" type="text" class="validate">
 
         </div>
-        <div class="input-field col s6">
+        <div class="input-field col s6" style="padding-right: 0; padding-left: 1.5rem">
             <label for="last_name">last name</label>
           <input id="last_name" name="last_name" type="text" class="validate">
 
         </div>
         </div>
-    {{ render_field(form.school, useLabel=true) }}
+
+        <div class="row" style="margin-bottom: 0;">
+            {{ render_field(form.school, useLabel=true) }}
     {{ render_field(form.email, useLabel=true) }}
     {{ render_field(form.password, useLabel=true) }}
-        <div style="margin-bottom: 3vh">
+            </div>
+        <div class="row" style="margin-bottom: 3vh">
             {{ render_field(form.password2, useLabel=true) }}
       </div>
         <div class="row" style="margin-bottom: 3.8vh;">
