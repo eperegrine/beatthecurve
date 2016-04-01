@@ -124,10 +124,10 @@ def add_exam(lessonid):
 
 @exams_bp.route("/vote/<examid>")
 @login_required
-def vote(noteid):
+def vote(examid):
     """Route to allow a user to vote on an exam"""
     # TODO: Move to POST request
-    exam = Exam.get(Exam.id == noteid)
+    exam = Exam.get(Exam.id == examid)
 
     has_voted = exam.has_voted(g.user)
 
