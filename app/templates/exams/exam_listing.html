@@ -93,7 +93,7 @@
       $(".exam_vote").click(function () {
                 var elem = $(this);
                 var id = $(this).attr("exam_id");
-                $.get("/exam/vote/" + id, function (data) {
+                $.get("/exams/vote/" + id, function (data) {
                     if (data.success) {
                         console.log(data);
                         console.log(elem.hasClass("vote_voted"));
