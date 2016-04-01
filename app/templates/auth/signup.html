@@ -5,18 +5,35 @@
 {% block title %}Sign Up!{% endblock %}
 {% block main %}
   <div class="container">
-    <br>
-    <h2 class="content_title">create an account</h2>
+    <h2 class="content_title" style="padding-top: 7.4vh; padding-bottom: 5vh; margin-top: 0; margin-bottom: 0;">create an account</h2>
     <ul>
       {% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
       {% endfor %}
     </ul>
-    <form method="post" class="row">
-      {% for field in form %}
-        {{ render_field(field, useLabel=true) }}
-      {% endfor %}
-      <div class="row">
+    <form method="post">
+    {{ render_field(form.csrf_token, useLabel=true) }}
+{#    {{ render_field(form.first_name, useLabel=true) }}#}
+{#    {{ render_field(form.last_name, useLabel=true) }}#}
+        <div class="row" style="margin-bottom: 0;">
+            <div class="input-field col s6">
+                <label for="first_name">first name</label>
+          <input name="last_name" id="first_name" type="text" class="validate">
+
+        </div>
+        <div class="input-field col s6">
+            <label for="last_name">last name</label>
+          <input id="last_name" name="last_name" type="text" class="validate">
+
+        </div>
+        </div>
+    {{ render_field(form.school, useLabel=true) }}
+    {{ render_field(form.email, useLabel=true) }}
+    {{ render_field(form.password, useLabel=true) }}
+        <div style="margin-bottom: 3vh">
+            {{ render_field(form.password2, useLabel=true) }}
+      </div>
+        <div class="row" style="margin-bottom: 3.8vh;">
         <button type="submit" class="waves-effect waves-light btn-large z-depth-0" style="width: 20%; margin-left: 40%; padding: 0;">create</button>
       </div>
     </form>
