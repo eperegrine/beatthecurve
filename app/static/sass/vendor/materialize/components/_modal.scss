@@ -1,5 +1,5 @@
 .modal {
-  @extend .z-depth-4;
+  @extend .z-depth-2;
 
   display: none;
   position: fixed;
@@ -7,12 +7,12 @@
   right: 0;
   background-color: #fafafa;
   padding: 0;
-  max-height: 70%;
-  width: 55%;
+  max-height: 46%;
+  width: 48%;
   margin: auto;
   overflow-y: auto;
 
-  border-radius: 2px;
+  border-radius: 0px;
   will-change: top, opacity;
 
   @media #{$medium-and-down} {
@@ -21,10 +21,13 @@
 
   h1,h2,h3,h4 {
     margin-top: 0;
+    margin-bottom: 3.7vh;
   }
 
   .modal-content {
-    padding: 24px;
+    padding-top: 4%;
+    padding-left: 8%;
+    padding-right: 8%;
   }
   .modal-close {
     cursor: pointer;
