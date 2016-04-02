@@ -22,7 +22,7 @@ class AddExamForm(Form):
     file_hash = HiddenField()
     file = FileField('file', validators=[DataRequired()])
     filename = StringField('filename', validators=[DataRequired()])
-    description = TextAreaField('description', validators=[Optional()])
+    description = StringField('description', validators=[Optional()])
     # average_grade = DecimalField('average grade', validators=[DataRequired()])
     # number_of_takers = IntegerField('number of takers', validators=[DataRequired()])
     # semester = SelectField('semester', validators=[DataRequired()], choices=[(str(s.value), s.name.title()) for s in Semester])
