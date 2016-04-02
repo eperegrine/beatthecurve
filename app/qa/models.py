@@ -55,7 +55,7 @@ class Reply(Model):
     def has_voted(self, user_id):
         try:
             vote = ReplyVote.get(ReplyVote.reply == self, ReplyVote.user == user_id)
-            return vote.voted
+            return True
         except:
             return False
 

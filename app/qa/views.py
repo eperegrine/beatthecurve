@@ -165,6 +165,7 @@ def question_vote():
 @qa_bp.route('/reply-vote', methods=['POST'])
 @login_required
 def reply_vote():
+    print(request.form)
     with DATABASE.transaction():
         # Get reply id
         reply_id = request.form['reply_id']
@@ -174,18 +175,20 @@ def reply_vote():
         except:
             return jsonify({'success': False, 'message': 'Invalid id for Reply: {}'.format(reply_id)})
 
+        has_voted = reply.has_voted(g.user.user_id)
 
-        # Check if user has already voted
-        vote, created = ReplyVote.create_or_get(reply=reply, user=g.user.user_id)
-        print(created)
-        if not created:
-            vote.voted = not vote.voted
-            vote.save()
+        if has_voted:
+            rv = ReplyVote.get(ReplyVote.reply == reply.id, ReplyVote.user == g.user.user_id)
+            if rv.voted:
+                reply.votes -= 1
+            else:
+                reply.votes += 1
 
-        if vote.voted:
-            reply.votes += 1
+            rv.voted = not rv.voted
+            rv.save()
         else:
-            reply.votes -= 1
+            rv = ReplyVote.create(reply=reply.id,user=g.user.user_id)
+            reply.votes += 1
 
         reply.save()
 
@@ -231,7 +234,8 @@ def get_questions():
                     'content': reply.content,
                     'datetime': reply.datetime.strftime('%m/%d/%Y'),
                     'votes': reply.votes,
-                    'has_voted': reply.has_voted(g.user.user_id)
+                    'has_voted': reply.has_voted(g.user.user_id),
+                    'id': reply.id,
                 } for reply in question.replies()
             ]
         })

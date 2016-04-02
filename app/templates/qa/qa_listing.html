@@ -55,7 +55,7 @@
         </form>
     </div>
   <div id="questions_list">
-      <span v-for="q in questions" track-by="id">
+      <span v-for="(index, q) in questions" track-by="id">
 
     {% raw %}
           <span v-if="q.new_semester">
@@ -69,10 +69,10 @@
       <div class="card-panel question" q_id="{{ q.id }}" semester="{{ q.semester }}" year="{{ q.year }}" >
           <div class="row">
               <div class="col s1 valign-wrapper">
-                      <a v-on:click="q_vote(q.id, $index)" href="#!" v-bind:class="{ 'primary': q.has_voted, 'grey-text-imp': !q.has_voted }" class="primary valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>
+                      <a v-on:click="q_vote(q.id, index)" href="#!" v-bind:class="{ 'primary': q.has_voted, 'grey-text-imp': !q.has_voted }" class="primary valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>
               </div>
               <div class="col s10">
-                  <div class="q_head" q_id={{ q.id }} v-on:click="toggle_visibility(q.id)">
+                  <div class="q_head" q_id={{ q.id }} v-on:click="toggle_visibility(index)">
                     <div class="row">
                       <span class="primary poster_name">{{q.user }}</span>
                       <span class="lightBlue right q_document">{{q.document}}</span>
@@ -88,7 +88,7 @@
                     <div class="divider bg-primary" style="margin-bottom: 3.7vh;"></div>
                       <span v-for="reply in q.replies"><div class="comment">
                         <div class="row comment_name primary" style="margin-bottom: 1.8vh">
-                                  <a v-on:click="reply_vote(q.id, reply.id)" v-bind:class="{ 'primary': reply.has_voted, 'grey-text-imp': !reply.has_voted }" href="#!" class="primary valign r_vote right" reply="{{ $key }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ $key }}">{{ reply.votes}}</span></a>
+                                  <a v-on:click="reply_vote(reply.id, $index, index)" track-by="id" v-bind:class="{ 'primary': reply.has_voted, 'grey-text-imp': !reply.has_voted }" href="#!" class="primary valign r_vote right" reply="{{ $key }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ $key }}">{{ reply.votes}}</span></a>
                             &nbsp;<i class="fa fa-user fa-lg grey-text-imp"></i>&nbsp;&nbsp;{{ reply.user }}
                         </div>
                         <p class="grey-text" style="margin-bottom: 0;">{{ reply.content }}</p>
@@ -211,13 +211,18 @@
                         }
                     });
                 },
-                reply_vote: function (q_id, r_id) {
+                reply_vote: function (reply_id, reply_index, question_index) {
                     t = this;
-                     p = $.post("/qa/reply-vote", {reply_id: r_id}, function (data) {
+                  console.log("Reply index");
+                  console.log(reply_index)
+                     p = $.post("/qa/reply-vote", {reply_id: reply_id}, function (data) {
                          console.log(data);
                         if (data.success) {
-                            t.$set('questions[' + q_id + '].replies[' + r_id + ']has_voted', !t.questions[q_id].replies[r_id].has_voted);
-                            t.$set('questions[' + q_id + '].replies[' + r_id + ']votes', data.number_of_posts);
+                            console.log(t.questions[question_index].replies)
+                            t.$set('questions[' + question_index + '].replies[' + reply_index + ']has_voted', !t.questions[question_index].replies[reply_index].has_voted);
+                            t.$set('questions[' + question_index + '].replies[' + reply_index + ']votes', data.number_of_posts);
+                                                      console.log(t.questions[question_index].replies)
+
                         } else {
                             alert("Error Voting");
                         }
@@ -227,9 +232,9 @@
                         console.log(err);
                     }) ;
                 },
-                toggle_visibility: function (q_id) {
-                    console.log("Toggling vis of " + q_id);
-                    this.$set('questions[' + q_id + '].show', !this.questions[q_id].show);
+                toggle_visibility: function (index) {
+                    console.log("Toggling vis of " + index);
+                    this.$set('questions[' + index + '].show', !this.questions[index].show);
                 }
             }
         });
