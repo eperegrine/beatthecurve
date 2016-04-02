@@ -3,6 +3,12 @@
 {% from 'macros.html' import render_lesson_tabs, render_semester_tabs, render_field %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
+    <style>
+      #filename {
+          margin-top: 3.7vh;
+      }
+    </style>
+
   <div class="left" id="sem_col" style="width: 14.89%">
     <div class="lesson-tabs">
         {{ render_semester_tabs(semesters, semester_enum) }}
@@ -32,7 +38,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a href="#" class=" modal-action modal-close waves-effect btn-flat">Cancel</a>
+        <a href="#" class=" modal-action modal-close waves-effect btn-flat">cancel</a>
       </div>
     </div>
     <div class="section">

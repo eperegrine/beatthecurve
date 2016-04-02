@@ -19,9 +19,9 @@ from app.models import Semester
 class AddExamForm(Form):
     """Form to allow users to upload an exam"""
     file_hash = HiddenField()
-    file = FileField('File', validators=[DataRequired()])
-    filename = StringField('Filename', validators=[DataRequired()])
-    average_grade = DecimalField('Average Grade', validators=[DataRequired()])
-    number_of_takers = IntegerField('Number Of Takers', validators=[DataRequired()])
-    semester = SelectField('Semester', validators=[DataRequired()], choices=[(str(s.value), s.name.title()) for s in Semester])
-    year = SelectField('Year', choices=[(str(i), str(i)) for i in range(datetime.now().year, datetime.now().year + 5)])
+    file = FileField('file', validators=[DataRequired()])
+    filename = StringField('filename', validators=[DataRequired()])
+    average_grade = DecimalField('average grade', validators=[DataRequired()])
+    number_of_takers = IntegerField('number of takers', validators=[DataRequired()])
+    semester = SelectField('semester', validators=[DataRequired()], choices=[(str(s.value), s.name.title()) for s in Semester])
+    year = SelectField('year', choices=[(str(i), str(i)) for i in range(datetime.now().year, datetime.now().year + 5)])

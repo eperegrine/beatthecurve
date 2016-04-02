@@ -4,6 +4,16 @@
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
 
+    <style>
+      #filename {
+          margin-top: 3.7vh;
+      }
+
+      #description {
+          margin-top: 2vh;
+          margin-bottom: 3.7vh;
+      }
+    </style>
 
   <div class="left" id="sem_col" style="width: 14.89%">
     <div class="lesson-tabs">
@@ -29,13 +39,13 @@
                {{ render_field(field) }}
              {% endfor %}
              <div class="row" style="margin-bottom: 0;">
-               <button type="button" class="waves-effect waves-light btn bg-primary" style="margin-left: 40%; width: 20%; padding: 0; text-align: center" id="submit">upload</button>
+               <button type="button" class="waves-effect waves-light btn bg-primary" style="margin-left: 40%; width: 20%; padding: 0; text-align: center; margin-bottom: 1em;" id="submit">upload</button>
              </div>
 
           </div>
         </div>
         <div class="modal-footer">
-          <a class=" modal-action modal-close waves-effect btn-flat">Cancel</a>
+          <a class=" modal-action modal-close waves-effect btn-flat">cancel</a>
 {#          <a class=" modal-action waves-effect btn-flat primary" id="submit">Upload</a>#}
         </div>
       </div>
