@@ -19,6 +19,7 @@ class Exam(Model):
     votes = IntegerField(db_column='VOTES', default=0)
     year = IntegerField(db_column='YEAR', default=2015)
     semester = IntegerField(db_column='SEMESTER', default=Semester.winter.value)
+    description = TextField(db_column='DESCRIPTION', null=True)
 
     class Meta:
         database = DATABASE

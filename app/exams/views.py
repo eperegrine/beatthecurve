@@ -90,7 +90,8 @@ def add_exam(lessonid):
             publisher=g.user.user_id,
             number_of_takers=-1,
             year=datetime.now().year,
-            semester=Semester.current_semester().value
+            semester=Semester.current_semester().value,
+            description=form.description.data
         )
         g.user.karma_points += KarmaPoints.upload_exam.value
         g.user.save()
