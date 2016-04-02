@@ -3,11 +3,13 @@ from wtforms.fields import (
     SelectField,
     StringField,
     FileField,
-    HiddenField
+    HiddenField,
+    TextAreaField
 )
 from wtforms.validators import (
     DataRequired,
     Optional,
+    Length
 )
 
 from app.models import Semester
@@ -19,7 +21,7 @@ class AddNoteForm(Form):
     file_hash = HiddenField()
     file = FileField('File', validators=[DataRequired()])
     filename = StringField('Filename', validators=[DataRequired()])
-    description = StringField('Description', validators=[Optional()])
+    description = TextAreaField('Description', validators=[Optional(), Length(min=-1, max=255, message="Description is too long")])
 
 
 class AdminAddNoteForm(AddNoteForm):

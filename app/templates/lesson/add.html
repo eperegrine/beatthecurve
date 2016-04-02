@@ -16,8 +16,7 @@
                     <li class="collection-item" v-for="(key, l) in lessons | filterBy name in 'name'" v-if="!l.is_attended" >
                         {{ l.name }}
                         <button class=" secondary-content" lesson_id="{{ l.id }}" v-on:click="toggle_attendance(l.id)">
-                            <i class="fa fa-plus" v-if="!l.is_loading"></i>
-                            <i class="fa fa-circle-o-notch fa-spin" v-else></i>
+                            <i class="fa fa-plus"></i>
                         </button>
                     </li>
                 </ul>
@@ -31,8 +30,7 @@
                     <li class="collection-item" v-for="(key, l) in lessons" v-if="l.is_attended" >
                         {{ l.name }}
                         <button lesson_id="{{ l.id }}" v-on:click="toggle_attendance(l.id)" class="secondary-content">
-                            <i class="fa fa-times" v-if="!l.is_loading"></i>
-                            <i class="fa fa-circle-o-notch fa-spin" v-else></i>
+                            <i class="fa fa-times"></i>
                         </button>
                     </li>
                 </ul>
@@ -63,12 +61,12 @@
         var lessons = {
         {% for l in get_unattended_lessons(current_user) %}
             {{ l.id }} : {
-                name: "{{ l.code + " - " + l.get_professors_names_as_string() }}", id: {{ l.id }},originally_attended:false , is_attended:false, is_loading:false
+                name: "{{ l.code + " - " + l.get_professors_names_as_string() }}", id: {{ l.id }},originally_attended:false , is_attended:false,
             },
         {% endfor%}
         {% for l in get_lessons(current_user) %}
             {{ l.id }}: {
-                name: "{{ l.code + " - " + l.get_professors_names_as_string() }}", id: {{ l.id }},originally_attended:true , is_attended:true, is_loading:false
+                name: "{{ l.code + " - " + l.get_professors_names_as_string() }}", id: {{ l.id }},originally_attended:true , is_attended:true,
             },
         {% endfor%}
         };
@@ -85,7 +83,7 @@
                     lesson = this.lessons[index];
                     lesson.is_attended = !lesson.is_attended;
                     this.$set("lessons[" + index + "].has_changed", lesson.originally_attended != lesson.is_attended);
-                    this.has_changed = haveLessonsChanged();
+                    //this.has_changed = haveLessonsChanged();
                 }
             }
         });
