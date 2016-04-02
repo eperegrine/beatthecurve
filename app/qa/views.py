@@ -6,6 +6,7 @@ from .models import Question, Reply, QuestionVote, ReplyVote
 from app.models import Semester
 from datetime import datetime
 from app.models import KarmaPoints, DATABASE
+from collections import OrderedDict
 
 qa_bp = Blueprint('qa_bp', __name__, url_prefix='/qa')
 
@@ -194,14 +195,14 @@ def get_questions():
         except:
             return jsonify({'success': False, 'message': 'Invalid question id'})
 
-        questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id)).order_by(Question.id.desc()).limit(10)
+        questions = Question.select().where(~(Question.id << question_ids) & (Question.lesson == lesson_id)).order_by(Question.year.desc(), Question.semester.desc(), Question.datetime.desc()).limit(10)
     else:
-        questions = Question.select().where(Question.lesson == lesson_id).order_by(Question.id.desc()).limit(10)
+        questions = Question.select().where(Question.lesson == lesson_id).order_by(Question.year.desc(), Question.semester.desc(), Question.datetime.desc()).limit(10)
 
-    questions_data = {}
+    questions_data = []
 
     for question in questions:
-        questions_data[question.id] = {
+        questions_data.append({
             'id': question.id,
             'user': question.user.first_name + " " + question.user.last_name,
             'number_of_posts': question.number_of_posts,
@@ -212,6 +213,7 @@ def get_questions():
             'year': question.year,
             'has_voted': question.has_voted(g.user.user_id),
             'votes': question.votes,
+            'datetime': question.datetime.strftime("%H:%M %m/%d/%Y"),
             'replies': [
                 {
                     'user': reply.user.first_name + " " + reply.user.last_name,
@@ -221,22 +223,21 @@ def get_questions():
                     'has_voted': reply.has_voted(g.user.user_id)
                 } for reply in question.replies()
             ]
-        }
+        })
 
     more_to_load = True
 
     print(Question.select().where(Question.lesson == lesson_id).count())
 
     if question_ids:
-        print(len(question_ids) + len(questions_data.keys()))
+        print(len(question_ids) + len(questions_data))
 
-        if len(question_ids) + len(questions_data.keys()) == Question.select().where(Question.lesson == lesson_id).count():
+        if len(question_ids) + len(questions_data) == Question.select().where(Question.lesson == lesson_id).count():
             more_to_load = False
     else:
-        print(len(questions_data.keys()))
-        if len(questions_data.keys()) == Question.select().where(Question.lesson == lesson_id).count():
+        if len(questions_data) == Question.select().where(Question.lesson == lesson_id).count():
             more_to_load = False
-
+    print(questions_data)
     return jsonify({'success': True, 'questions': questions_data, 'moreToLoad': more_to_load})
 
 

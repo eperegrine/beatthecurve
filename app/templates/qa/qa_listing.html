@@ -15,7 +15,7 @@
             {% raw %}
           <div class="bg-primary white semester-title">Select Semester</div>
           <ul class="collection" id="semesters">
-              <li v-for="semester in semesters" class="collection-item semester-tab center" style="text-transform: capitalize;" semester="{{ semester.season }}" year="{{ semester.year }}">
+              <li v-for="semester in semesters" track-by="$index" class="collection-item semester-tab center" style="text-transform: capitalize;" semester="{{ semester.season }}" year="{{ semester.year }}">
                   <a target="_self" href="#{{ semester.season + semester.year }}">{{ semester.season + " " + semester.year }}</a>
               </li>
           </ul>
@@ -55,7 +55,7 @@
         </form>
     </div>
   <div id="questions_list">
-      <span v-for="q in questions | orderBy 'id' -1">
+      <span v-for="q in questions" track-by="id">
 
     {% raw %}
           <span v-if="q.new_semester">
@@ -69,7 +69,7 @@
       <div class="card-panel question" q_id="{{ q.id }}" semester="{{ q.semester }}" year="{{ q.year }}" >
           <div class="row">
               <div class="col s1 valign-wrapper">
-                      <a v-on:click="q_vote(q.id)" href="#!" v-bind:class="{ 'primary': q.has_voted, 'grey-text-imp': !q.has_voted }" class="primary valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>
+                      <a v-on:click="q_vote(q.id, $index)" href="#!" v-bind:class="{ 'primary': q.has_voted, 'grey-text-imp': !q.has_voted }" class="primary valign q_vote" question="{{ q.id }}"><i class="fa fa-thumbs-up fa-lg"></i> <span id="votes_{{ q.id }}">{{ q.votes}}</span></a>
               </div>
               <div class="col s10">
                   <div class="q_head" q_id={{ q.id }} v-on:click="toggle_visibility(q.id)">
@@ -167,7 +167,8 @@
         var sem_vue = new Vue({
             el: "#sem_col",
             data: {
-                semesters: []
+                semesters: [],
+                semsterStrings: []
             }
         });
 
@@ -175,7 +176,7 @@
             el: "#questions_list",
             data: {
                 csrf_token: '',
-                questions: {},
+                questions: [],
                 is_loading: true,
                 moreToLoad: true
             }, methods: {
@@ -192,12 +193,12 @@
                     }
                     return res;
                 },
-                q_vote: function (q_id) {
+                q_vote: function (q_id, index) {
                     t = this;
                     $.post("/qa/question-vote", {question_id: q_id}, function (data) {
                         if (data.success) {
-                            t.$set('questions[' + q_id +'].has_voted', !t.questions[q_id].has_voted);
-                            t.$set('questions[' + q_id +'].votes', data.number_of_posts);
+                            t.$set('questions[' + index +'].has_voted', !t.questions[index].has_voted);
+                            t.$set('questions[' + index +'].votes', data.number_of_posts);
                         } else {
                             alert("Error Voting");
                         }
@@ -257,17 +258,21 @@
                         if (data.success) {
                             console.log(data);
                             //Add questions to vue
-                            var newQuestionsObj = $.extend($.extend({}, q_vue.questions), data.questions);
+                            var newQuestionsObj = q_vue.questions.concat(data.questions); //$.extend($.extend({}, q_vue.questions), data.questions);
                             var semesters = [];
+                            var semesterStrings = [];
 
-                            for (id in newQuestionsObj) {
-                                var q = newQuestionsObj[id];
+                            for (var index in newQuestionsObj) {
+                                var q = newQuestionsObj[index];
+                                q.datetime = new Date(q.datetime);
                                 var semester = { season: semesterIdToStr(q.semester).toLowerCase(), year: q.year };
-                                if (!ArrayContainsObj(semesters, semester)) {
+                                if (semesterStrings.indexOf(semesterIdToStr(q.semester).toLowerCase() + q.year) < 0) {
                                     q.new_semester = true;
                                     semesters.push(semester);
+                                    semesterStrings.push(semesterIdToStr(q.semester).toLowerCase() + q.year)
                                 }
-                              console.log(ArrayContainsObj(semesters, semester));
+
+                                console.log(ArrayContainsObj(semesters, semester));
 
                                 q.semester_string = semesterIdToStr(q.semester);
                             }

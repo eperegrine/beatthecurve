@@ -17,6 +17,7 @@ class Question(Model):
     year = IntegerField(db_column='YEAR', default=2016)
     lesson = ForeignKeyField(Lesson, db_column='LESSON_ID')
     votes = IntegerField(db_column='VOTES', default=0)
+    datetime = DateTimeField(db_column='DATETIME', default=datetime.now)
 
     class Meta:
         database = DATABASE
