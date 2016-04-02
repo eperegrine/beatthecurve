@@ -81,7 +81,7 @@ def add_question(lessonid):
         g.user.karma_points += KarmaPoints.post_question.value
         g.user.save()
 
-        return {'success': True, 'question': {
+        return jsonify({'success': True, 'question': {
             'id': question.id,
             'user': question.user.first_name + " " + question.user.last_name,
             'number_of_posts': question.number_of_posts,
@@ -103,7 +103,7 @@ def add_question(lessonid):
                     'id': reply.id,
                 } for reply in question.replies()
             ]
-        }}
+        }})
     else:
         print('update globals')
         session['name'] = form.name.data
