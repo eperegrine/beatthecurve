@@ -219,8 +219,8 @@
                          console.log(data);
                         if (data.success) {
                             console.log(t.questions[question_index].replies)
-                            t.$set('questions[' + question_index + '].replies[' + reply_index + ']has_voted', !t.questions[question_index].replies[reply_index].has_voted);
-                            t.$set('questions[' + question_index + '].replies[' + reply_index + ']votes', data.number_of_posts);
+                            t.$set('questions[' + question_index + '].replies[' + reply_index + '].has_voted', !t.questions[question_index].replies[reply_index].has_voted);
+                            t.$set('questions[' + question_index + '].replies[' + reply_index + '].votes', data.number_of_posts);
                                                       console.log(t.questions[question_index].replies)
 
                         } else {

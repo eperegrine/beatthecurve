@@ -19,6 +19,7 @@ postgres;
 **Start server**
 ```sh
 source venv/bin/activate #Or another way to start the virtual env
+export PYTHONPATH=(pwd)
 export AWS_ACCESS_KEY=AKIAJPAM7ZQCRQQ5GP3Q;
 export AWS_SECRET_KEY=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;
 export S3_BUCKET=beatthecurve;
