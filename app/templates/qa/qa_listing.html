@@ -182,16 +182,23 @@
             }, methods: {
                 load: loadQuestions,
                 get_ids: function () {
-                    res = '';
-                    for (key in this.questions) {
-                        if (this.questions.hasOwnProperty(key)) {
-                            res += key + ','
-                        }
-                    }
-                    if (res.endsWith(',')) {
+{#                    res = '';#}
+{#                    for (key in this.questions) {#}
+{#                        if (this.questions.hasOwnProperty(key)) {#}
+{#                            res += key + ','#}
+{#                        }#}
+{#                    }#}
+
+{#                    return res;#}
+                    var res = '';
+                  for (index in this.questions) {
+                    var question = this.questions[index];
+                    res += question.id + ','
+                  }
+                  if (res.endsWith(',')) {
                         res = res.substring(0, res.length - 1);
                     }
-                    return res;
+                  return res;
                 },
                 q_vote: function (q_id, index) {
                     t = this;
