@@ -10,7 +10,8 @@ import hmac
 import json
 import os
 from hashlib import sha1, md5
-from app.models import KarmaPoints
+from app.models import KarmaPoints, Semester
+from datetime import datetime
 
 exams_bp = Blueprint('exams_bp', __name__, url_prefix='/exams')
 
@@ -82,14 +83,14 @@ def add_exam(lessonid):
         return redirect(url_for('auth_bp.profile'))
     if form.validate_on_submit():
         Exam.create(
-            average_grade=form.average_grade.data,
+            average_grade=-1,
             filename=form.filename.data,
             s3_filename=form.file_hash.data,
             lesson=lesson.id,
             publisher=g.user.user_id,
-            number_of_takers=form.number_of_takers.data,
-            year=form.year.data,
-            semester=form.semester.data
+            number_of_takers=-1,
+            year=datetime.now().year,
+            semester=Semester.current_semester().value
         )
         g.user.karma_points += KarmaPoints.upload_exam.value
         g.user.save()
