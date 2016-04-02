@@ -2,6 +2,7 @@ from lxml import html
 import requests
 import json
 
+
 base_url = 'https://koofers.com'
 study_materials_url = base_url + '/university-of-maryland-umd/study-materials'
 

@@ -82,3 +82,5 @@ setup.sh
 .DS_Store
 
 preload/exams/img/*
+
+*.db

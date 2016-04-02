@@ -5,14 +5,10 @@ from redis import Redis
 from rq import Queue
 from preload.exams.download import get_image
 
-q = Queue(connection=Redis())
-
-
+q = Queue(connection=Redis("localhost"))
 
 cmd = ["preload/exams/phantomjs", "preload/exams/download_images.js"]
 p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-
-urls = []
 
 for line in iter(p.stdout.readline, ''):
     print(line)
@@ -23,5 +19,3 @@ for line in iter(p.stdout.readline, ''):
     sys.stdout.flush()
     pass
 p.wait()
-
-print(urls)
