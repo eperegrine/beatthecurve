@@ -76,16 +76,42 @@ def add_question(lessonid):
         else:
             semester = Semester.fall
 
-        Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lesson=lessonid, document=form.document.data, semester=semester.value, year=datetime.now().year)
+        question = Question.create(user=g.user.user_id, name=form.name.data, content=form.content.data, lesson=lessonid, document=form.document.data, semester=semester.value, year=datetime.now().year)
 
         g.user.karma_points += KarmaPoints.post_question.value
         g.user.save()
+
+        return {'success': True, 'question': {
+            'id': question.id,
+            'user': question.user.first_name + " " + question.user.last_name,
+            'number_of_posts': question.number_of_posts,
+            'document': question.document,
+            'question': question.name,
+            'details': question.content,
+            'semester': question.semester,
+            'year': question.year,
+            'has_voted': question.has_voted(g.user.user_id),
+            'votes': question.votes,
+            'datetime': question.datetime.strftime("%H:%M %m/%d/%Y"),
+            'replies': [
+                {
+                    'user': reply.user.first_name + " " + reply.user.last_name,
+                    'content': reply.content,
+                    'datetime': reply.datetime.strftime('%m/%d/%Y'),
+                    'votes': reply.votes,
+                    'has_voted': reply.has_voted(g.user.user_id),
+                    'id': reply.id,
+                } for reply in question.replies()
+            ]
+        }}
     else:
         print('update globals')
         session['name'] = form.name.data
         session['content'] = form.content.data
         session['document'] = form.document.data
         session['add_question_data'] = True
+
+        return jsonify({'success': False, 'errors': form.errors})
 
     return redirect(url_for(".view", lessonid=lessonid))
 
