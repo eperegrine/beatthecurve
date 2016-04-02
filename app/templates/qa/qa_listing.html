@@ -198,7 +198,7 @@
                     $.post("/qa/question-vote", {question_id: q_id}, function (data) {
                         if (data.success) {
                             t.$set('questions[' + index +'].has_voted', !t.questions[index].has_voted);
-                            t.$set('questions[' + index +'].votes', data.number_of_posts);
+                            t.$set('questions[' + index +'].votes', data.number_of_votes);
                         } else {
                             alert("Error Voting");
                         }

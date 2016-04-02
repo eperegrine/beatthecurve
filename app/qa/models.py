@@ -34,7 +34,7 @@ class Question(Model):
     def has_voted(self, user_id):
         try:
             vote = QuestionVote.get(QuestionVote.question == self, QuestionVote.user == user_id)
-            return vote.voted
+            return True
         except:
             return False
 

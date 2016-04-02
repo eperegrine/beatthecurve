@@ -129,18 +129,29 @@ def question_vote():
         except:
             return jsonify({'success': False, 'message': 'Invalid id for Question: {}'.format(question_id)})
 
-        print("Before", question.votes)
-        # Check if user has already voted
-        vote, created = QuestionVote.create_or_get(question=question, user=g.user.user_id)
-        print("Created", created)
-        if not created:
-            vote.voted = not vote.voted
-            vote.save()
+        # print("Before", question.votes)
+        # # Check if user has already voted
+        # vote, created = QuestionVote.create_or_get(question=question, user=g.user.user_id)
+        # print("Created", created)
+        # if not created:
+        #     vote.voted = not vote.voted
+        #     vote.save()
 
-        if vote.voted:
-            question.votes += 1
+        has_voted = question.has_voted(g.user.user_id)
+
+        if has_voted:
+            qv = QuestionVote.get(QuestionVote.question == question.id, QuestionVote.user == g.user.user_id)
+            if qv.voted:
+                question.votes -= 1
+            else:
+                question.votes += 1
+
+            qv.voted = not qv.voted
+            qv.save()
         else:
-            question.votes -= 1
+            qv = QuestionVote.create(question=question, user=g.user.user_id)
+            question.votes += 1
+
 
         question.save()
         print("after", question.votes)
@@ -148,7 +159,7 @@ def question_vote():
 
 
 
-    return jsonify({'success': True, 'number_of_posts': question.votes})
+    return jsonify({'success': True, 'number_of_votes': question.votes})
 
 
 @qa_bp.route('/reply-vote', methods=['POST'])
