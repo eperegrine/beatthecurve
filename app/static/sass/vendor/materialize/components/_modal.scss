@@ -7,7 +7,7 @@
   right: 0;
   background-color: #fafafa;
   padding: 0;
-  max-height: 46%;
+  max-height: 48%;
   width: 48%;
   margin: auto;
   overflow-y: auto;
@@ -22,6 +22,9 @@
   h1,h2,h3,h4 {
     margin-top: 0;
     margin-bottom: 3.7vh;
+    color: #979797;
+    text-align: center;
+    text-transform: lowercase;
   }
 
   .modal-content {
@@ -31,6 +34,7 @@
   }
   .modal-close {
     cursor: pointer;
+    color: #979797;
   }
 
   .modal-footer {
