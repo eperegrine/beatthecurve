@@ -4,19 +4,23 @@ function upload_file(file, signed_request, url){
     xhr.setRequestHeader('x-amz-acl', 'public-read');
     xhr.onload = function() {
         if (xhr.status === 200) {
-            console.log('submitting');
-            alert("Submitting!");
             undisableForm();
-            $("#progress").remove();
-            document.createElement('form').submit.call(document.getElementById('add-exam-form'));
-            console.log('called again')
+
+            sweetAlert({
+                title: "Finished!",
+                text: "Your file was successfully uploaded",
+                type: "success"
+            }, function () {
+                document.createElement('form').submit.call(document.getElementById('add-exam-form'));
+                console.log('called again');
+            });
         }
     };
 
     xhr.onerror = function() {
-        undisableForm();
+        sweetAlert("Error!", "Could not upload file", "error");
         $("#progress").remove();
-        alert("Could not upload file.");
+        undisableForm();
     };
     xhr.send(file);
 }
@@ -31,9 +35,9 @@ function get_signed_request(file){
                 upload_file(file, response.signed_request, response.url);
             }
             else{
-                undisableForm();
+                sweetAlert("Error!", "Could not get signed url", "error");
                 $("#progress").remove();
-                alert("Could not get signed URL.");
+                undisableForm();
             }
         }
     };
@@ -46,17 +50,25 @@ $(document).ready(function() {
             console.log('called');
             return true;
         } else {
-            $('#add-exam-form').attr({'ajax-done': 'true'});
-
             var files = document.getElementById("file").files;
             var file = files[0];
             if (file == null) {
-                alert("No file selected.");
+                sweetAlert("No File", "Please select a file", "error");
             }
             else {
-                disableForm();
-                $("#average_grade").parent().append('<div class="progress" id="progress"><div class="indeterminate"></div></div>');
-                get_signed_request(file);
+                sweetAlert({
+                    title: "Upload File",
+                    text: "Do you want to upload the file?",
+                    type: "info",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    showLoaderOnConfirm: true
+                }, function() {
+                    disableForm();
+                    get_signed_request(file);
+                    $('#add-exam-form').attr({'ajax-done': 'true'});
+                });
+
             }
         }
 });

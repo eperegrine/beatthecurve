@@ -4,17 +4,22 @@ function upload_file(file, signed_request, url){
     xhr.setRequestHeader('x-amz-acl', 'public-read');
     xhr.onload = function() {
         if (xhr.status === 200) {
-            console.log('submitting');
-            alert("Submitting!");
             undisableForm();
-            document.createElement('form').submit.call(document.getElementById('add-note-form'));
-            console.log('called again')
+
+            sweetAlert({
+                title: "Finished!",
+                text: "Your file was successfully uploaded",
+                type: "success"
+            }, function () {
+                document.createElement('form').submit.call(document.getElementById('add-note-form'));
+                console.log('called again');
+            });
         }
     };
 
     xhr.onerror = function() {
-        alert("Could not upload file.");
-        $("#progress").remove()
+        sweetAlert("Error!", "Could not upload file", "error");
+        $("#progress").remove();
         undisableForm();
     };
     xhr.send(file);
@@ -30,7 +35,7 @@ function get_signed_request(file){
                 upload_file(file, response.signed_request, response.url);
             }
             else{
-                alert("Could not get signed URL.");
+                sweetAlert("Error!", "Could not get signed url", "error");
                 $("#progress").remove();
                 undisableForm();
             }
@@ -41,22 +46,30 @@ function get_signed_request(file){
 
 $(document).ready(function() {
     $('#submit').on('click', function(e) {
-        alert("Clicked");
+        //alert("Clicked");
         if ($('#add-note-form').attr('ajax-done') === 'true') {
             console.log('called');
             return true;
         } else {
-            $('#add-note-form').attr({'ajax-done': 'true'});
-
             var files = document.getElementById("file").files;
             var file = files[0];
             if (file == null) {
-                alert("No file selected.");
+                sweetAlert("No File", "Please select a file", "error");
             }
             else {
-                $("#description").parent().parent().append('<div class="progress" id="progress"><div class="indeterminate"></div></div>');
-                disableForm();
-                get_signed_request(file);
+                sweetAlert({
+                    title: "Upload File",
+                    text: "Do you want to upload the file?",
+                    type: "info",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    showLoaderOnConfirm: true
+                }, function() {
+                    $("#description").parent().parent().append('<div class="progress" id="progress"><div class="indeterminate"></div></div>');
+                    disableForm();
+                    get_signed_request(file);
+                    $('#add-note-form').attr({'ajax-done': 'true'});
+                });
             }
         }
 });
@@ -65,7 +78,7 @@ $(document).ready(function() {
 function disableForm() {
     $("#add-note-form").find('input, textarea, button, select').addClass("disabled");
     $("form > div .btn").addClass("disabled");
-    alert("Disabled");
+    //alert("Disabled");
 }
 
 function undisableForm() {

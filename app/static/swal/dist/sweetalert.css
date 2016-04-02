@@ -3,11 +3,11 @@ body.stop-scrolling {
   overflow: hidden; }
 
 .sweet-overlay {
-  background-color: black;
+  background-color: #7A7A7A;
   /* IE8 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0.9)";
   /* IE8 */
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(122, 122, 122, 0.9);
   position: fixed;
   left: 0;
   right: 0;
