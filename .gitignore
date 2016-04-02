@@ -80,3 +80,7 @@ setup.sh
 
 *.scssc
 .DS_Store
+
+preload/exams/img/*
+
+*.db
