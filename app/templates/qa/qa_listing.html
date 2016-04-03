@@ -257,7 +257,12 @@
                         sweetAlert("Question Added!", "Your question was successfully added", "success");
                         loadQuestions(data, false);
                     } else {
-                        sweetAlert("Error", "There was a problem adding your question", "error");
+                        sweetAlert({
+                            title: "Error",
+                            text: "There was a problem adding your question <br>" + generateErrorListForQuestion(data.errors),
+                            type: "error",
+                            html: true
+                        });
                     }
 
                 });
@@ -278,14 +283,17 @@
                 replyQuery.done(function (data) {
                     console.log(data);
                     if (data.success) {
-                        if (data.success) {
-                            var q = q_vue.questions[q_index];
-                            newRepliesObj = q.replies.concat(data.reply);
-                            q_vue.$set('questions[' + q_index + '].replies', newRepliesObj);
-                            sweetAlert("Reply Added!", "Your reply was successfully added", "success");
-                        } else {
-                            sweetAlert("Error", "There was a problem adding your reply", "error");
-                        }
+                        var q = q_vue.questions[q_index];
+                        newRepliesObj = q.replies.concat(data.reply);
+                        q_vue.$set('questions[' + q_index + '].replies', newRepliesObj);
+                        sweetAlert("Reply Added!", "Your reply was successfully added", "success");
+                    } else {
+                        sweetAlert({
+                            title: "Error",
+                            text: "There was a problem adding your question",
+                            type: "error",
+                            html: true
+                        });
                     }
                 });
 
@@ -295,6 +303,36 @@
 
             });
         });
+
+        function generateErrorListForQuestion(errors) {
+            str = "<br>";
+
+            if (errors.name) {
+                str += "<h5>Question</h5><dl>";
+                for (e in errors.name) {
+                    str += '<li>' + errors.name[e] + '</li>';
+                }
+                str += '</dl>';
+            }
+
+            if (errors.document) {
+                str += "<h5>Subject</h5><dl>";
+                for (e in errors.document) {
+                    str += '<li>' + errors.document[e] + '</li>';
+                }
+                str += '</dl>';
+            }
+
+            if (errors.content) {
+                str += "<h5>Content</h5><ul>";
+                for (e in errors.content) {
+                    str += '<li>' + errors.content[e] + '</li>';
+                }
+                str += '</ul>';
+            }
+
+            return str;
+        }
 
         function semesterIdToStr(id) {
             switch (id) {
