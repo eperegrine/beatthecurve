@@ -38,19 +38,17 @@ def view(lessonid):
 
     form = AddQuestionForm()
 
-    try:
-        print("name", session['name'])
-        if session['add_question_data']:
-            session['add_question_data'] = False
-            form.name.data = session['name']
-            form.content.data = session['content']
-            form.document.data = session['document']
-            form.validate()
-
-    except KeyError as e:
-        print(e)
-
-
+    # try:
+    #     print("name", session['name'])
+    #     if session['add_question_data']:
+    #         session['add_question_data'] = False
+    #         form.name.data = session['name']
+    #         form.content.data = session['content']
+    #         form.document.data = session['document']
+    #         form.validate()
+    #
+    # except KeyError as e:
+    #     print(e)
 
     comment_form = AddReplyForm()
 
@@ -105,15 +103,15 @@ def add_question(lessonid):
             ]
         }})
     else:
-        print('update globals')
-        session['name'] = form.name.data
-        session['content'] = form.content.data
-        session['document'] = form.document.data
-        session['add_question_data'] = True
+        # print('update globals')
+        # session['name'] = form.name.data
+        # session['content'] = form.content.data
+        # session['document'] = form.document.data
+        # session['add_question_data'] = True
 
         return jsonify({'success': False, 'errors': form.errors})
 
-    return redirect(url_for(".view", lessonid=lessonid))
+    # return redirect(url_for(".view", lessonid=lessonid))
 
 
 @qa_bp.route('/add-reply/<questionid>', methods=('POST', 'GET'))
@@ -125,11 +123,10 @@ def add_reply(questionid):
     try:
         question = Question.get(Question.id == questionid)
     except:
-        flash('Id not found', 'error')
-        return redirect(url_for('auth_bp.profile'))
+        return jsonify({'success': False, 'errors': {'questionid', 'Invalid id'}})
 
     if form.validate_on_submit():
-        Reply.create(
+        reply = Reply.create(
             question=question.id,
             user=g.user.user_id,
             content=form.content.data
@@ -140,7 +137,18 @@ def add_reply(questionid):
         question.number_of_posts += 1
         question.save()
 
-    return redirect(url_for(".view", lessonid=question.lesson.id))
+        return jsonify({'success': True, 'reply': {
+                    'user': reply.user.first_name + " " + reply.user.last_name,
+                    'content': reply.content,
+                    'datetime': reply.datetime.strftime('%m/%d/%Y'),
+                    'votes': reply.votes,
+                    'has_voted': reply.has_voted(g.user.user_id),
+                    'id': reply.id,
+                }})
+    else:
+        return jsonify({'success': False, 'errors': form.errors})
+
+
 
 
 @qa_bp.route('/question-vote', methods=['POST'])
