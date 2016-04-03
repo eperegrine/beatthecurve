@@ -50,8 +50,6 @@ def view(lessonid):
     # except KeyError as e:
     #     print(e)
 
-
-
     comment_form = AddReplyForm()
 
     return render_template('qa/qa_listing.html', lesson=lesson, questions=questions, form=form, last_posts=last_posts,
@@ -125,11 +123,10 @@ def add_reply(questionid):
     try:
         question = Question.get(Question.id == questionid)
     except:
-        flash('Id not found', 'error')
-        return redirect(url_for('auth_bp.profile'))
+        return jsonify({'success': False, 'errors': {'questionid', 'Invalid id'}})
 
     if form.validate_on_submit():
-        Reply.create(
+        reply = Reply.create(
             question=question.id,
             user=g.user.user_id,
             content=form.content.data
@@ -140,7 +137,18 @@ def add_reply(questionid):
         question.number_of_posts += 1
         question.save()
 
-    return redirect(url_for(".view", lessonid=question.lesson.id))
+        return jsonify({'success': True, 'reply': {
+                    'user': reply.user.first_name + " " + reply.user.last_name,
+                    'content': reply.content,
+                    'datetime': reply.datetime.strftime('%m/%d/%Y'),
+                    'votes': reply.votes,
+                    'has_voted': reply.has_voted(g.user.user_id),
+                    'id': reply.id,
+                }})
+    else:
+        return jsonify({'success': False, 'errors': form.errors})
+
+
 
 
 @qa_bp.route('/question-vote', methods=['POST'])
