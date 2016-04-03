@@ -96,14 +96,14 @@
                       </div>
                         <div v-if="$index == q.replies.length - 1" style="" class="divider bg-primary"></div>
                       </span>
-                    <form style="margin-top: 3.7vh" class=""method="post" action="/qa/add-reply/{{ q.id }}">
+                    <form style="margin-top: 3.7vh" id="reply-form-{{ q.id }}" >
                         <input id="csrf_token" name="csrf_token" placeholder="Csrf Token" type="hidden" value="{{ csrf_token }}">
                         <div class="input-field">
                         <!-- <strong><h6 class="grey-text">Type a reply</h6></strong>-->
                           <textarea class="q_reply materialize-textarea" id="reply-content-{{ q.id }}" placeholder="Type a reply" name="content"></textarea>
                         </div>
                       <div class="row">
-                        <button type="submit" class="waves-effect waves-light btn center right lowercase">send</button>
+                        <button class="waves-effect waves-light btn center right lowercase submit_reply" form_selector="#reply-form-{{ q.id }}" q_id="{{ q.id }}">send</button>
                       </div>
                     </form>
                   </div>
@@ -263,8 +263,39 @@
                 });
 
                 questionQuery.fail(function (data) {
-                    sweetAlert("Error", "There was a problem adding your question", "error");
+                    sweetAlert("Request Failed", "There was a network error while adding your question", "error");
                 });
+            });
+
+            $(".submit_reply").click(function(e) {
+                alert("submit clicked");
+                e.preventDefault();
+
+                formData = $($(this).attr("form-selector")).serialize();
+                q_id = $(this).attr("q_id");
+
+                alert(q_id);
+
+                var replyQuery = $.post("/qa/add-reply/" + q_id, formData);
+
+                replyQuery.done(function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        if (data.success) {
+                            var q = q_vue.questions[q_id];
+                            newRepliesObj = q.replies.concat(data.reply);
+                            q_vue.$set('questions[' + q_id + '].replies', newRepliesObj);
+                            sweetAlert("Reply Added!", "Your reply was successfully added", "success");
+                        } else {
+                            sweetAlert("Error", "There was a problem adding your reply", "error");
+                        }
+                    }
+                });
+
+                replyQuery.fail(function (data) {
+                    sweetAlert("Request Failed", "There was a network error while adding your question", "error");
+                });
+
             });
         });
 
