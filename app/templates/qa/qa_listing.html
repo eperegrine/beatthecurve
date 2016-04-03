@@ -3,6 +3,7 @@
 {% from 'macros.html' import render_lesson_tabs, render_field, render_semester_tabs %}
 {% block title %}{{ lesson.lesson_name }}{% endblock %}
 {% block page %}
+    <script>var lessonId = {{ lesson.id }};</script>
     <style xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
     .expand-transition {
       transition: all .5s ease;
@@ -26,7 +27,7 @@
   <div class="right" style="width: 82%">
     <div class="card-panel">
         <h3 class="content_title grey-text">add a question</h3>
-        <form method="post" action="{{ url_for("qa_bp.add_question", lessonid=lesson.id) }}">
+        <form id="add-question-form" method="post" action="{{ url_for("qa_bp.add_question", lessonid=lesson.id) }}">
             {{ form.csrf_token() }}
             <div class="input-field">
                 {%for error in form.document.errors %}
@@ -50,7 +51,7 @@
                 {{ form.content(class_="materialize-textarea q_reply") }}
             </div>
           <div class="row">
-            <button type="submit" class="waves-effect waves-light btn col s2 push-s5 lowercase">send</button>
+            <button type="submit" id="add-question-submit" class="waves-effect waves-light btn col s2 push-s5 lowercase">send</button>
           </div>
         </form>
     </div>
@@ -242,6 +243,29 @@
         $(document).ready(function () {
             q_vue.csrf_token = $("#csrf_token").val();
             loadQuestions();
+
+            $("#add-question-form").submit(function (e) {
+                e.preventDefault();
+
+                formData = $(this).serialize();
+
+                var questionQuery = $.post("/qa/add-question/" + lessonId, formData);
+
+                questionQuery.done(function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        sweetAlert("Question Added!", "Your question was successfully added", "success");
+                        loadQuestions(data, false);
+                    } else {
+                        sweetAlert("Error", "There was a problem adding your question", "error");
+                    }
+
+                });
+
+                questionQuery.fail(function (data) {
+                    sweetAlert("Error", "There was a problem adding your question", "error");
+                });
+            });
         });
 
         function semesterIdToStr(id) {
@@ -267,49 +291,54 @@
                         lesson_id: '{{ lesson.id }}'
                     },
                     function (data) {
-                        if (data.success) {
-                            console.log(data);
-                            //Add questions to vue
-                            var newQuestionsObj = q_vue.questions.concat(data.questions); //$.extend($.extend({}, q_vue.questions), data.questions);
-                            var semesters = [];
-                            var semesterStrings = [];
-
-                            for (var index in newQuestionsObj) {
-                                var q = newQuestionsObj[index];
-                                q.datetime = new Date(q.datetime);
-                                var semester = { season: semesterIdToStr(q.semester).toLowerCase(), year: q.year };
-                                if (semesterStrings.indexOf(semesterIdToStr(q.semester).toLowerCase() + q.year) < 0) {
-                                    q.new_semester = true;
-                                    semesters.push(semester);
-                                    semesterStrings.push(semesterIdToStr(q.semester).toLowerCase() + q.year)
-                                }
-
-                                console.log(ArrayContainsObj(semesters, semester));
-
-                                q.semester_string = semesterIdToStr(q.semester);
-                            }
-
-                            console.log("Semesters: " + JSON.stringify(semesters));
-                            console.log("New Question Obj: " + JSON.stringify(newQuestionsObj));
-
-                            if ($.isEmptyObject(data.questions)) {
-                                q_vue.$set('questions', []);
-                            } else {
-                                sem_vue.$set('semesters', semesters);
-                                q_vue.$set('questions', newQuestionsObj);
-                                q_vue.$set("questions[" + Object.keys(q_vue.questions)[0]+ "].show", true);
-                            }
-
-                            q_vue.$set("is_loading", false);
-                            q_vue.$set("moreToLoad", data.moreToLoad);
-
-                        } else {
-                            q_vue.is_loading = false;
-                            alert("Error loading more Questions");
-                        }
+                        updateQuestionsList(data, true);
                     }
             );
         }
+
+    function updateQuestionsList (data, doSetMoreToLoad) {
+        if (data.success) {
+            console.log(data);
+            //Add questions to vue
+            var newQuestionsObj = q_vue.questions.concat(data.questions); //$.extend($.extend({}, q_vue.questions), data.questions);
+            var semesters = [];
+            var semesterStrings = [];
+
+            for (var index in newQuestionsObj) {
+                var q = newQuestionsObj[index];
+                q.datetime = new Date(q.datetime);
+                var semester = { season: semesterIdToStr(q.semester).toLowerCase(), year: q.year };
+                if (semesterStrings.indexOf(semesterIdToStr(q.semester).toLowerCase() + q.year) < 0) {
+                    q.new_semester = true;
+                    semesters.push(semester);
+                    semesterStrings.push(semesterIdToStr(q.semester).toLowerCase() + q.year)
+                }
+
+                console.log(ArrayContainsObj(semesters, semester));
+                q.semester_string = semesterIdToStr(q.semester);
+            }
+
+            console.log("Semesters: " + JSON.stringify(semesters));
+            console.log("New Question Obj: " + JSON.stringify(newQuestionsObj));
+
+            if ($.isEmptyObject(data.questions)) {
+                q_vue.$set('questions', []);
+            } else {
+                sem_vue.$set('semesters', semesters);
+                q_vue.$set('questions', newQuestionsObj);
+                q_vue.$set("questions[" + Object.keys(q_vue.questions)[0]+ "].show", true);
+            }
+
+            q_vue.$set("is_loading", false);
+            if (doSetMoreToLoad) {
+                q_vue.$set("moreToLoad", data.moreToLoad);
+            }
+
+        } else {
+            q_vue.is_loading = false;
+            alert("Error loading more Questions");
+        }
+    }
 
     </script>
  {# <script src="{{ url_for("static", filename="js/get_discussions.js") }}"></script>
