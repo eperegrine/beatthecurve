@@ -38,17 +38,17 @@ def view(lessonid):
 
     form = AddQuestionForm()
 
-    try:
-        print("name", session['name'])
-        if session['add_question_data']:
-            session['add_question_data'] = False
-            form.name.data = session['name']
-            form.content.data = session['content']
-            form.document.data = session['document']
-            form.validate()
-
-    except KeyError as e:
-        print(e)
+    # try:
+    #     print("name", session['name'])
+    #     if session['add_question_data']:
+    #         session['add_question_data'] = False
+    #         form.name.data = session['name']
+    #         form.content.data = session['content']
+    #         form.document.data = session['document']
+    #         form.validate()
+    #
+    # except KeyError as e:
+    #     print(e)
 
 
 
@@ -105,15 +105,15 @@ def add_question(lessonid):
             ]
         }})
     else:
-        print('update globals')
-        session['name'] = form.name.data
-        session['content'] = form.content.data
-        session['document'] = form.document.data
-        session['add_question_data'] = True
+        # print('update globals')
+        # session['name'] = form.name.data
+        # session['content'] = form.content.data
+        # session['document'] = form.document.data
+        # session['add_question_data'] = True
 
         return jsonify({'success': False, 'errors': form.errors})
 
-    return redirect(url_for(".view", lessonid=lessonid))
+    # return redirect(url_for(".view", lessonid=lessonid))
 
 
 @qa_bp.route('/add-reply/<questionid>', methods=('POST', 'GET'))
