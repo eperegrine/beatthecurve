@@ -103,7 +103,7 @@
                           <textarea class="q_reply materialize-textarea" id="reply-content-{{ q.id }}" placeholder="Type a reply" name="content"></textarea>
                         </div>
                       <div class="row">
-                        <button class="waves-effect waves-light btn center right lowercase submit_reply" form_selector="#reply-form-{{ q.id }}" q_id="{{ q.id }}">send</button>
+                        <button class="waves-effect waves-light btn center right lowercase submit_reply" q_index="{{ index }}" type="button" form_selector="#reply-form-{{ q.id }}" q_id="{{ q.id }}">send</button>
                       </div>
                     </form>
                   </div>
@@ -267,14 +267,11 @@
                 });
             });
 
-            $(".submit_reply").click(function(e) {
-                alert("submit clicked");
+            $("body").on('click', '.submit_reply', function(e) {
                 e.preventDefault();
-
-                formData = $($(this).attr("form-selector")).serialize();
-                q_id = $(this).attr("q_id");
-
-                alert(q_id);
+                var q_id = $(this).attr("q_id");
+                var q_index = $(this).attr("q_index");
+                var formData = $("#reply-form-" + q_id).serialize();
 
                 var replyQuery = $.post("/qa/add-reply/" + q_id, formData);
 
@@ -282,9 +279,9 @@
                     console.log(data);
                     if (data.success) {
                         if (data.success) {
-                            var q = q_vue.questions[q_id];
+                            var q = q_vue.questions[q_index];
                             newRepliesObj = q.replies.concat(data.reply);
-                            q_vue.$set('questions[' + q_id + '].replies', newRepliesObj);
+                            q_vue.$set('questions[' + q_index + '].replies', newRepliesObj);
                             sweetAlert("Reply Added!", "Your reply was successfully added", "success");
                         } else {
                             sweetAlert("Error", "There was a problem adding your reply", "error");
