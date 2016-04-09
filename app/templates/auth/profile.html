@@ -2,34 +2,36 @@
 {% from 'macros.html' import render_field %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-    <h1>Hello, {{ current_user.first_name }}</h1>
-    <h5>Karma Points: {{ current_user.karma_points }}</h5>
-{#
-    <hr>
+    <div style="margin-left: 10%; width: 80%;">
+        <h1>Hello, {{ current_user.first_name }}</h1>
+        <h5>Karma Points: {{ current_user.karma_points }}</h5>
+    {#
+        <hr>
 
-     <div class="row">
-      <span class="col s1">&nbsp;</span>
-      <a href="{{ url_for("search_bp.options") }}" class="btn bg-primary col s10">Update Search Preferences</a>
-      <span class="col s1">&nbsp;</span>
-    </div>#}
+         <div class="row">
+          <span class="col s1">&nbsp;</span>
+          <a href="{{ url_for("search_bp.options") }}" class="btn bg-primary col s10">Update Search Preferences</a>
+          <span class="col s1">&nbsp;</span>
+        </div>#}
 
-    <hr>
+        <hr>
 
-    <h5>Change Email</h5>
-    <form action="" method="post">
-      {% for field in change_email_form %}
-        {{ render_field(field) }}
-      {% endfor %}
-      <button type="submit" class="btn waves-effect waves-light" name="change_email">Change Email</button>
-    </form>
+        <h5>Change Email</h5>
+        <form action="" method="post">
+          {% for field in change_email_form %}
+            {{ render_field(field) }}
+          {% endfor %}
+          <button type="submit" class="btn waves-effect waves-light" name="change_email">Change Email</button>
+        </form>
 
-    <hr>
+        <hr>
 
-    <h5>Change Password</h5>
-    <form action="" method="post">
-      {% for field in change_password_form %}
-        {{ render_field(field) }}
-      {% endfor %}
-      <button type="submit" class="btn waves-effect waves-light" name="change_password">Change Password</button>
-    </form>
+        <h5>Change Password</h5>
+        <form action="" method="post">
+          {% for field in change_password_form %}
+            {{ render_field(field) }}
+          {% endfor %}
+          <button type="submit" class="btn waves-effect waves-light" name="change_password">Change Password</button>
+        </form>
+    </div>
 {% endblock %}

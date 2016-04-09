@@ -3,9 +3,9 @@
 {% from 'macros.html' import render_field %}
 {% block title %}Join classes{% endblock %}
 {% block content %}
-    <h3>Class enrollment</h3>
 
-    <div id="class-select">
+    <div id="class-select" style="margin-left: 10%; width: 80%;">
+        <h3>Class enrollment</h3>
         {% raw %}
         <div class="row">
             <div class="available_classes col s6">
@@ -35,10 +35,10 @@
                     </li>
                 </ul>
 
+                <div id="confirm_btn" class="btn right" v-bind:class="{ 'disabled': !has_changed}">
+                    Confirm Changes
+                </div>
             </div>
-        </div>
-        <div id="confirm_btn" class="btn" v-bind:class="{ 'disabled': !has_changed}">
-            Confirm Changes
         </div>
         {% endraw %}
     </div>
